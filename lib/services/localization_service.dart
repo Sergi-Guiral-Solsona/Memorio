@@ -1,46 +1,72 @@
-import 'package:flutter/services.dart' show rootBundle;
-import 'package:csv/csv.dart';
+import 'package:memorio/barrel_file.dart';
 
-class LocalizationService {
-  // Mapa en memoria para almacenar los textos: {'key': {'es': '...', 'en': '...'}}
-  static final Map<String, Map<String, String>> _localizedValues = {};
+class LocalizationService extends ChangeNotifier {
+  static final LocalizationService instance = LocalizationService._init();
+  LocalizationService._init();
 
-  // Método de inicialización (se ejecuta una sola vez al arrancar la app)
-  static Future<void> init() async {
+  // Constantes de configuración centralizadas
+  static const String assetPath = 'assets/translations/translations.csv';
+  static const String defaultLang = 'ES';
+  static const List<String> supportedLanguages = ['ES', 'ENG'];
+
+  Map<String, Map<String, String>> _localizedStrings = {};
+  String _currentLanguage = 'ES';
+
+  String get currentLanguage => _currentLanguage;
+
+  Future<void> load() async {
     try {
-      final rawData = await rootBundle.loadString('assets/translations/texts.csv');
-      List<List<dynamic>> listData = const CsvToListConverter().convert(rawData);
+      _currentLanguage = defaultLang;
+      List<List<dynamic>> listData = await CsvReaderService.loadCsvFromAsset(assetPath);
 
-      if (listData.isEmpty) return;
+      if (listData.isEmpty) {
+        AppLogger.warning('El archivo CSV de localizaciones está vacío.');
+        return;
+      }
 
-      // La primera fila contiene las cabeceras (key, es, en...)
-      List<dynamic> headers = listData[0];
+      List<String> headers = listData[0].map((e) => e.toString().trim()).toList();
+      Map<String, Map<String, String>> tempMap = {};
 
-      // Recorremos el contenido a partir de la segunda fila
       for (int i = 1; i < listData.length; i++) {
         var row = listData[i];
         if (row.isEmpty) continue;
 
         String key = row[0].toString().trim();
-        Map<String, String> langMap = {};
+        Map<String, String> translations = {};
 
         for (int j = 1; j < headers.length; j++) {
-          String langCode = headers[j].toString().trim(); // 'es', 'en', etc.
-          langMap[langCode] = row[j].toString().trim();
+          if (j < row.length) {
+            String langCode = headers[j];
+            translations[langCode] = row[j].toString();
+          }
         }
-
-        _localizedValues[key] = langMap;
+        tempMap[key] = translations;
       }
-    } catch (e) {
-      print('Error al cargar el archivo de localización: $e');
+
+      _localizedStrings = tempMap;
+      AppLogger.info('Localizaciones cargadas correctamente desde $assetPath');
+    } catch (e, stack) {
+      AppLogger.error('Error al procesar las localizaciones', error: e, stackTrace: stack);
     }
   }
 
-  // Método estático para traducir desde cualquier lugar de la app
-  static String translate(String key, String langCode) {
-    if (_localizedValues.containsKey(key)) {
-      return _localizedValues[key]?[langCode] ?? key;
+  void changeLanguage(String langCode) {
+    if (_currentLanguage != langCode) {
+      _currentLanguage = langCode;
+      AppLogger.info('Idioma cambiado a: $langCode');
+      notifyListeners(); // <--- Esto avisa a la UI para que se redibuje sola
     }
-    return key; // Si no encuentra la clave, devuelve la clave original por seguridad
   }
+
+  String translate(String key) {
+    if (!_localizedStrings.containsKey(key)) {
+      AppLogger.warning('Clave de traducción no encontrada: "$key"');
+      return key;
+    }
+    return _localizedStrings[key]?[_currentLanguage] ?? _localizedStrings[key]?['ES'] ?? key;
+  }
+}
+
+extension LocalizationExtension on String {
+  String get loc => LocalizationService.instance.translate(this);
 }

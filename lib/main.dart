@@ -1,25 +1,21 @@
-import 'package:flutter/material.dart';
+import 'package:memorio/barrel_file.dart';
 
-void main() {
-  runApp(const MiAppEstudio());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  //Carga el paquete de traducciones
+  await LocalizationService.instance.load();
+  runApp(const MyApp());
 }
 
-class MiAppEstudio extends StatelessWidget {
-  const MiAppEstudio({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'App de Memorización',
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Mis Mazos de Estudio'),
-        ),
-        body: const Center(
-          child: Text(
-            '¡Hola, Mundo! Aquí empezarán mis tarjetas.',
-            style: TextStyle(fontSize: 18),
-          ),
+        body: Center(
+          child: Text('Random_TEXT'.loc),
         ),
       ),
     );
