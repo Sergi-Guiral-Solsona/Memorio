@@ -1,3 +1,22 @@
 KEY,ES,ENG
 Random_TEXT,"Texto random pa rellenar
 ",Random text
+KEY_DECKS,Mazos,Decks
+KEY_MEMORIZE,Memorizar,Memorize
+KEY_SETTINGS,Ajustes,Settings
+KEY_CARDS,Cartas,Cards
+KEY_NO_DECKS,No hay mazos creados,No decks
+KEY_SAVE,Guardar,Save
+KEY_CANCEL,Cancelar,Cancel
+KEY_DECK_NAME,Nombre del mazo,Deck name
+KEY_CREATE_DECK,Crear mazo,Create deck
+KEY_EDIT_DECK,Editar mazo,Edit deck
+KEY_CREATE_CARD,Crear carta,Create card
+KEY_WORD_OR_PHRASE,Palabra o Frase,Word or Phrase
+KEY_EXAMPLE_SHORT,Ej.,Ex.
+KEY_HINT,Pista,Hint
+KEY_BEACH_THING,Cosa azul en la playa,Blue thing at the beach
+KEY_ANSWER,Respuesta,Answer
+KEY_OCEAN,El océano,The ocean
+KEY_ANSWER_DEFAULT,The ocean,El océano
+KEY_NO_CARDS,No hay tarjetas creadas en este mazo.,No cards created in this deck.

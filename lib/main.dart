@@ -13,11 +13,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Random_TEXT'.loc),
-        ),
+      debugShowCheckedModeBanner: false,
+      title: 'Memorio',
+      theme: ThemeData(
+        primarySwatch: Colors.indigo,
+        useMaterial3: true,
       ),
+      home: const BottomNavScreen(),
     );
   }
 }
