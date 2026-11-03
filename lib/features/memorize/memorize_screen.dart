@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:memorio/barrel_file.dart';
 
 class MemorizeScreen extends StatefulWidget {
@@ -17,7 +18,7 @@ class _MemorizeScreenState extends State<MemorizeScreen> {
     _fetchDecks();
   }
 
-  // Cargamos los mazos para comprobar si hay disponibles o no
+  // Carga de mazos para verificar disponibilidad
   Future<void> _fetchDecks() async {
     final loadedDecks = await DeckController.loadDecks();
     setState(() {
@@ -28,17 +29,17 @@ class _MemorizeScreenState extends State<MemorizeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Definimos las 3 formas de aprender que solicitaste
+    // Lista de métodos/modos de estudio disponibles
     final studyModes = [
       {
-        'title': 'Pomodoro',
-        'subtitle': 'Estudio enfocado con intervalos de tiempo',
+        'title': 'KEY_POMODORO'.loc,
+        'subtitle': 'KEY_FOCUSED_STUDY'.loc,
         'icon': Icons.timer_outlined,
         'color': Colors.orange,
       },
       {
-        'title': 'Randomize',
-        'subtitle': 'Tarjetas en orden aleatorio',
+        'title': 'KEY_RANDOM'.loc,
+        'subtitle': 'KEY_RANDOM_CARDS'.loc,
         'icon': Icons.shuffle,
         'color': Colors.purple,
       },
@@ -52,10 +53,12 @@ class _MemorizeScreenState extends State<MemorizeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Memorizar'),
+        title: Text('KEY_MEMORIZE'.loc),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
+          : _decks.isEmpty
+          ? EmptyDecksMemorizeView()
           : ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: studyModes.length,
@@ -75,7 +78,8 @@ class _MemorizeScreenState extends State<MemorizeScreen> {
               ],
             ),
             child: ListTile(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 20, vertical: 12),
               leading: Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
@@ -99,12 +103,19 @@ class _MemorizeScreenState extends State<MemorizeScreen> {
                 padding: const EdgeInsets.only(top: 4.0),
                 child: Text(
                   mode['subtitle'] as String,
-                  style: TextStyle(color: Colors.grey[600], fontSize: 13),
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                    fontSize: 13,
+                  ),
                 ),
               ),
-              trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+              trailing: const Icon(
+                Icons.arrow_forward_ios,
+                size: 16,
+                color: Colors.grey,
+              ),
               onTap: () {
-                // Al hacer clic, navegamos a la pantalla de selección de mazos para esta técnica
+                // Navega a la selección de mazo para la técnica elegida
                 Navigator.push(
                   context,
                   MaterialPageRoute(

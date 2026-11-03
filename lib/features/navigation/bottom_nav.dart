@@ -4,16 +4,31 @@ class BottomNavScreen extends StatefulWidget {
   const BottomNavScreen({super.key});
 
   @override
-  State<BottomNavScreen> createState() => _BottomNavScreenState();
+  State<BottomNavScreen> createState() => BottomNavScreenState();
+
+  static BottomNavScreenState? of(BuildContext context) =>
+      context.findAncestorStateOfType<BottomNavScreenState>();
 }
 
-class _BottomNavScreenState extends State<BottomNavScreen> {
+class BottomNavScreenState extends State<BottomNavScreen> {
   int _currentIndex = 0;
+
+  void openDecks() {
+    setState(() => _currentIndex = 0);
+  }
+
+  void openMemorize() {
+    setState(() => _currentIndex = 1);
+  }
+
+  void openSettings() {
+    setState(() => _currentIndex = 2);
+  }
 
   final List<Widget> _screens = const [
     DecksScreen(),
-    Center(child: Text('KEY_MEMORIZE')),
-    Center(child: Text('KEY_SETTINGS')),
+    MemorizeScreen(),
+    SettingsScreen(),
   ];
 
   @override

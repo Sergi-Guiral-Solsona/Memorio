@@ -17,6 +17,10 @@ export 'package:memorio/features/decks/models/deck_model.dart';
 export 'package:memorio/features/decks/models/card_model.dart';
 export 'package:memorio/features/decks/deck_detail_screen.dart';
 export 'package:memorio/features/decks/deck_controller.dart';
+export 'package:memorio/features/decks/empty_decks_view.dart';
 ///memorize
 export 'package:memorio/features/memorize/memorize_screen.dart';
 export 'package:memorio/features/memorize/select_deck_for_study_screen.dart';
+export 'package:memorio/features/memorize/empty_decks_memorize_view.dart';
+///settings
+export 'package:memorio/features/settings/settings_screen.dart';

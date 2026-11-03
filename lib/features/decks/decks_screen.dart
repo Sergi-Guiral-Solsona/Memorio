@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:memorio/barrel_file.dart';
 
 class DecksScreen extends StatefulWidget {
@@ -86,12 +87,12 @@ class _DecksScreenState extends State<DecksScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${'KEY_DECKS'.loc} ${_decks.length}'),
+        title: Text('${'KEY_DECKS'.loc} (${_decks.length})'),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _decks.isEmpty
-          ? Center(child: Text('KEY_NO_DECKS'.loc))
+          ? EmptyDecksView(onCreateDeckPressed: () => _showDeckDialog())
           : ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: _decks.length,

@@ -1,11 +1,8 @@
 KEY,ES,ENG
-Random_TEXT,"Texto random pa rellenar
-",Random text
 KEY_DECKS,Mazos,Decks
 KEY_MEMORIZE,Memorizar,Memorize
 KEY_SETTINGS,Ajustes,Settings
 KEY_CARDS,Cartas,Cards
-KEY_NO_DECKS,No hay mazos creados,No decks
 KEY_SAVE,Guardar,Save
 KEY_CANCEL,Cancelar,Cancel
 KEY_DECK_NAME,Nombre del mazo,Deck name
@@ -20,3 +17,11 @@ KEY_ANSWER,Respuesta,Answer
 KEY_OCEAN,El océano,The ocean
 KEY_ANSWER_DEFAULT,The ocean,El océano
 KEY_NO_CARDS,No hay tarjetas creadas en este mazo.,No cards created in this deck.
+KEY_CREATE_FIRST_DECK,Crea tu primer mazo para comenzar a estudiar,Create your first deck to start studying
+KEY_NO_DECKS,No hay mazos disponibles,No decks available
+KEY_GO_TO_CREATE_DECK,Ir a crear un mazo,Go to create a deck
+KEY_POMODORO,Pomodoro,Pomodoro
+KEY_FOCUSED_STUDY,Estudio enfocado con intervalos de tiempo,Focused study with time intervals
+KEY_RANDOM,Aleatorio,Random
+KEY_RANDOM_CARDS,Tarjetas en orden aleatorio,Cards in random order
+KEY_MODE,Modo,Mode
