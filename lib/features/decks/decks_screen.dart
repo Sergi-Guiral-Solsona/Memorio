@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:memorio/barrel_file.dart';
 
 class DecksScreen extends StatefulWidget {
@@ -11,6 +10,10 @@ class DecksScreen extends StatefulWidget {
 class _DecksScreenState extends State<DecksScreen> {
   List<Deck> _decks = [];
   bool _isLoading = true;
+  String _query = '';
+
+  List<Deck> get _visibleDecks =>
+      _decks.where((d) => matchesSearch(_query, [d.title])).toList();
 
   @override
   void initState() {
@@ -19,66 +22,44 @@ class _DecksScreenState extends State<DecksScreen> {
   }
 
   Future<void> _fetchDecks() async {
-    final loadedDecks = await DeckController.loadDecks();
+    final decks = await DeckController.loadDecks();
+    if (!mounted) return;
     setState(() {
-      _decks = loadedDecks;
+      _decks = decks;
       _isLoading = false;
     });
   }
 
-  Future<void> _addDeck(String title) async {
-    final updatedDecks = await DeckController.addDeck(_decks, title);
-    setState(() {
-      _decks = updatedDecks;
-    });
+  /// Ejecuta una operación del controlador y refresca la lista con su resultado.
+  Future<void> _apply(Future<List<Deck>> operation) async {
+    final updated = await operation;
+    if (!mounted) return;
+    setState(() => _decks = updated);
   }
 
-  Future<void> _editDeck(int index, String newTitle) async {
-    final updatedDecks = await DeckController.editDeck(_decks, index, newTitle);
-    setState(() {
-      _decks = updatedDecks;
-    });
-  }
-
-  Future<void> _deleteDeck(int index) async {
-    final updatedDecks = await DeckController.deleteDeck(_decks, index);
-    setState(() {
-      _decks = updatedDecks;
-    });
-  }
-
-  void _showDeckDialog({Deck? deckToEdit, int? index}) {
-    final controller = TextEditingController(text: deckToEdit?.title ?? '');
-
-    showDialog(
+  /// Crea un mazo (deck == null) o renombra [deck].
+  Future<void> _showDeckDialog({Deck? deck}) async {
+    final title = await showDialog<String>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(deckToEdit == null ? 'KEY_CREATE_DECK'.loc : 'KEY_EDIT_DECK'.loc),
-        content: TextField(
-          controller: controller,
-          autofocus: true,
-          decoration: InputDecoration(hintText: 'KEY_DECK_NAME'.loc),
+      builder: (_) => DeckNameDialog(initialTitle: deck?.title),
+    );
+    if (title == null) return;
+
+    await _apply(
+      deck == null
+          ? DeckController.addDeck(_decks, title)
+          : DeckController.editDeck(_decks, deck.id, title),
+    );
+  }
+
+  void _openDeck(Deck deck) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => DeckDetailScreen(
+          deck: deck,
+          onDeckUpdated: _fetchDecks,
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('KEY_CANCEL'.loc),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              final text = controller.text.trim();
-              if (text.isNotEmpty) {
-                if (deckToEdit == null) {
-                  _addDeck(text);
-                } else if (index != null) {
-                  _editDeck(index, text);
-                }
-                Navigator.pop(context);
-              }
-            },
-            child: Text('KEY_SAVE'.loc),
-          ),
-        ],
       ),
     );
   }
@@ -89,74 +70,54 @@ class _DecksScreenState extends State<DecksScreen> {
       appBar: AppBar(
         title: Text('${'KEY_DECKS'.loc} (${_decks.length})'),
       ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : _decks.isEmpty
-          ? EmptyDecksView(onCreateDeckPressed: () => _showDeckDialog())
-          : ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemCount: _decks.length,
-        itemBuilder: (context, index) {
-          final deck = _decks[index];
-          return Container(
-            margin: const EdgeInsets.only(bottom: 12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: ListTile(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DeckDetailScreen(
-                      deck: deck,
-                      onDeckUpdated: _fetchDecks,
-                    ),
-                  ),
-                );
-              },
-              contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-              leading: Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.indigo.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Icon(Icons.style, color: Colors.indigo),
-              ),
-              title: Text(
-                deck.title,
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.edit_outlined, color: Colors.grey),
-                    onPressed: () => _showDeckDialog(deckToEdit: deck, index: index),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
-                    onPressed: () => _deleteDeck(index),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
+      body: _buildBody(),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showDeckDialog(),
         child: const Icon(Icons.add),
       ),
+    );
+  }
+
+  Widget _buildBody() {
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (_decks.isEmpty) {
+      return EmptyStateView(
+        icon: Icons.folder_open_outlined,
+        title: 'KEY_NO_DECKS'.loc,
+        subtitle: 'KEY_CREATE_FIRST_DECK'.loc,
+        actionLabel: 'KEY_CREATE_DECK'.loc,
+        onAction: () => _showDeckDialog(),
+      );
+    }
+
+    final visible = _visibleDecks;
+    return Column(
+      children: [
+        AppSearchBar(onChanged: (value) => setState(() => _query = value)),
+        Expanded(
+          child: visible.isEmpty
+              ? EmptyStateView(
+                  icon: Icons.search_off,
+                  title: 'KEY_NO_RESULTS'.loc,
+                )
+              : ListView.builder(
+                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 96),
+                  itemCount: visible.length,
+                  itemBuilder: (context, index) {
+                    final deck = visible[index];
+                    return DeckListItem(
+                      deck: deck,
+                      onTap: () => _openDeck(deck),
+                      onEdit: () => _showDeckDialog(deck: deck),
+                      onDelete: () =>
+                          _apply(DeckController.deleteDeck(_decks, deck.id)),
+                    );
+                  },
+                ),
+        ),
+      ],
     );
   }
 }

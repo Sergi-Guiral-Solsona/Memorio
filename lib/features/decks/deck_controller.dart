@@ -1,98 +1,95 @@
 import 'package:memorio/barrel_file.dart';
 
+/// Lógica de mazos y tarjetas. Toda operación se persiste en
+/// [DeckStorageService]. Se opera siempre por id (no por posición), para que
+/// funcione igual con listas filtradas por el buscador.
 class DeckController {
-  static Future<List<Deck>> loadDecks() async {
-    return await DeckStorageService.loadDecks();
+  DeckController._();
+
+  // ------------------------------ Mazos ------------------------------
+
+  static Future<List<Deck>> loadDecks() => DeckStorageService.loadDecks();
+
+  static Future<void> saveDecks(List<Deck> decks) =>
+      DeckStorageService.saveDecks(decks);
+
+  static Future<List<Deck>> addDeck(List<Deck> decks, String title) async {
+    decks.add(Deck(id: _newId(), title: title));
+    await saveDecks(decks);
+    return decks;
   }
 
-  static Future<void> saveDecks(List<Deck> decks) async {
-    await DeckStorageService.saveDecks(decks);
+  static Future<List<Deck>> editDeck(
+    List<Deck> decks,
+    String deckId,
+    String newTitle,
+  ) async {
+    final index = decks.indexWhere((d) => d.id == deckId);
+    if (index == -1) return decks;
+
+    decks[index] = decks[index].copyWith(title: newTitle);
+    await saveDecks(decks);
+    return decks;
   }
 
-  static Future<List<Deck>> addDeck(List<Deck> currentDecks, String title) async {
-    final newDeck = Deck(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-      title: title,
+  static Future<List<Deck>> deleteDeck(List<Deck> decks, String deckId) async {
+    decks.removeWhere((d) => d.id == deckId);
+    await saveDecks(decks);
+    return decks;
+  }
+
+  // ---------------------------- Tarjetas -----------------------------
+
+  /// Añade la tarjeta al mazo asignándole un id nuevo.
+  static Future<void> addCardToDeck(Deck deck, CardModel card) async {
+    deck.cards.add(card.copyWith(id: _newId()));
+    await _persistDeck(deck);
+  }
+
+  static Future<void> updateCardInDeck(Deck deck, CardModel updated) async {
+    final index = _indexOfCard(deck, updated.id);
+    if (index == -1) return;
+
+    deck.cards[index] = updated;
+    await _persistDeck(deck);
+  }
+
+  static Future<void> deleteCardFromDeck(Deck deck, String cardId) async {
+    deck.cards.removeWhere((c) => c.id == cardId);
+    await _persistDeck(deck);
+  }
+
+  static Future<void> recordCardResult(
+    Deck deck,
+    String cardId,
+    bool isCorrect,
+  ) async {
+    final index = _indexOfCard(deck, cardId);
+    if (index == -1) return;
+
+    final card = deck.cards[index];
+    deck.cards[index] = card.copyWith(
+      correctCount: card.correctCount + (isCorrect ? 1 : 0),
+      incorrectCount: card.incorrectCount + (isCorrect ? 0 : 1),
+      lastReviewed: DateTime.now(),
     );
-    currentDecks.add(newDeck);
-    await saveDecks(currentDecks);
-    return currentDecks;
+    await _persistDeck(deck);
   }
 
-  static Future<List<Deck>> editDeck(List<Deck> currentDecks, int index, String newTitle) async {
-    currentDecks[index].title = newTitle;
-    await saveDecks(currentDecks);
-    return currentDecks;
-  }
+  // ----------------------------- Privados ----------------------------
 
-  static Future<List<Deck>> deleteDeck(List<Deck> currentDecks, int index) async {
-    currentDecks.removeAt(index);
-    await saveDecks(currentDecks);
-    return currentDecks;
-  }
+  static String _newId() => DateTime.now().millisecondsSinceEpoch.toString();
 
-  static Future<void> addCardToDeck(Deck deck, CardModel newCard) async {
-    newCard.id = DateTime.now().millisecondsSinceEpoch.toString();
-    deck.cards.add(newCard);
+  static int _indexOfCard(Deck deck, String cardId) =>
+      deck.cards.indexWhere((c) => c.id == cardId);
 
+  /// Sustituye [deck] dentro del almacenamiento y guarda todo.
+  static Future<void> _persistDeck(Deck deck) async {
     final allDecks = await loadDecks();
     final index = allDecks.indexWhere((d) => d.id == deck.id);
-    if (index != -1) {
-      allDecks[index] = deck;
-      await saveDecks(allDecks);
-    }
+    if (index == -1) return;
+
+    allDecks[index] = deck;
+    await saveDecks(allDecks);
   }
-
-  static Future<void> deleteCardFromDeck(Deck deck, int cardIndex) async {
-    deck.cards.removeAt(cardIndex);
-
-    final allDecks = await loadDecks();
-    final index = allDecks.indexWhere((d) => d.id == deck.id);
-    if (index != -1) {
-      allDecks[index] = deck;
-      await saveDecks(allDecks);
-    }
-  }
-
-
-
-  static Future<void> recordCardResult(Deck deck, String cardId, bool isCorrect) async {
-    final cardIndex = deck.cards.indexWhere((c) => c.id == cardId);
-    if (cardIndex != -1) {
-      final card = deck.cards[cardIndex];
-      if (isCorrect) {
-        card.correctCount++;
-      } else {
-        card.incorrectCount++;
-      }
-      card.lastReviewed = DateTime.now();
-
-      // Guardado general
-      final allDecks = await loadDecks();
-      final index = allDecks.indexWhere((d) => d.id == deck.id);
-      if (index != -1) {
-        allDecks[index] = deck;
-        await saveDecks(allDecks);
-      }
-    }
-  }
-
-  static Future<void> updateCardInDeck(Deck deck, CardModel updatedCard) async {
-    final index = deck.cards.indexWhere((c) => c.id == updatedCard.id);
-
-    if (index != -1) {
-      deck.cards[index] = updatedCard;
-
-      final decks = await DeckStorageService.loadDecks();
-      final deckIndex = decks.indexWhere((d) => d.id == deck.id);
-
-      if (deckIndex != -1) {
-        decks[deckIndex] = deck;
-        await DeckStorageService.saveDecks(decks);
-      }
-    }
-  }
-
-
 }
-

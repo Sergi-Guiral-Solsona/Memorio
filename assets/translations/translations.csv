@@ -25,3 +25,6 @@ KEY_FOCUSED_STUDY,Estudio enfocado con intervalos de tiempo,Focused study with t
 KEY_RANDOM,Aleatorio,Random
 KEY_RANDOM_CARDS,Tarjetas en orden aleatorio,Cards in random order
 KEY_MODE,Modo,Mode
+KEY_LANGUAGE,Idioma,Language
+KEY_SEARCH,Buscar,Search
+KEY_NO_RESULTS,Sin resultados,No results
