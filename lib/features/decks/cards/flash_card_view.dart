@@ -18,6 +18,12 @@ class FlashCardView extends StatefulWidget {
   final ValueChanged<bool>? onSideChanged;
   final bool editable;
 
+  /// Si la pista empieza visible. En práctica conviene false (se descubre con el ojo).
+  final bool initialHintVisible;
+
+  /// Proporción ancho/alto de la tarjeta (para calcular su tamaño desde fuera).
+  static const double aspectRatio = 0.68;
+
   const FlashCardView({
     super.key,
     required this.frontController,
@@ -26,6 +32,7 @@ class FlashCardView extends StatefulWidget {
     this.showBack = false,
     this.onSideChanged,
     this.editable = true,
+    this.initialHintVisible = true,
   });
 
   @override
@@ -34,7 +41,6 @@ class FlashCardView extends StatefulWidget {
 
 class _FlashCardViewState extends State<FlashCardView>
     with SingleTickerProviderStateMixin {
-  static const double _aspectRatio = 0.68;
   static const Duration _buttonFlipDuration = Duration(milliseconds: 500);
   static const Duration _dragSettleDuration = Duration(milliseconds: 280);
 
@@ -55,7 +61,7 @@ class _FlashCardViewState extends State<FlashCardView>
   late int _face = widget.showBack ? 1 : 0;
 
   // Vive aquí (y no en la cara) porque la cara frontal se destruye al girar.
-  bool _hintVisible = true;
+  late bool _hintVisible = widget.initialHintVisible;
 
   double get _dragExtent =>
       (context.size?.width ?? 300) * _dragExtentFactor;
@@ -84,10 +90,10 @@ class _FlashCardViewState extends State<FlashCardView>
   // --------------------------- Giro ---------------------------
 
   void _settleOn(
-    int face, {
-    Duration duration = _dragSettleDuration,
-    Curve curve = Curves.easeOutCubic,
-  }) {
+      int face, {
+        Duration duration = _dragSettleDuration,
+        Curve curve = Curves.easeOutCubic,
+      }) {
     _face = face;
     _turn
         .animateTo(face.toDouble(), duration: duration, curve: curve)
@@ -133,7 +139,7 @@ class _FlashCardViewState extends State<FlashCardView>
       onHorizontalDragEnd: _onDragEnd,
       onHorizontalDragCancel: _onDragCancel,
       child: AspectRatio(
-        aspectRatio: _aspectRatio,
+        aspectRatio: FlashCardView.aspectRatio,
         child: AnimatedBuilder(
           animation: _turn,
           builder: (context, _) {
@@ -144,23 +150,23 @@ class _FlashCardViewState extends State<FlashCardView>
                 ..setEntry(3, 2, 0.001)
                 ..rotateY(_turn.value * math.pi),
               child: showingBack
-                  // Se gira otra vez para que el texto no salga en espejo.
+              // Se gira otra vez para que el texto no salga en espejo.
                   ? Transform(
-                      alignment: Alignment.center,
-                      transform: Matrix4.rotationY(math.pi),
-                      child: _BackFace(
-                        controller: widget.backController,
-                        editable: widget.editable,
-                      ),
-                    )
+                alignment: Alignment.center,
+                transform: Matrix4.rotationY(math.pi),
+                child: _BackFace(
+                  controller: widget.backController,
+                  editable: widget.editable,
+                ),
+              )
                   : _FrontFace(
-                      frontController: widget.frontController,
-                      hintController: widget.hintController,
-                      editable: widget.editable,
-                      hintVisible: _hintVisible,
-                      onToggleHint: () =>
-                          setState(() => _hintVisible = !_hintVisible),
-                    ),
+                frontController: widget.frontController,
+                hintController: widget.hintController,
+                editable: widget.editable,
+                hintVisible: _hintVisible,
+                onToggleHint: () =>
+                    setState(() => _hintVisible = !_hintVisible),
+              ),
             );
           },
         ),
@@ -188,6 +194,9 @@ class _FrontFace extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Al editar siempre hay pista; al practicar solo si la tarjeta la tiene.
+    final hasHint = editable || hintController.text.isNotEmpty;
+
     return CardSurface(
       padding: const EdgeInsets.fromLTRB(20, 28, 20, 20),
       child: Column(
@@ -197,7 +206,6 @@ class _FrontFace extends StatelessWidget {
             child: _FaceText(
               controller: frontController,
               editable: editable,
-              textAlign: TextAlign.left,
               hintText: 'KEY_WORD_OR_PHRASE'.loc,
               maxLines: 2,
               style: const TextStyle(
@@ -207,37 +215,39 @@ class _FrontFace extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 16),
-          const CardDivider(),
-          const SizedBox(height: 16),
-          Center(
-            child: InkWell(
-              customBorder: const CircleBorder(),
-              onTap: onToggleHint,
-              child: HintBadge(size: 46, visible: hintVisible),
+          if (hasHint) ...[
+            const SizedBox(height: 16),
+            const CardDivider(),
+            const SizedBox(height: 16),
+            Center(
+              child: InkWell(
+                customBorder: const CircleBorder(),
+                onTap: onToggleHint,
+                child: HintBadge(size: 46, visible: hintVisible),
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-          Expanded(
-            child: hintVisible
-                ? _InsetBox(
-                    borderColor: CardSurface.accent,
-                    borderWidth: 2,
-                    expand: true,
-                    child: SingleChildScrollView(
-                      child: _FaceText(
-                        controller: hintController,
-                        editable: editable,
-                        hintText: 'KEY_HINT'.loc,
-                        style: const TextStyle(
-                          color: CardSurface.ink,
-                          fontSize: 15,
-                        ),
-                      ),
+            const SizedBox(height: 16),
+            Expanded(
+              child: hintVisible
+                  ? _InsetBox(
+                borderColor: CardSurface.accent,
+                borderWidth: 2,
+                expand: true,
+                child: SingleChildScrollView(
+                  child: _FaceText(
+                    controller: hintController,
+                    editable: editable,
+                    hintText: 'KEY_HINT'.loc,
+                    style: const TextStyle(
+                      color: CardSurface.ink,
+                      fontSize: 15,
                     ),
-                  )
-                : const SizedBox.shrink(),
-          ),
+                  ),
+                ),
+              )
+                  : const SizedBox.shrink(),
+            ),
+          ],
         ],
       ),
     );

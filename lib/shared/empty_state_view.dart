@@ -4,6 +4,7 @@ import 'package:memorio/barrel_file.dart';
 /// un botón de acción. Sustituye a EmptyDecksView y sirve para cualquier lista.
 class EmptyStateView extends StatelessWidget {
   final IconData icon;
+  final IconData? actionIcon;
   final String title;
   final String? subtitle;
   final String? actionLabel;
@@ -12,6 +13,7 @@ class EmptyStateView extends StatelessWidget {
   const EmptyStateView({
     super.key,
     required this.icon,
+    this.actionIcon,
     required this.title,
     this.subtitle,
     this.actionLabel,

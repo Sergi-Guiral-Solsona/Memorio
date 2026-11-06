@@ -8,6 +8,7 @@ class CardGridItem extends StatelessWidget {
   final VoidCallback onTap;
   final VoidCallback onDelete;
 
+
   const CardGridItem({
     super.key,
     required this.card,
@@ -120,9 +121,9 @@ class _Footer extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: Row(
               children: [
-                _Stat(icon: Icons.check, count: card.correctCount, color: Colors.green),
+                _Stat(icon: Icons.check, count: card.correctCount),
                 const SizedBox(width: 10),
-                _Stat(icon: Icons.close, count: card.incorrectCount, color: Colors.red),
+                _Stat(icon: Icons.close, count: card.incorrectCount),
               ],
             ),
           ),
@@ -131,7 +132,7 @@ class _Footer extends StatelessWidget {
           padding: EdgeInsets.zero,
           constraints: const BoxConstraints.tightFor(width: 30, height: 30),
           iconSize: 18,
-          color: Colors.red,
+          color: CardSurface.ink.withValues(alpha: 0.6),
           icon: const Icon(Icons.delete_outline),
           onPressed: onDelete,
         ),

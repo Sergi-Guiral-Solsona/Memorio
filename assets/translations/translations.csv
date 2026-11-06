@@ -28,3 +28,26 @@ KEY_MODE,Modo,Mode
 KEY_LANGUAGE,Idioma,Language
 KEY_SEARCH,Buscar,Search
 KEY_NO_RESULTS,Sin resultados,No results
+KEY_MY_FILTER,Mi filtro,My filter
+KEY_MY_FILTER_DESC,Tus reglas personalizadas de repaso,Your custom review rules
+KEY_COMING_SOON,Próximamente,Coming soon
+KEY_SELECT_DECKS,Elige uno o varios mazos,Choose one or more decks
+KEY_SELECT_ALL,Todos,Select all
+KEY_DESELECT_ALL,Ninguno,Deselect all
+KEY_START,Empezar,Start
+KEY_KNEW_IT,Lo sabía,I knew it
+KEY_DIDNT_KNOW,No lo sabía,I didn't know it
+KEY_SESSION_COMPLETE,Sesión completada,Session complete
+KEY_CORRECT,Aciertos,Correct
+KEY_INCORRECT,Fallos,Incorrect
+KEY_REPEAT,Repetir,Repeat
+KEY_EXIT,Salir,Exit
+KEY_FOCUS,Enfoque,Focus
+KEY_BREAK,Descanso,Break
+KEY_LONG_BREAK,Descanso largo,Long break
+KEY_TAKE_A_BREAK,Toca descansar,Time for a break
+KEY_SKIP_BREAK,Saltar descanso,Skip break
+KEY_PAUSED,En pausa,Paused
+KEY_RESUME,Continuar,Resume
+KEY_POMODOROS_DONE,Pomodoros completados,Pomodoros completed
+KEY_FINISH_SESSION,Terminar sesión,End session
