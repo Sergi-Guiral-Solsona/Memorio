@@ -7,7 +7,6 @@ class CardModel {
   final String hint; // Pista
   final String back; // Significado / respuesta
 
-
   // Métricas para estadísticas y repetición espaciada
   final int correctCount;
   final int incorrectCount;
@@ -29,6 +28,12 @@ class CardModel {
   const CardModel.draft() : this(id: '', front: '', back: '');
 
   bool get isDraft => id.isEmpty;
+
+  /// Veces que se ha respondido la tarjeta.
+  int get attempts => correctCount + incorrectCount;
+
+  /// Porcentaje de fallos (0..1). Una tarjeta sin intentos devuelve 0.
+  double get errorRate => attempts == 0 ? 0 : incorrectCount / attempts;
 
   CardModel copyWith({
     String? id,

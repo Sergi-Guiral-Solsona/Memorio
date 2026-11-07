@@ -73,12 +73,12 @@ class _SelectDecksForStudyScreenState extends State<SelectDecksForStudyScreen> {
 
   Widget _studyScreenFor(List<Deck> decks) {
     switch (widget.mode) {
+      case StudyMode.memorio:
+        return MemorioLearningScreen(decks: decks);
       case StudyMode.pomodoro:
         return PomodoroStudyScreen(decks: decks);
       case StudyMode.random:
         return RandomStudyScreen(decks: decks);
-      case StudyMode.custom:
-        throw StateError('El modo personalizado aún no está disponible.');
     }
   }
 
@@ -106,7 +106,10 @@ class _SelectDecksForStudyScreenState extends State<SelectDecksForStudyScreen> {
               alignment: Alignment.centerLeft,
               child: Text(
                 'KEY_SELECT_DECKS'.loc,
-                style: TextStyle(color: Colors.grey[600], fontSize: 13),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontSize: 13,
+                ),
               ),
             ),
           ),
@@ -147,7 +150,10 @@ class _SelectDecksForStudyScreenState extends State<SelectDecksForStudyScreen> {
             Text(
               '${'KEY_DECKS'.loc}: ${_selectedIds.length}  ·  '
               '${'KEY_CARDS'.loc}: $_selectedCardCount',
-              style: TextStyle(color: Colors.grey[700], fontWeight: FontWeight.w500),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                fontWeight: FontWeight.w500,
+              ),
             ),
             const SizedBox(height: 8),
             SizedBox(
@@ -180,6 +186,7 @@ class _DeckCheckTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final enabled = onChanged != null;
+    final scheme = Theme.of(context).colorScheme;
 
     return Card(
       elevation: 0,
@@ -187,7 +194,7 @@ class _DeckCheckTile extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
         side: BorderSide(
-          color: selected ? Colors.indigo : Colors.grey.shade200,
+          color: selected ? scheme.primary : scheme.outlineVariant,
           width: selected ? 2 : 1,
         ),
       ),
@@ -197,7 +204,7 @@ class _DeckCheckTile extends StatelessWidget {
         controlAffinity: ListTileControlAffinity.trailing,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-        secondary: Icon(Icons.style, color: enabled ? Colors.indigo : Colors.grey),
+        secondary: Icon(Icons.style, color: enabled ? scheme.primary : scheme.outline),
         title: Text(
           deck.title,
           style: const TextStyle(fontWeight: FontWeight.bold),

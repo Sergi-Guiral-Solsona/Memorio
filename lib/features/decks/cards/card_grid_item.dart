@@ -8,7 +8,6 @@ class CardGridItem extends StatelessWidget {
   final VoidCallback onTap;
   final VoidCallback onDelete;
 
-
   const CardGridItem({
     super.key,
     required this.card,
@@ -18,6 +17,8 @@ class CardGridItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ink = context.cardPalette.ink;
+
     return CardSurface(
       compact: true,
       radius: 18,
@@ -28,7 +29,7 @@ class CardGridItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           onTap: onTap,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(12, 12, 8, 6),
+            padding: const EdgeInsets.fromLTRB(14, 14, 10, 8),
             child: ClipRect(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,8 +38,8 @@ class CardGridItem extends StatelessWidget {
                     card.front,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: CardSurface.ink,
+                    style: TextStyle(
+                      color: ink,
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
                     ),
@@ -59,8 +60,8 @@ class CardGridItem extends StatelessWidget {
                       card.back,
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: CardSurface.ink,
+                      style: TextStyle(
+                        color: ink,
                         fontWeight: FontWeight.w500,
                         fontSize: 13,
                       ),
@@ -95,7 +96,7 @@ class _HintLine extends StatelessWidget {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              color: CardSurface.ink.withValues(alpha: 0.7),
+              color: context.cardPalette.ink.withValues(alpha: 0.7),
               fontSize: 12,
             ),
           ),
@@ -118,7 +119,7 @@ class _Footer extends StatelessWidget {
         Expanded(
           child: FittedBox(
             fit: BoxFit.scaleDown,
-            alignment: Alignment.centerLeft,
+            alignment: AlignmentDirectional.centerStart,
             child: Row(
               children: [
                 _Stat(icon: Icons.check, count: card.correctCount),
@@ -132,7 +133,7 @@ class _Footer extends StatelessWidget {
           padding: EdgeInsets.zero,
           constraints: const BoxConstraints.tightFor(width: 30, height: 30),
           iconSize: 18,
-          color: CardSurface.ink.withValues(alpha: 0.6),
+          color: context.cardPalette.ink.withValues(alpha: 0.6),
           icon: const Icon(Icons.delete_outline),
           onPressed: onDelete,
         ),
@@ -149,7 +150,7 @@ class _Stat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = CardSurface.ink.withValues(alpha: 0.6);
+    final color = context.cardPalette.ink.withValues(alpha: 0.6);
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [

@@ -1,8 +1,8 @@
-import 'package:flutter/services.dart';
 import 'package:memorio/barrel_file.dart';
 
 /// Modo Pomodoro: periodos de enfoque en los que se estudian las tarjetas de
-/// los mazos elegidos (barajadas y en bucle), separados por descansos.
+/// los mazos elegidos, separados por descansos. Las tarjetas salen en el orden
+/// de Memorio Learning (cambia [_order] a StudyOrder.random si prefieres azar puro).
 class PomodoroStudyScreen extends StatefulWidget {
   final List<Deck> decks;
 
@@ -13,8 +13,13 @@ class PomodoroStudyScreen extends StatefulWidget {
 }
 
 class _PomodoroStudyScreenState extends State<PomodoroStudyScreen> {
-  late final StudySession _session =
-      StudySession(StudyCard.fromDecks(widget.decks), loop: true);
+  static const StudyOrder _order = StudyOrder.memorio;
+
+  late final StudySession _session = StudySession(
+    StudyCard.fromDecks(widget.decks),
+    loop: true,
+    order: _order,
+  );
 
   late final PomodoroTimer _timer =
       PomodoroTimer(onPhaseChanged: (_) => HapticFeedback.mediumImpact());
@@ -79,15 +84,23 @@ class _PomodoroStudyScreenState extends State<PomodoroStudyScreen> {
       builder: (context, _) => Column(
         children: [
           _TimerHeader(timer: _timer),
-          Expanded(child: _buildContent()),
+          Expanded(
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 350),
+              child: _buildContent(),
+            ),
+          ),
         ],
       ),
     );
   }
 
+  /// Cada estado lleva su propia key; todas las tarjetas comparten la misma
+  /// (la tarjeta se anima sola), así el cambio animado es solo entre estados.
   Widget _buildContent() {
     if (_timer.phase != PomodoroPhase.focus) {
       return EmptyStateView(
+        key: const ValueKey('break'),
         icon: Icons.free_breakfast_outlined,
         title: 'KEY_TAKE_A_BREAK'.loc,
         actionLabel: 'KEY_SKIP_BREAK'.loc,
@@ -97,6 +110,7 @@ class _PomodoroStudyScreenState extends State<PomodoroStudyScreen> {
     }
     if (!_timer.isRunning) {
       return EmptyStateView(
+        key: const ValueKey('paused'),
         icon: Icons.pause_circle_outline,
         title: 'KEY_PAUSED'.loc,
         actionLabel: 'KEY_RESUME'.loc,
@@ -108,10 +122,14 @@ class _PomodoroStudyScreenState extends State<PomodoroStudyScreen> {
     final current = _session.current;
     if (current == null) return const SizedBox.shrink();
 
-    return StudyCardPlayer(
-      key: ValueKey(_session.answeredCount),
-      card: current.card,
-      onAnswer: _answer,
+    final card = current.latest;
+    return KeyedSubtree(
+      key: const ValueKey('focus'),
+      child: StudyCardPlayer(
+        key: ValueKey(_session.answeredCount),
+        card: card,
+        onAnswer: _answer,
+      ),
     );
   }
 }
@@ -147,73 +165,77 @@ class _TimerHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = _phaseColor(timer.phase);
+    final scheme = Theme.of(context).colorScheme;
 
-    return Container(
-      margin: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+    // El color cambia con una transición suave entre enfoque y descanso.
+    return TweenAnimationBuilder<Color?>(
+      tween: ColorTween(end: _phaseColor(timer.phase)),
+      duration: const Duration(milliseconds: 500),
+      builder: (context, animated, _) {
+        final color = animated ?? _phaseColor(timer.phase);
+
+        return Container(
+          margin: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: scheme.surfaceContainerLow,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: scheme.outlineVariant.withValues(alpha: 0.5)),
           ),
-        ],
-      ),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 88,
-            height: 88,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                SizedBox.expand(
-                  child: CircularProgressIndicator(
-                    value: timer.progress,
-                    strokeWidth: 8,
-                    color: color,
-                    backgroundColor: color.withValues(alpha: 0.15),
-                  ),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 88,
+                height: 88,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    SizedBox.expand(
+                      child: CircularProgressIndicator(
+                        value: timer.progress,
+                        strokeWidth: 8,
+                        strokeCap: StrokeCap.round,
+                        color: color,
+                        backgroundColor: color.withValues(alpha: 0.15),
+                      ),
+                    ),
+                    Text(
+                      timer.formattedRemaining,
+                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ],
                 ),
-                Text(
-                  timer.formattedRemaining,
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _phaseLabel(timer.phase),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: color,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '${'KEY_POMODOROS_DONE'.loc}: ${timer.completedFocusSessions}',
+                      style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 13),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              IconButton.filled(
+                style: IconButton.styleFrom(backgroundColor: color),
+                onPressed: timer.isRunning ? timer.pause : timer.start,
+                icon: Icon(timer.isRunning ? Icons.pause : Icons.play_arrow),
+              ),
+            ],
           ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  _phaseLabel(timer.phase),
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: color,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  '${'KEY_POMODOROS_DONE'.loc}: ${timer.completedFocusSessions}',
-                  style: TextStyle(color: Colors.grey[600], fontSize: 13),
-                ),
-              ],
-            ),
-          ),
-          IconButton.filled(
-            style: IconButton.styleFrom(backgroundColor: color),
-            onPressed: timer.isRunning ? timer.pause : timer.start,
-            icon: Icon(timer.isRunning ? Icons.pause : Icons.play_arrow),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

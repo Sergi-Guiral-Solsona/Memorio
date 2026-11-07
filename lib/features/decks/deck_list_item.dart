@@ -17,11 +17,14 @@ class DeckListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: scheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: scheme.outlineVariant.withValues(alpha: 0.5)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -32,32 +35,35 @@ class DeckListItem extends StatelessWidget {
       ),
       child: ListTile(
         onTap: onTap,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        contentPadding: const EdgeInsetsDirectional.only(start: 20, end: 8, top: 8, bottom: 8),
         leading: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: Colors.indigo.withValues(alpha: 0.1),
+            color: scheme.primary.withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(12),
           ),
-          child: const Icon(Icons.style, color: Colors.indigo),
+          child: Icon(Icons.style, color: scheme.primary),
         ),
         title: Text(
           deck.title,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         subtitle: Text(
           '${'KEY_CARDS'.loc}: ${deck.cards.length}',
-          style: TextStyle(color: Colors.grey[600], fontSize: 13),
+          style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 13),
         ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              icon: const Icon(Icons.edit_outlined, color: Colors.grey),
+              icon: Icon(Icons.edit_outlined, color: scheme.onSurfaceVariant),
               onPressed: onEdit,
             ),
             IconButton(
-              icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
+              icon: Icon(Icons.delete_outline, color: scheme.error),
               onPressed: onDelete,
             ),
           ],

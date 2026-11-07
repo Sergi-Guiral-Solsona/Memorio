@@ -1,92 +1,149 @@
 import 'package:memorio/barrel_file.dart';
 
-/// Idioma disponible: código interno (el de la cabecera del CSV)
-/// y nombre en su idioma original.
+/// Un idioma disponible. Sale de una columna del CSV.
 class AppLanguage {
-  final String code;
-  final String nativeName;
-  const AppLanguage(this.code, this.nativeName);
+  final String code; // cabecera de la columna: es, en, de, zh...
+  final String nativeName; // fila LANGUAGE_NAME del CSV
+  final Locale locale;
+
+  AppLanguage(this.code, this.nativeName) : locale = _toLocale(code);
+
+  static Locale _toLocale(String code) {
+    final parts = code.split(RegExp('[-_]'));
+    final language = parts.first.toLowerCase();
+    if (parts.length == 1) return Locale(language);
+    if (parts[1].length == 4) {
+      return Locale.fromSubtags(languageCode: language, scriptCode: parts[1]);
+    }
+    return Locale(language, parts[1].toUpperCase());
+  }
 }
 
+/// Traducciones desde un CSV. Los idiomas también salen del CSV:
+///
+///     key,es,en,de,...
+///     LANGUAGE_NAME,Español,English,Deutsch,...
+///     KEY_SAVE,Guardar,Save,Speichern,...
+///
+/// Para añadir un idioma basta con añadir su columna (y su nombre en la fila
+/// LANGUAGE_NAME). No hay que tocar código.
 class LocalizationService extends ChangeNotifier {
   static final LocalizationService instance = LocalizationService._init();
   LocalizationService._init();
 
   static const String assetPath = 'assets/translations/translations.csv';
-  static const String defaultLang = 'ES';
+  static const String fallbackLang = 'en';
+  static const String _languageNameKey = 'LANGUAGE_NAME';
 
-  /// Para añadir un idioma: una línea aquí + su columna en el CSV.
-  static const List<AppLanguage> supportedLanguages = [
-    AppLanguage('ES', 'Español'),
-    AppLanguage('ENG', 'English'),
-  ];
+  /// Códigos de versiones anteriores de la app.
+  static const Map<String, String> _legacyCodes = {'ES': 'es', 'ENG': 'en'};
 
-  Map<String, Map<String, String>> _localizedStrings = {};
-  String _currentLanguage = defaultLang;
+  Map<String, Map<String, String>> _strings = {};
+  List<AppLanguage> _languages = [AppLanguage(fallbackLang, 'English')];
+  String _currentLanguage = fallbackLang;
+  final Set<String> _reportedMissingKeys = {};
 
+  List<AppLanguage> get languages => _languages;
   String get currentLanguage => _currentLanguage;
 
-  String get currentLanguageName => supportedLanguages
-      .firstWhere((l) => l.code == _currentLanguage,
-      orElse: () => supportedLanguages.first)
-      .nativeName;
+  AppLanguage get currentLanguageInfo => _languages.firstWhere(
+        (l) => l.code == _currentLanguage,
+        orElse: () => _languages.first,
+      );
+
+  Locale get currentLocale => currentLanguageInfo.locale;
+  List<Locale> get supportedLocales => _languages.map((l) => l.locale).toList();
 
   Future<void> load() async {
     try {
-      // 1) Idioma guardado (si existe y sigue siendo válido), si no el por defecto
-      final saved = SettingsService.instance.language;
-      final isValid = saved != null && supportedLanguages.any((l) => l.code == saved);
-      _currentLanguage = isValid ? saved : defaultLang;
-
-      // 2) Carga del CSV (igual que antes)
-      List<List<dynamic>> listData = await CsvReaderService.loadCsvFromAsset(assetPath);
-
-      if (listData.isEmpty) {
+      final rows = await CsvReaderService.loadCsvFromAsset(assetPath);
+      if (rows.isEmpty) {
         AppLogger.warning('El archivo CSV de localizaciones está vacío.');
         return;
       }
 
-      List<String> headers = listData[0].map((e) => e.toString().trim()).toList();
-      Map<String, Map<String, String>> tempMap = {};
+      final headers = rows.first.map((e) => e.toString().trim()).toList();
+      final strings = <String, Map<String, String>>{};
 
-      for (int i = 1; i < listData.length; i++) {
-        var row = listData[i];
+      for (var i = 1; i < rows.length; i++) {
+        final row = rows[i];
         if (row.isEmpty) continue;
 
-        String key = row[0].toString().trim();
-        Map<String, String> translations = {};
+        final key = row[0].toString().trim();
+        if (key.isEmpty) continue;
 
-        for (int j = 1; j < headers.length; j++) {
-          if (j < row.length) {
-            translations[headers[j]] = row[j].toString();
-          }
+        final translations = <String, String>{};
+        for (var j = 1; j < headers.length && j < row.length; j++) {
+          translations[headers[j]] = row[j].toString();
         }
-        tempMap[key] = translations;
+        strings[key] = translations;
       }
 
-      _localizedStrings = tempMap;
-      AppLogger.info('Localizaciones cargadas correctamente desde $assetPath');
+      _strings = strings;
+      _languages = _buildLanguages(headers.skip(1));
+      _currentLanguage = _pickInitialLanguage();
+      AppLogger.info(
+        'Localizaciones cargadas: ${_languages.length} idiomas, '
+        '${_strings.length} textos. Idioma actual: $_currentLanguage',
+      );
     } catch (e, stack) {
       AppLogger.error('Error al procesar las localizaciones', error: e, stackTrace: stack);
     }
   }
 
-  Future<void> changeLanguage(String langCode) async {
-    if (_currentLanguage == langCode) return;
-    _currentLanguage = langCode;
-    AppLogger.info('Idioma cambiado a: $langCode');
-    notifyListeners(); // redibuja la UI
-    await SettingsService.instance.setLanguage(langCode); // persiste
+  Future<void> changeLanguage(String code) async {
+    if (code == _currentLanguage || !_languages.any((l) => l.code == code)) return;
+
+    _currentLanguage = code;
+    AppLogger.info('Idioma cambiado a: $code');
+    notifyListeners();
+    await SettingsService.instance.setLanguage(code);
   }
 
   String translate(String key) {
-    if (!_localizedStrings.containsKey(key)) {
-      AppLogger.warning('Clave de traducción no encontrada: "$key"');
+    final entry = _strings[key];
+    if (entry == null) {
+      if (_reportedMissingKeys.add(key)) {
+        AppLogger.warning('Clave de traducción no encontrada: "$key"');
+      }
       return key;
     }
-    return _localizedStrings[key]?[_currentLanguage] ??
-        _localizedStrings[key]?[defaultLang] ??
-        key;
+
+    final text = entry[_currentLanguage];
+    if (text != null && text.isNotEmpty) return text;
+    return entry[fallbackLang] ?? key;
+  }
+
+  // ----------------------------- Privados -----------------------------
+
+  List<AppLanguage> _buildLanguages(Iterable<String> codes) {
+    final names = _strings[_languageNameKey] ?? const <String, String>{};
+    final languages = [
+      for (final code in codes)
+        if (code.isNotEmpty)
+          AppLanguage(
+            code,
+            (names[code]?.isNotEmpty ?? false) ? names[code]! : code.toUpperCase(),
+          ),
+    ];
+    return languages.isEmpty ? _languages : languages;
+  }
+
+  /// Orden: idioma guardado -> idioma del dispositivo -> inglés.
+  String _pickInitialLanguage() {
+    bool isAvailable(String code) => _languages.any((l) => l.code == code);
+
+    final saved = SettingsService.instance.language;
+    if (saved != null) {
+      final code = _legacyCodes[saved] ?? saved.toLowerCase();
+      if (isAvailable(code)) return code;
+    }
+
+    final device =
+        WidgetsBinding.instance.platformDispatcher.locale.languageCode.toLowerCase();
+    if (isAvailable(device)) return device;
+
+    return isAvailable(fallbackLang) ? fallbackLang : _languages.first.code;
   }
 }
 

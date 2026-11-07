@@ -10,13 +10,15 @@ class StudyModeTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = mode.isAvailable ? mode.color : Colors.grey;
+    final scheme = Theme.of(context).colorScheme;
+    final color = mode.isAvailable ? mode.color : scheme.outline;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: scheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: scheme.outlineVariant.withValues(alpha: 0.5)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
@@ -26,11 +28,12 @@ class StudyModeTile extends StatelessWidget {
         ],
       ),
       child: ListTile(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         leading: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.1),
+            color: color.withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(14),
           ),
           child: Icon(mode.icon, color: color, size: 28),
@@ -43,11 +46,11 @@ class StudyModeTile extends StatelessWidget {
           padding: const EdgeInsets.only(top: 4),
           child: Text(
             mode.subtitle,
-            style: TextStyle(color: Colors.grey[600], fontSize: 13),
+            style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 13),
           ),
         ),
         trailing: mode.isAvailable
-            ? const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey)
+            ? Icon(Icons.arrow_forward_ios, size: 16, color: scheme.outline)
             : const _ComingSoonChip(),
         onTap: mode.isAvailable ? onTap : null,
       ),
@@ -60,15 +63,16 @@ class _ComingSoonChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: Colors.grey.shade200,
+        color: scheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
         'KEY_COMING_SOON'.loc,
-        style: TextStyle(color: Colors.grey[700], fontSize: 11),
+        style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 11),
       ),
     );
   }

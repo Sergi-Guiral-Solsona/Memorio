@@ -3,14 +3,28 @@ import 'package:memorio/barrel_file.dart';
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
+  String _themeModeLabel(ThemeMode mode) {
+    switch (mode) {
+      case ThemeMode.system:
+        return 'KEY_THEME_SYSTEM'.loc;
+      case ThemeMode.light:
+        return 'KEY_THEME_LIGHT'.loc;
+      case ThemeMode.dark:
+        return 'KEY_THEME_DARK'.loc;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
 
+    // Se redibuja al cambiar de idioma o de tema.
     return ListenableBuilder(
-      listenable: LocalizationService.instance,
+      listenable: Listenable.merge([
+        LocalizationService.instance,
+        ThemeService.instance,
+      ]),
       builder: (context, _) {
-        final loc = LocalizationService.instance;
-
         return Scaffold(
           appBar: AppBar(title: Text('KEY_SETTINGS'.loc)),
           body: ListView(
@@ -18,13 +32,22 @@ class SettingsScreen extends StatelessWidget {
             children: [
               SettingsButton(
                 icon: Icons.language,
-                color: Colors.indigo,
+                color: scheme.primary,
                 title: 'KEY_LANGUAGE'.loc,
-
-                trailingText: loc.currentLanguage,
+                trailingText: LocalizationService.instance.currentLanguage.toUpperCase(),
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => const LanguageScreen()),
+                ),
+              ),
+              SettingsButton(
+                icon: Icons.palette_outlined,
+                color: scheme.tertiary,
+                title: 'KEY_APPEARANCE'.loc,
+                trailingText: _themeModeLabel(ThemeService.instance.mode),
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const AppearanceScreen()),
                 ),
               ),
               // Futuros botones: SettingsButton(...)
@@ -55,12 +78,15 @@ class SettingsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Card(
       elevation: 0,
+      color: scheme.surfaceContainerLow,
       margin: const EdgeInsets.only(bottom: 12),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: Colors.grey.shade200),
+        side: BorderSide(color: scheme.outlineVariant.withValues(alpha: 0.6)),
       ),
       child: ListTile(
         onTap: onTap,
@@ -69,7 +95,7 @@ class SettingsButton extends StatelessWidget {
         leading: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.1),
+            color: color.withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(icon, color: color),
@@ -82,9 +108,8 @@ class SettingsButton extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade100,
+                  color: scheme.surfaceContainerHighest,
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.grey.shade300),
                 ),
                 child: Text(
                   trailingText!,

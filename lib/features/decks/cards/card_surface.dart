@@ -1,18 +1,17 @@
+import 'dart:math' as math;
 import 'package:memorio/barrel_file.dart';
 
-/// Superficie con aspecto de tarjeta física: fondo gris, reborde oscuro
-/// redondeado y sombra. La usan la tarjeta grande (FlashCardView) y las
-/// miniaturas del grid (CardGridItem), para que se vean como la misma carta.
+/// Superficie con aspecto de tarjeta de verdad: papel con degradado, reborde
+/// redondeado, marco interior impreso, adornos en las esquinas, brillo y
+/// sombra. Los colores salen de [CardPalette], así sirve en claro y oscuro.
+/// La usan la tarjeta grande (FlashCardView) y las miniaturas (CardGridItem).
 class CardSurface extends StatelessWidget {
-  static const Color ink = Color(0xFF26262B); // reborde y texto
-  static const Color accent = Color(0xFFFFC107); // amarillo de la pista
-
   final Widget child;
   final EdgeInsetsGeometry padding;
   final double radius;
   final double borderWidth;
 
-  /// Versión pequeña (sombra más corta) para el grid.
+  /// Versión pequeña (sombra corta, sin adornos de esquina) para el grid.
   final bool compact;
 
   const CardSurface({
@@ -20,51 +19,184 @@ class CardSurface extends StatelessWidget {
     required this.child,
     this.padding = EdgeInsets.zero,
     this.radius = 28,
-    this.borderWidth = 3,
+    this.borderWidth = 2.5,
     this.compact = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    final p = context.cardPalette;
+    final innerRadius = math.max(0.0, radius - borderWidth);
+
     return Container(
-      padding: padding,
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Color(0xFFEFEFF1), Color(0xFFD5D5D9)],
+          colors: [p.paperTop, p.paperBottom],
         ),
         borderRadius: BorderRadius.circular(radius),
-        border: Border.all(color: ink, width: borderWidth),
+        border: Border.all(color: p.frame, width: borderWidth),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: compact ? 0.22 : 0.30),
-            blurRadius: compact ? 12 : 30,
-            offset: Offset(0, compact ? 6 : 16),
+            color: p.shadow.withValues(alpha: compact ? 0.22 : 0.32),
+            blurRadius: compact ? 12 : 32,
+            offset: Offset(0, compact ? 6 : 18),
           ),
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.12),
+            color: p.shadow.withValues(alpha: 0.14),
             blurRadius: compact ? 3 : 6,
             offset: Offset(0, compact ? 1 : 2),
           ),
         ],
       ),
-      child: child,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(innerRadius),
+        child: Stack(
+          fit: StackFit.passthrough,
+          children: [
+            Positioned.fill(
+              child: IgnorePointer(
+                child: CustomPaint(
+                  painter: _CardDecorationPainter(
+                    ink: p.ink,
+                    glossAlpha: p.glossAlpha,
+                    radius: innerRadius,
+                    compact: compact,
+                  ),
+                ),
+              ),
+            ),
+            Padding(padding: padding, child: child),
+          ],
+        ),
+      ),
     );
   }
 }
 
-/// Línea fina que separa secciones dentro de una tarjeta.
+/// Brillo, marco interior y adornos de las esquinas.
+class _CardDecorationPainter extends CustomPainter {
+  final Color ink;
+  final double glossAlpha;
+  final double radius;
+  final bool compact;
+
+  const _CardDecorationPainter({
+    required this.ink,
+    required this.glossAlpha,
+    required this.radius,
+    required this.compact,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rect = Offset.zero & size;
+
+    // Brillo suave arriba a la izquierda.
+    canvas.drawRect(
+      rect,
+      Paint()
+        ..shader = LinearGradient(
+          begin: Alignment.topLeft,
+          end: const Alignment(0.35, 0.15),
+          colors: [
+            Colors.white.withValues(alpha: glossAlpha),
+            Colors.white.withValues(alpha: 0),
+          ],
+        ).createShader(rect),
+    );
+
+    // Marco interior impreso.
+    final inset = compact ? 6.0 : 10.0;
+    final frameRadius = math.max(0.0, radius - inset);
+    final frame = RRect.fromRectAndRadius(
+      rect.deflate(inset),
+      Radius.circular(frameRadius),
+    );
+    canvas.drawRRect(
+      frame,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = compact ? 1.0 : 1.4
+        ..color = ink.withValues(alpha: 0.25),
+    );
+
+    if (compact) return;
+
+    // Rombos en las cuatro esquinas del marco.
+    final fill = Paint()..color = ink.withValues(alpha: 0.4);
+    final offset = inset + 15;
+    final corners = [
+      Offset(offset, offset),
+      Offset(size.width - offset, offset),
+      Offset(offset, size.height - offset),
+      Offset(size.width - offset, size.height - offset),
+    ];
+    for (final c in corners) {
+      final path = Path()
+        ..moveTo(c.dx, c.dy - 4.5)
+        ..lineTo(c.dx + 4.5, c.dy)
+        ..lineTo(c.dx, c.dy + 4.5)
+        ..lineTo(c.dx - 4.5, c.dy)
+        ..close();
+      canvas.drawPath(path, fill);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _CardDecorationPainter old) =>
+      old.ink != ink ||
+      old.glossAlpha != glossAlpha ||
+      old.radius != radius ||
+      old.compact != compact;
+}
+
+/// Separador con rombo central, para dividir secciones dentro de una tarjeta.
 class CardDivider extends StatelessWidget {
   const CardDivider({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 2,
-      decoration: BoxDecoration(
-        color: CardSurface.ink.withValues(alpha: 0.35),
-        borderRadius: BorderRadius.circular(1),
+    final ink = context.cardPalette.ink;
+    Widget line() => Expanded(
+          child: Container(height: 1.5, color: ink.withValues(alpha: 0.3)),
+        );
+
+    return Row(
+      children: [
+        line(),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Transform.rotate(
+            angle: math.pi / 4,
+            child: Container(width: 7, height: 7, color: ink.withValues(alpha: 0.5)),
+          ),
+        ),
+        line(),
+      ],
+    );
+  }
+}
+
+/// Rótulo pequeño en mayúsculas ("RESPUESTA").
+class CardCaption extends StatelessWidget {
+  final String text;
+
+  const CardCaption(this.text, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text.toUpperCase(),
+      textAlign: TextAlign.center,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: TextStyle(
+        fontSize: 11,
+        letterSpacing: 1.6,
+        fontWeight: FontWeight.w600,
+        color: context.cardPalette.ink.withValues(alpha: 0.5),
       ),
     );
   }
@@ -79,17 +211,15 @@ class HintBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final p = context.cardPalette;
     return Container(
       width: size,
       height: size,
-      decoration: const BoxDecoration(
-        shape: BoxShape.circle,
-        color: CardSurface.ink,
-      ),
+      decoration: BoxDecoration(shape: BoxShape.circle, color: p.badge),
       child: Icon(
         visible ? Icons.visibility : Icons.visibility_off,
         size: size * 0.55,
-        color: CardSurface.accent,
+        color: p.accent,
       ),
     );
   }

@@ -1,18 +1,12 @@
 import 'package:memorio/barrel_file.dart';
 
-/// Tarjeta en modo práctica: solo lectura y con la pista oculta al empezar.
-/// Envuelve a [FlashCardView] y se encarga de sus controladores.
+/// Tarjeta en modo estudio: solo lectura, pista oculta al empezar y se gira
+/// también tocándola. Envuelve a [FlashCardView] y gestiona sus controladores.
 class StudyCardView extends StatefulWidget {
   final CardModel card;
-  final bool showBack;
-  final ValueChanged<bool> onSideChanged;
+  final FlashCardController controller;
 
-  const StudyCardView({
-    super.key,
-    required this.card,
-    required this.showBack,
-    required this.onSideChanged,
-  });
+  const StudyCardView({super.key, required this.card, required this.controller});
 
   @override
   State<StudyCardView> createState() => _StudyCardViewState();
@@ -47,13 +41,13 @@ class _StudyCardViewState extends State<StudyCardView> {
   @override
   Widget build(BuildContext context) {
     return FlashCardView(
+      controller: widget.controller,
       frontController: _front,
       hintController: _hint,
       backController: _back,
       editable: false,
       initialHintVisible: false,
-      showBack: widget.showBack,
-      onSideChanged: widget.onSideChanged,
+      flipOnTap: true,
     );
   }
 }

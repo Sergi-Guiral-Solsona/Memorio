@@ -22,17 +22,16 @@ class _CardEditScreenState extends State<CardEditScreen> {
   late final TextEditingController _back =
       TextEditingController(text: _original.back);
 
-  bool _showBack = false;
+  final FlashCardController _flip = FlashCardController();
 
   @override
   void dispose() {
     _front.dispose();
     _hint.dispose();
     _back.dispose();
+    _flip.dispose();
     super.dispose();
   }
-
-  void _toggleSide() => setState(() => _showBack = !_showBack);
 
   void _save() {
     final front = _front.text.trim();
@@ -48,11 +47,7 @@ class _CardEditScreenState extends State<CardEditScreen> {
     // copyWith conserva id y estadísticas de la tarjeta original.
     Navigator.pop(
       context,
-      _original.copyWith(
-        front: front,
-        hint: _hint.text.trim(),
-        back: back,
-      ),
+      _original.copyWith(front: front, hint: _hint.text.trim(), back: back),
     );
   }
 
@@ -71,16 +66,14 @@ class _CardEditScreenState extends State<CardEditScreen> {
               child: Column(
                 children: [
                   FlashCardView(
+                    controller: _flip,
                     frontController: _front,
                     hintController: _hint,
                     backController: _back,
-                    showBack: _showBack,
-                    // Si se gira con el dedo, el botón sigue sabiendo la cara.
-                    onSideChanged: (isBack) => setState(() => _showBack = isBack),
                   ),
                   const SizedBox(height: 28),
                   OutlinedButton.icon(
-                    onPressed: _toggleSide,
+                    onPressed: _flip.flip,
                     icon: const Icon(Icons.flip),
                     label: Text('KEY_FLIP'.loc),
                   ),

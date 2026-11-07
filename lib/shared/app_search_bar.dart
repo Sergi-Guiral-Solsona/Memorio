@@ -39,6 +39,8 @@ class _AppSearchBarState extends State<AppSearchBar> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Padding(
       padding: widget.padding,
       child: TextField(
@@ -52,7 +54,7 @@ class _AppSearchBarState extends State<AppSearchBar> {
               ? null
               : IconButton(icon: const Icon(Icons.close), onPressed: _clear),
           filled: true,
-          fillColor: Colors.grey.shade100,
+          fillColor: scheme.surfaceContainerHighest.withValues(alpha: 0.6),
           contentPadding: const EdgeInsets.symmetric(vertical: 0),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),

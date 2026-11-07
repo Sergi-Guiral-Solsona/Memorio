@@ -1,53 +1,68 @@
-KEY,ES,ENG
-KEY_DECKS,Mazos,Decks
-KEY_MEMORIZE,Memorizar,Memorize
-KEY_SETTINGS,Ajustes,Settings
-KEY_CARDS,Cartas,Cards
-KEY_SAVE,Guardar,Save
-KEY_CANCEL,Cancelar,Cancel
-KEY_DECK_NAME,Nombre del mazo,Deck name
-KEY_CREATE_DECK,Crear mazo,Create deck
-KEY_EDIT_DECK,Editar mazo,Edit deck
-KEY_CREATE_CARD,Crear carta,Create card
-KEY_WORD_OR_PHRASE,Palabra o Frase,Word or Phrase
-KEY_EXAMPLE_SHORT,Ej.,Ex.
-KEY_HINT,Pista,Hint
-KEY_BEACH_THING,Cosa azul en la playa,Blue thing at the beach
-KEY_ANSWER,Respuesta,Answer
-KEY_OCEAN,El océano,The ocean
-KEY_ANSWER_DEFAULT,The ocean,El océano
-KEY_NO_CARDS,No hay tarjetas creadas en este mazo.,No cards created in this deck.
-KEY_CREATE_FIRST_DECK,Crea tu primer mazo para comenzar a estudiar,Create your first deck to start studying
-KEY_NO_DECKS,No hay mazos disponibles,No decks available
-KEY_GO_TO_CREATE_DECK,Ir a crear un mazo,Go to create a deck
-KEY_POMODORO,Pomodoro,Pomodoro
-KEY_FOCUSED_STUDY,Estudio enfocado con intervalos de tiempo,Focused study with time intervals
-KEY_RANDOM,Aleatorio,Random
-KEY_RANDOM_CARDS,Tarjetas en orden aleatorio,Cards in random order
-KEY_MODE,Modo,Mode
-KEY_LANGUAGE,Idioma,Language
-KEY_SEARCH,Buscar,Search
-KEY_NO_RESULTS,Sin resultados,No results
-KEY_MY_FILTER,Mi filtro,My filter
-KEY_MY_FILTER_DESC,Tus reglas personalizadas de repaso,Your custom review rules
-KEY_COMING_SOON,Próximamente,Coming soon
-KEY_SELECT_DECKS,Elige uno o varios mazos,Choose one or more decks
-KEY_SELECT_ALL,Todos,Select all
-KEY_DESELECT_ALL,Ninguno,Deselect all
-KEY_START,Empezar,Start
-KEY_KNEW_IT,Lo sabía,I knew it
-KEY_DIDNT_KNOW,No lo sabía,I didn't know it
-KEY_SESSION_COMPLETE,Sesión completada,Session complete
-KEY_CORRECT,Aciertos,Correct
-KEY_INCORRECT,Fallos,Incorrect
-KEY_REPEAT,Repetir,Repeat
-KEY_EXIT,Salir,Exit
-KEY_FOCUS,Enfoque,Focus
-KEY_BREAK,Descanso,Break
-KEY_LONG_BREAK,Descanso largo,Long break
-KEY_TAKE_A_BREAK,Toca descansar,Time for a break
-KEY_SKIP_BREAK,Saltar descanso,Skip break
-KEY_PAUSED,En pausa,Paused
-KEY_RESUME,Continuar,Resume
-KEY_POMODOROS_DONE,Pomodoros completados,Pomodoros completed
-KEY_FINISH_SESSION,Terminar sesión,End session
+key,es,en,de,fr,it,pt,ru,zh,ja,ko,ar,tr,nl,pl,hi
+LANGUAGE_NAME,Español,English,Deutsch,Français,Italiano,Português,Русский,中文（简体）,日本語,한국어,العربية,Türkçe,Nederlands,Polski,हिन्दी
+KEY_SETTINGS,Ajustes,Settings,Einstellungen,Paramètres,Impostazioni,Configurações,Настройки,设置,設定,설정,الإعدادات,Ayarlar,Instellingen,Ustawienia,सेटिंग्स
+KEY_LANGUAGE,Idioma,Language,Sprache,Langue,Lingua,Idioma,Язык,语言,言語,언어,اللغة,Dil,Taal,Język,भाषा
+KEY_SEARCH,Buscar,Search,Suchen,Rechercher,Cerca,Pesquisar,Поиск,搜索,検索,검색,بحث,Ara,Zoeken,Szukaj,खोजें
+KEY_NO_RESULTS,Sin resultados,No results,Keine Ergebnisse,Aucun résultat,Nessun risultato,Sem resultados,Нет результатов,没有结果,結果がありません,결과 없음,لا توجد نتائج,Sonuç yok,Geen resultaten,Brak wyników,कोई परिणाम नहीं
+KEY_DECKS,Mazos,Decks,Stapel,Paquets,Mazzi,Baralhos,Колоды,卡组,デッキ,덱,المجموعات,Desteler,Stapels,Talie,डेक
+KEY_MEMORIZE,Memorizar,Memorize,Lernen,Mémoriser,Memorizza,Memorizar,Запоминать,记忆,暗記,암기,حفظ,Ezberle,Onthouden,Zapamiętaj,याद करें
+KEY_CARDS,Tarjetas,Cards,Karten,Cartes,Carte,Cartões,Карточки,卡片,カード,카드,البطاقات,Kartlar,Kaarten,Fiszki,कार्ड
+KEY_CANCEL,Cancelar,Cancel,Abbrechen,Annuler,Annulla,Cancelar,Отмена,取消,キャンセル,취소,إلغاء,İptal,Annuleren,Anuluj,रद्द करें
+KEY_SAVE,Guardar,Save,Speichern,Enregistrer,Salva,Guardar,Сохранить,保存,保存,저장,حفظ,Kaydet,Opslaan,Zapisz,सहेजें
+KEY_CREATE_DECK,Crear mazo,Create deck,Stapel erstellen,Créer un paquet,Crea mazzo,Criar baralho,Создать колоду,创建卡组,デッキを作成,덱 만들기,إنشاء مجموعة,Deste oluştur,Stapel maken,Utwórz talię,डेक बनाएँ
+KEY_EDIT_DECK,Editar mazo,Edit deck,Stapel bearbeiten,Modifier le paquet,Modifica mazzo,Editar baralho,Изменить колоду,编辑卡组,デッキを編集,덱 편집,تعديل المجموعة,Desteyi düzenle,Stapel bewerken,Edytuj talię,डेक संपादित करें
+KEY_DECK_NAME,Nombre del mazo,Deck name,Name des Stapels,Nom du paquet,Nome del mazzo,Nome do baralho,Название колоды,卡组名称,デッキ名,덱 이름,اسم المجموعة,Deste adı,Naam van de stapel,Nazwa talii,डेक का नाम
+KEY_NO_DECKS,Aún no tienes mazos,You don't have any decks yet,Du hast noch keine Stapel,Vous n'avez pas encore de paquets,Non hai ancora nessun mazzo,Ainda não tem baralhos,У вас пока нет колод,你还没有卡组,まだデッキがありません,아직 덱이 없어요,ليس لديك أي مجموعات بعد,Henüz deste yok,Je hebt nog geen stapels,Nie masz jeszcze talii,आपके पास अभी कोई डेक नहीं है
+KEY_CREATE_FIRST_DECK,Crea tu primer mazo para empezar,Create your first deck to get started,"Erstelle deinen ersten Stapel, um zu beginnen",Créez votre premier paquet pour commencer,Crea il tuo primo mazzo per iniziare,Crie o seu primeiro baralho para começar,"Создайте первую колоду, чтобы начать",创建你的第一个卡组开始吧,最初のデッキを作成して始めましょう,첫 번째 덱을 만들어 시작하세요,أنشئ أول مجموعة لك للبدء,Başlamak için ilk desteni oluştur,Maak je eerste stapel om te beginnen,"Utwórz pierwszą talię, aby zacząć",शुरू करने के लिए अपना पहला डेक बनाएँ
+KEY_GO_TO_CREATE_DECK,Ir a crear un mazo,Go create a deck,Stapel erstellen,Créer un paquet,Vai a creare un mazzo,Ir criar um baralho,Создать колоду,去创建卡组,デッキを作成しに行く,덱 만들러 가기,اذهب لإنشاء مجموعة,Deste oluşturmaya git,Ga een stapel maken,Przejdź do tworzenia talii,डेक बनाने जाएँ
+KEY_NO_CARDS,Este mazo no tiene tarjetas,This deck has no cards,Dieser Stapel hat keine Karten,Ce paquet n'a pas de cartes,Questo mazzo non ha carte,Este baralho não tem cartões,В этой колоде нет карточек,这个卡组没有卡片,このデッキにはカードがありません,이 덱에는 카드가 없어요,لا توجد بطاقات في هذه المجموعة,Bu destede kart yok,Deze stapel heeft geen kaarten,Ta talia nie ma fiszek,इस डेक में कोई कार्ड नहीं है
+KEY_CREATE_FIRST_CARD,Crea tu primera tarjeta,Create your first card,Erstelle deine erste Karte,Créez votre première carte,Crea la tua prima carta,Crie o seu primeiro cartão,Создайте первую карточку,创建你的第一张卡片,最初のカードを作成しましょう,첫 번째 카드를 만들어 보세요,أنشئ أول بطاقة لك,İlk kartını oluştur,Maak je eerste kaart,Utwórz pierwszą fiszkę,अपना पहला कार्ड बनाएँ
+KEY_CREATE_CARD,Crear tarjeta,Create card,Karte erstellen,Créer une carte,Crea carta,Criar cartão,Создать карточку,创建卡片,カードを作成,카드 만들기,إنشاء بطاقة,Kart oluştur,Kaart maken,Utwórz fiszkę,कार्ड बनाएँ
+KEY_EDIT_CARD,Editar tarjeta,Edit card,Karte bearbeiten,Modifier la carte,Modifica carta,Editar cartão,Изменить карточку,编辑卡片,カードを編集,카드 편집,تعديل البطاقة,Kartı düzenle,Kaart bewerken,Edytuj fiszkę,कार्ड संपादित करें
+KEY_WORD_OR_PHRASE,Palabra o frase,Word or phrase,Wort oder Satz,Mot ou phrase,Parola o frase,Palavra ou frase,Слово или фраза,单词或短语,単語またはフレーズ,단어 또는 문장,كلمة أو عبارة,Kelime veya cümle,Woord of zin,Słowo lub fraza,शब्द या वाक्यांश
+KEY_HINT,Pista,Hint,Hinweis,Indice,Suggerimento,Dica,Подсказка,提示,ヒント,힌트,تلميح,İpucu,Hint,Podpowiedź,संकेत
+KEY_ANSWER,Respuesta,Answer,Antwort,Réponse,Risposta,Resposta,Ответ,答案,答え,정답,الإجابة,Cevap,Antwoord,Odpowiedź,उत्तर
+KEY_FLIP,Dar la vuelta,Flip card,Karte umdrehen,Retourner la carte,Gira la carta,Virar cartão,Перевернуть,翻转卡片,カードをめくる,카드 뒤집기,اقلب البطاقة,Kartı çevir,Kaart omdraaien,Obróć fiszkę,कार्ड पलटें
+KEY_CARD_REQUIRED,Rellena la palabra y la respuesta,Fill in the word and the answer,Fülle Wort und Antwort aus,Remplissez le mot et la réponse,Compila la parola e la risposta,Preencha a palavra e a resposta,Заполните слово и ответ,请填写单词和答案,単語と答えを入力してください,단어와 정답을 입력하세요,املأ الكلمة والإجابة,Kelimeyi ve cevabı doldur,Vul het woord en het antwoord in,Uzupełnij słowo i odpowiedź,शब्द और उत्तर भरें
+KEY_MODE,Modo,Mode,Modus,Mode,Modalità,Modo,Режим,模式,モード,모드,الوضع,Mod,Modus,Tryb,मोड
+KEY_POMODORO,Pomodoro,Pomodoro,Pomodoro,Pomodoro,Pomodoro,Pomodoro,Pomodoro,Pomodoro,Pomodoro,Pomodoro,Pomodoro,Pomodoro,Pomodoro,Pomodoro,Pomodoro
+KEY_FOCUSED_STUDY,Estudio con tiempos de enfoque y descanso,Study in focus and break intervals,Lernen in Fokus- und Pausenphasen,Étude par périodes de concentration et de pause,Studio a intervalli di concentrazione e pausa,Estudo com períodos de foco e descanso,Учёба с периодами концентрации и отдыха,专注与休息交替的学习,集中と休憩を繰り返して学習,집중과 휴식을 반복하며 학습,دراسة بفترات تركيز واستراحة,Odak ve mola aralıklarıyla çalışma,Studeren met focus- en pauzeperiodes,Nauka w okresach skupienia i przerw,फ़ोकस और ब्रेक के अंतराल में पढ़ाई
+KEY_RANDOM,Aleatorio,Random,Zufall,Aléatoire,Casuale,Aleatório,Случайно,随机,ランダム,무작위,عشوائي,Rastgele,Willekeurig,Losowo,यादृच्छिक
+KEY_RANDOM_CARDS,Tarjetas en orden aleatorio,Cards in random order,Karten in zufälliger Reihenfolge,Cartes dans un ordre aléatoire,Carte in ordine casuale,Cartões em ordem aleatória,Карточки в случайном порядке,按随机顺序学习卡片,カードをランダムな順番で,카드를 무작위 순서로,بطاقات بترتيب عشوائي,Kartlar rastgele sırada,Kaarten in willekeurige volgorde,Fiszki w losowej kolejności,कार्ड यादृच्छिक क्रम में
+KEY_MY_FILTER,Mi filtro,My filter,Mein Filter,Mon filtre,Il mio filtro,O meu filtro,Мой фильтр,我的筛选,マイフィルター,내 필터,مرشحي,Filtrem,Mijn filter,Mój filtr,मेरा फ़िल्टर
+KEY_MY_FILTER_DESC,Tus reglas personalizadas de repaso,Your custom review rules,Deine eigenen Wiederholungsregeln,Vos propres règles de révision,Le tue regole di ripasso personalizzate,As suas regras de revisão personalizadas,Ваши собственные правила повторения,你的自定义复习规则,自分だけの復習ルール,나만의 복습 규칙,قواعد المراجعة المخصصة لك,Kendi tekrar kuralların,Je eigen herhalingsregels,Twoje własne zasady powtórek,आपके अपने दोहराने के नियम
+KEY_COMING_SOON,Próximamente,Coming soon,Demnächst,Bientôt,Prossimamente,Em breve,Скоро,即将推出,近日公開,곧 출시,قريبًا,Çok yakında,Binnenkort,Wkrótce,जल्द आ रहा है
+KEY_SELECT_DECKS,Elige uno o varios mazos,Choose one or more decks,Wähle einen oder mehrere Stapel,Choisissez un ou plusieurs paquets,Scegli uno o più mazzi,Escolha um ou mais baralhos,Выберите одну или несколько колод,选择一个或多个卡组,デッキを1つ以上選んでください,덱을 하나 이상 선택하세요,اختر مجموعة أو أكثر,Bir veya daha fazla deste seç,Kies een of meer stapels,Wybierz jedną lub więcej talii,एक या अधिक डेक चुनें
+KEY_SELECT_ALL,Todos,Select all,Alle,Tout,Tutti,Todos,Все,全选,すべて,모두,الكل,Tümü,Alles,Wszystkie,सभी
+KEY_DESELECT_ALL,Ninguno,Deselect all,Keine,Aucun,Nessuno,Nenhum,Снять всё,全不选,選択解除,모두 해제,إلغاء الكل,Hiçbiri,Niets,Żadne,कोई नहीं
+KEY_START,Empezar,Start,Starten,Commencer,Inizia,Começar,Начать,开始,開始,시작,ابدأ,Başla,Starten,Rozpocznij,शुरू करें
+KEY_KNEW_IT,Lo sabía,I knew it,Gewusst,Je savais,Lo sapevo,Eu sabia,Помню,我记得,わかった,알고 있었어요,كنت أعرفها,Biliyordum,Wist ik,Znam to,मुझे पता था
+KEY_DIDNT_KNOW,No lo sabía,I didn't know it,Nicht gewusst,Je ne savais pas,Non lo sapevo,Eu não sabia,Не помню,我不记得,わからなかった,몰랐어요,لم أكن أعرفها,Bilmiyordum,Wist ik niet,Nie znam,मुझे नहीं पता था
+KEY_SESSION_COMPLETE,Sesión completada,Session complete,Sitzung abgeschlossen,Session terminée,Sessione completata,Sessão concluída,Сессия завершена,学习完成,セッション完了,세션 완료,اكتملت الجلسة,Oturum tamamlandı,Sessie voltooid,Sesja zakończona,सत्र पूरा हुआ
+KEY_CORRECT,Aciertos,Correct,Richtig,Correctes,Corrette,Certas,Верно,答对,正解,정답,صحيحة,Doğru,Goed,Poprawne,सही
+KEY_INCORRECT,Fallos,Incorrect,Falsch,Incorrectes,Sbagliate,Erradas,Неверно,答错,不正解,오답,خاطئة,Yanlış,Fout,Błędne,गलत
+KEY_REPEAT,Repetir,Repeat,Wiederholen,Recommencer,Ripeti,Repetir,Повторить,重复,もう一度,다시 하기,إعادة,Tekrarla,Herhalen,Powtórz,दोहराएँ
+KEY_EXIT,Salir,Exit,Beenden,Quitter,Esci,Sair,Выйти,退出,終了,나가기,خروج,Çık,Afsluiten,Wyjdź,बाहर निकलें
+KEY_FOCUS,Enfoque,Focus,Fokus,Concentration,Concentrazione,Foco,Концентрация,专注,集中,집중,تركيز,Odak,Focus,Skupienie,फ़ोकस
+KEY_BREAK,Descanso,Break,Pause,Pause,Pausa,Pausa,Перерыв,休息,休憩,휴식,استراحة,Mola,Pauze,Przerwa,ब्रेक
+KEY_LONG_BREAK,Descanso largo,Long break,Lange Pause,Longue pause,Pausa lunga,Pausa longa,Длинный перерыв,长休息,長い休憩,긴 휴식,استراحة طويلة,Uzun mola,Lange pauze,Długa przerwa,लंबा ब्रेक
+KEY_TAKE_A_BREAK,Toca descansar,Time for a break,Zeit für eine Pause,C'est l'heure de la pause,È ora di una pausa,Hora de uma pausa,Время отдохнуть,该休息一下了,休憩の時間です,쉬어갈 시간이에요,حان وقت الاستراحة,Mola zamanı,Tijd voor een pauze,Czas na przerwę,ब्रेक का समय
+KEY_SKIP_BREAK,Saltar descanso,Skip break,Pause überspringen,Passer la pause,Salta la pausa,Saltar pausa,Пропустить перерыв,跳过休息,休憩をスキップ,휴식 건너뛰기,تخطي الاستراحة,Molayı atla,Pauze overslaan,Pomiń przerwę,ब्रेक छोड़ें
+KEY_PAUSED,En pausa,Paused,Pausiert,En pause,In pausa,Em pausa,Пауза,已暂停,一時停止中,일시정지됨,متوقف مؤقتًا,Duraklatıldı,Gepauzeerd,Wstrzymano,रुका हुआ
+KEY_RESUME,Continuar,Resume,Fortsetzen,Reprendre,Riprendi,Continuar,Продолжить,继续,再開,계속하기,متابعة,Devam et,Hervatten,Wznów,जारी रखें
+KEY_POMODOROS_DONE,Pomodoros completados,Pomodoros completed,Abgeschlossene Pomodoros,Pomodoros terminés,Pomodori completati,Pomodoros concluídos,Завершённые помодоро,已完成番茄钟,完了したポモドーロ,완료한 포모도로,البومودورو المكتملة,Tamamlanan pomodorolar,Voltooide pomodoro's,Ukończone pomodoro,पूरे हुए पोमोडोरो
+KEY_FINISH_SESSION,Terminar sesión,End session,Sitzung beenden,Terminer la session,Termina sessione,Terminar sessão,Завершить сессию,结束学习,セッションを終了,세션 종료,إنهاء الجلسة,Oturumu bitir,Sessie beëindigen,Zakończ sesję,सत्र समाप्त करें
+KEY_MEMORIO_LEARNING,Memorio Learning,Memorio Learning,Memorio Learning,Memorio Learning,Memorio Learning,Memorio Learning,Memorio Learning,Memorio Learning,Memorio Learning,Memorio Learning,Memorio Learning,Memorio Learning,Memorio Learning,Memorio Learning,Memorio Learning
+KEY_MEMORIO_LEARNING_DESC,Las tarjetas que más fallas salen antes,Cards you miss most come up sooner,"Karten, die du oft verfehlst, kommen früher",Les cartes que vous ratez le plus reviennent plus tôt,Le carte che sbagli di più escono prima,Os cartões em que mais falha aparecem primeiro,"Карточки, в которых вы чаще ошибаетесь, выпадают раньше",你错得越多的卡片出现得越早,間違いの多いカードほど先に出てきます,많이 틀린 카드가 먼저 나옵니다,البطاقات التي تخطئ فيها أكثر تظهر أولًا,En çok yanlış yaptığın kartlar daha önce gelir,"Kaarten die je vaker fout hebt, komen eerder","Fiszki, w których częściej się mylisz, pojawiają się wcześniej",जिन कार्ड में आप ज़्यादा गलती करते हैं वे पहले आते हैं
+KEY_PRIORITY,Prioridad,Priority,Priorität,Priorité,Priorità,Prioridade,Приоритет,优先级,優先度,우선순위,الأولوية,Öncelik,Prioriteit,Priorytet,प्राथमिकता
+KEY_NEW_CARD,Tarjeta nueva,New card,Neue Karte,Nouvelle carte,Nuova carta,Novo cartão,Новая карточка,新卡片,新しいカード,새 카드,بطاقة جديدة,Yeni kart,Nieuwe kaart,Nowa fiszka,नया कार्ड
+KEY_ACCURACY,Precisión,Accuracy,Genauigkeit,Précision,Precisione,Precisão,Точность,正确率,正答率,정확도,الدقة,Doğruluk,Nauwkeurigheid,Dokładność,सटीकता
+KEY_APPEARANCE,Apariencia,Appearance,Darstellung,Apparence,Aspetto,Aparência,Оформление,外观,外観,화면 스타일,المظهر,Görünüm,Weergave,Wygląd,दिखावट
+KEY_THEME,Tema,Theme,Design,Thème,Tema,Tema,Тема,主题,テーマ,테마,السمة,Tema,Thema,Motyw,थीम
+KEY_THEME_SYSTEM,Sistema,System,System,Système,Sistema,Sistema,Системная,跟随系统,システム,시스템,النظام,Sistem,Systeem,Systemowy,सिस्टम
+KEY_THEME_LIGHT,Claro,Light,Hell,Clair,Chiaro,Claro,Светлая,浅色,ライト,라이트,فاتح,Açık,Licht,Jasny,हल्का
+KEY_THEME_DARK,Oscuro,Dark,Dunkel,Sombre,Scuro,Escuro,Тёмная,深色,ダーク,다크,داكن,Koyu,Donker,Ciemny,गहरा
+KEY_ACCENT_COLOR,Color de acento,Accent color,Akzentfarbe,Couleur d'accent,Colore principale,Cor de destaque,Акцентный цвет,主题色,アクセントカラー,강조 색상,لون التمييز,Vurgu rengi,Accentkleur,Kolor akcentu,एक्सेंट रंग
+KEY_AMOLED,Negro puro (AMOLED),Pure black (AMOLED),Reines Schwarz (AMOLED),Noir pur (AMOLED),Nero puro (AMOLED),Preto puro (AMOLED),Чисто чёрный (AMOLED),纯黑（AMOLED）,ピュアブラック（AMOLED）,퓨어 블랙 (AMOLED),أسود نقي (AMOLED),Saf siyah (AMOLED),Puur zwart (AMOLED),Czerń absolutna (AMOLED),शुद्ध काला (AMOLED)
+KEY_AMOLED_DESC,Ahorra batería en pantallas OLED con el tema oscuro,Saves battery on OLED screens in the dark theme,Spart Akku auf OLED-Displays im dunklen Design,Économise la batterie sur les écrans OLED avec le thème sombre,Risparmia batteria sugli schermi OLED con il tema scuro,Poupa bateria em ecrãs OLED com o tema escuro,Экономит заряд на OLED-экранах в тёмной теме,深色主题下可为 OLED 屏幕省电,ダークテーマのOLED画面でバッテリーを節約します,다크 테마에서 OLED 화면의 배터리를 절약해요,يوفّر البطارية على شاشات OLED في السمة الداكنة,Koyu temada OLED ekranlarda pil tasarrufu sağlar,Bespaart batterij op OLED-schermen in het donkere thema,Oszczędza baterię na ekranach OLED w ciemnym motywie,डार्क थीम में OLED स्क्रीन पर बैटरी बचाता है
+KEY_PREVIEW,Vista previa,Preview,Vorschau,Aperçu,Anteprima,Pré-visualização,Предпросмотр,预览,プレビュー,미리보기,معاينة,Önizleme,Voorbeeld,Podgląd,पूर्वावलोकन

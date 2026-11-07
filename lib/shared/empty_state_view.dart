@@ -1,34 +1,36 @@
 import 'package:memorio/barrel_file.dart';
 
 /// Pantalla de "no hay nada": icono, título, subtítulo y, opcionalmente,
-/// un botón de acción. Sustituye a EmptyDecksView y sirve para cualquier lista.
+/// un botón de acción. Sirve para cualquier lista vacía.
 class EmptyStateView extends StatelessWidget {
   final IconData icon;
-  final IconData? actionIcon;
   final String title;
   final String? subtitle;
   final String? actionLabel;
+  final IconData actionIcon;
   final VoidCallback? onAction;
 
   const EmptyStateView({
     super.key,
     required this.icon,
-    this.actionIcon,
     required this.title,
     this.subtitle,
     this.actionLabel,
+    this.actionIcon = Icons.add,
     this.onAction,
   });
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 80, color: Colors.grey),
+            Icon(icon, size: 80, color: scheme.outline),
             const SizedBox(height: 16),
             Text(
               title,
@@ -39,7 +41,7 @@ class EmptyStateView extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 subtitle!,
-                style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 14),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -47,7 +49,7 @@ class EmptyStateView extends StatelessWidget {
               const SizedBox(height: 24),
               ElevatedButton.icon(
                 onPressed: onAction,
-                icon: const Icon(Icons.add),
+                icon: Icon(actionIcon),
                 label: Text(actionLabel!),
               ),
             ],

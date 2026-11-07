@@ -1,5 +1,7 @@
 import 'package:memorio/barrel_file.dart';
 
+/// Lista de idiomas (salen del CSV), cada uno con su nombre en su propio
+/// idioma, con buscador.
 class LanguageScreen extends StatefulWidget {
   const LanguageScreen({super.key});
 
@@ -8,27 +10,15 @@ class LanguageScreen extends StatefulWidget {
 }
 
 class _LanguageScreenState extends State<LanguageScreen> {
-  final TextEditingController _searchController = TextEditingController();
   String _query = '';
 
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
-
-  List<AppLanguage> get _filtered {
-    final q = _query.trim().toLowerCase();
-    if (q.isEmpty) return LocalizationService.supportedLanguages;
-    return LocalizationService.supportedLanguages
-        .where((l) =>
-            l.nativeName.toLowerCase().contains(q) ||
-            l.code.toLowerCase().contains(q))
-        .toList();
-  }
+  List<AppLanguage> get _filtered => LocalizationService.instance.languages
+      .where((l) => matchesSearch(_query, [l.nativeName, l.code]))
+      .toList();
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     final current = LocalizationService.instance.currentLanguage;
     final languages = _filtered;
 
@@ -36,32 +26,10 @@ class _LanguageScreenState extends State<LanguageScreen> {
       appBar: AppBar(title: Text('KEY_LANGUAGE'.loc)),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-            child: TextField(
-              controller: _searchController,
-              onChanged: (v) => setState(() => _query = v),
-              decoration: InputDecoration(
-                hintText: 'KEY_SEARCH'.loc,
-                prefixIcon: const Icon(Icons.search),
-                suffixIcon: _query.isEmpty
-                    ? null
-                    : IconButton(
-                        icon: const Icon(Icons.clear),
-                        onPressed: () {
-                          _searchController.clear();
-                          setState(() => _query = '');
-                        },
-                      ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                ),
-              ),
-            ),
-          ),
+          AppSearchBar(onChanged: (value) => setState(() => _query = value)),
           Expanded(
             child: languages.isEmpty
-                ? Center(child: Text('KEY_NO_RESULTS'.loc))
+                ? EmptyStateView(icon: Icons.search_off, title: 'KEY_NO_RESULTS'.loc)
                 : ListView.builder(
                     itemCount: languages.length,
                     itemBuilder: (context, i) {
@@ -71,17 +39,15 @@ class _LanguageScreenState extends State<LanguageScreen> {
                         title: Text(
                           lang.nativeName, // siempre en su idioma original
                           style: TextStyle(
-                            fontWeight:
-                                selected ? FontWeight.bold : FontWeight.normal,
+                            fontWeight: selected ? FontWeight.bold : FontWeight.normal,
                           ),
                         ),
-                        subtitle: Text(lang.code),
+                        subtitle: Text(lang.code.toUpperCase()),
                         trailing: selected
-                            ? const Icon(Icons.check_circle, color: Colors.indigo)
+                            ? Icon(Icons.check_circle, color: scheme.primary)
                             : null,
                         onTap: () async {
-                          await LocalizationService.instance
-                              .changeLanguage(lang.code);
+                          await LocalizationService.instance.changeLanguage(lang.code);
                           if (context.mounted) Navigator.pop(context);
                         },
                       );
