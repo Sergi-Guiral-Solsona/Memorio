@@ -3,6 +3,7 @@ import 'package:memorio/barrel_file.dart';
 /// Colores de acento que se pueden elegir en Apariencia.
 /// Para añadir uno: una línea aquí.
 enum AppAccent {
+  ink(Color(0xFF4A6580)), // el azul pizarra de las tarjetas por defecto
   indigo(Color(0xFF3F51B5)),
   blue(Color(0xFF1E88E5)),
   teal(Color(0xFF00897B)),
@@ -20,16 +21,21 @@ enum AppAccent {
 class AppTheme {
   AppTheme._();
 
-  static ThemeData light(Color seed) =>
-      _build(Brightness.light, seed, amoled: false);
+  static ThemeData light(Color seed, {CardStyle cardStyle = CardStyle.minimal}) =>
+      _build(Brightness.light, seed, amoled: false, cardStyle: cardStyle);
 
-  static ThemeData dark(Color seed, {bool amoled = false}) =>
-      _build(Brightness.dark, seed, amoled: amoled);
+  static ThemeData dark(
+    Color seed, {
+    bool amoled = false,
+    CardStyle cardStyle = CardStyle.minimal,
+  }) =>
+      _build(Brightness.dark, seed, amoled: amoled, cardStyle: cardStyle);
 
   static ThemeData _build(
     Brightness brightness,
     Color seed, {
     required bool amoled,
+    required CardStyle cardStyle,
   }) {
     var scheme = ColorScheme.fromSeed(seedColor: seed, brightness: brightness);
 
@@ -55,7 +61,7 @@ class AppTheme {
       ),
       snackBarTheme: const SnackBarThemeData(behavior: SnackBarBehavior.floating),
       extensions: [
-        brightness == Brightness.dark ? CardPalette.dark : CardPalette.light,
+        CardLook(style: cardStyle, brightness: brightness, accent: seed),
       ],
     );
   }

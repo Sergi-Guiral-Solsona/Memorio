@@ -79,6 +79,8 @@ class _SelectDecksForStudyScreenState extends State<SelectDecksForStudyScreen> {
         return PomodoroStudyScreen(decks: decks);
       case StudyMode.random:
         return RandomStudyScreen(decks: decks);
+      case StudyMode.valley:
+        return ForgettingValleyScreen(decks: decks);
     }
   }
 

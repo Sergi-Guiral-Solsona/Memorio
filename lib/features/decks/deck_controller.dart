@@ -71,6 +71,7 @@ class DeckController {
     deck.cards[index] = card.copyWith(
       correctCount: card.correctCount + (isCorrect ? 1 : 0),
       incorrectCount: card.incorrectCount + (isCorrect ? 0 : 1),
+      streak: isCorrect ? card.streak + 1 : 0,
       lastReviewed: DateTime.now(),
     );
     await _persistDeck(deck);

@@ -11,12 +11,17 @@ class SinglePassStudyScreen extends StatefulWidget {
   /// Muestra sobre cada tarjeta su prioridad (solo tiene sentido en Memorio Learning).
   final bool showPriority;
 
+  /// Si el resumen ofrece "Repetir". No tiene sentido en el Valle del olvido:
+  /// al repasar, las tarjetas dejan de estar en el valle.
+  final bool allowRepeat;
+
   const SinglePassStudyScreen({
     super.key,
     required this.mode,
     required this.order,
     required this.decks,
     this.showPriority = false,
+    this.allowRepeat = true,
   });
 
   @override
@@ -55,7 +60,7 @@ class _SinglePassStudyScreenState extends State<SinglePassStudyScreen> {
     return StudySummaryView(
       correct: _session.correct,
       incorrect: _session.incorrect,
-      onRepeat: _restart,
+      onRepeat: widget.allowRepeat ? _restart : null,
       onExit: () => Navigator.pop(context),
     );
   }

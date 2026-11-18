@@ -9,7 +9,8 @@ class ThemeService extends ChangeNotifier {
   }
 
   ThemeMode _mode = ThemeMode.system;
-  AppAccent _accent = AppAccent.indigo;
+  AppAccent _accent = AppAccent.ink;
+  CardStyle _cardStyle = CardStyle.minimal;
   bool _amoled = false;
 
   late ThemeData _lightTheme;
@@ -17,6 +18,7 @@ class ThemeService extends ChangeNotifier {
 
   ThemeMode get mode => _mode;
   AppAccent get accent => _accent;
+  CardStyle get cardStyle => _cardStyle;
   bool get amoled => _amoled;
   ThemeData get lightTheme => _lightTheme;
   ThemeData get darkTheme => _darkTheme;
@@ -26,6 +28,7 @@ class ThemeService extends ChangeNotifier {
     final settings = SettingsService.instance;
     _mode = settings.themeMode;
     _accent = settings.accent;
+    _cardStyle = settings.cardStyle;
     _amoled = settings.amoled;
     _rebuildThemes();
   }
@@ -45,6 +48,14 @@ class ThemeService extends ChangeNotifier {
     await SettingsService.instance.setAccent(accent);
   }
 
+  Future<void> setCardStyle(CardStyle style) async {
+    if (_cardStyle == style) return;
+    _cardStyle = style;
+    _rebuildThemes();
+    notifyListeners();
+    await SettingsService.instance.setCardStyle(style);
+  }
+
   Future<void> setAmoled(bool value) async {
     if (_amoled == value) return;
     _amoled = value;
@@ -54,7 +65,7 @@ class ThemeService extends ChangeNotifier {
   }
 
   void _rebuildThemes() {
-    _lightTheme = AppTheme.light(_accent.color);
-    _darkTheme = AppTheme.dark(_accent.color, amoled: _amoled);
+    _lightTheme = AppTheme.light(_accent.color, cardStyle: _cardStyle);
+    _darkTheme = AppTheme.dark(_accent.color, amoled: _amoled, cardStyle: _cardStyle);
   }
 }

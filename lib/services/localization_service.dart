@@ -8,6 +8,11 @@ class AppLanguage {
 
   AppLanguage(this.code, this.nativeName) : locale = _toLocale(code);
 
+  /// Idiomas que se escriben de derecha a izquierda.
+  static const Set<String> _rtlLanguages = {'ar', 'he', 'fa', 'ur'};
+
+  bool get isRtl => _rtlLanguages.contains(locale.languageCode);
+
   static Locale _toLocale(String code) {
     final parts = code.split(RegExp('[-_]'));
     final language = parts.first.toLowerCase();
@@ -52,6 +57,10 @@ class LocalizationService extends ChangeNotifier {
       );
 
   Locale get currentLocale => currentLanguageInfo.locale;
+
+  /// Dirección del texto del idioma actual (árabe = derecha a izquierda).
+  TextDirection get textDirection =>
+      currentLanguageInfo.isRtl ? TextDirection.rtl : TextDirection.ltr;
   List<Locale> get supportedLocales => _languages.map((l) => l.locale).toList();
 
   Future<void> load() async {

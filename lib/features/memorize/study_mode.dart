@@ -20,6 +20,12 @@ enum StudyMode {
     subtitleKey: 'KEY_RANDOM_CARDS',
     icon: Icons.shuffle,
     color: Colors.purple,
+  ),
+  valley(
+    titleKey: 'KEY_FORGETTING_VALLEY',
+    subtitleKey: 'KEY_FORGETTING_VALLEY_DESC',
+    icon: Icons.trending_down,
+    color: Colors.blue,
   );
 
   final String titleKey;

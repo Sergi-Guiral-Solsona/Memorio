@@ -30,9 +30,16 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
 
   /// Abre el editor de tarjeta: crea si [card] es null, edita si no.
   Future<void> _openCardEditor({CardModel? card}) async {
+    final last = _deck.cards.isEmpty ? null : _deck.cards.last;
     final result = await Navigator.push<CardModel>(
       context,
-      MaterialPageRoute(builder: (_) => CardEditScreen(card: card)),
+      MaterialPageRoute(
+        builder: (_) => CardEditScreen(
+          card: card,
+          suggestedFrontLabel: last?.frontLabel ?? '',
+          suggestedBackLabel: last?.backLabel ?? '',
+        ),
+      ),
     );
     if (result == null) return;
 

@@ -36,6 +36,10 @@ class FlashCardView extends StatefulWidget {
   final TextEditingController frontController;
   final TextEditingController hintController;
   final TextEditingController backController;
+
+  /// Rótulos de cada cara ("English", "Español"...). Pueden estar vacíos.
+  final TextEditingController frontLabelController;
+  final TextEditingController backLabelController;
   final bool editable;
 
   /// Si la pista empieza visible. En estudio conviene false.
@@ -45,7 +49,7 @@ class FlashCardView extends StatefulWidget {
   final bool flipOnTap;
 
   /// Proporción ancho/alto de la tarjeta (para calcular su tamaño desde fuera).
-  static const double aspectRatio = 0.68;
+  static const double aspectRatio = 0.72;
 
   const FlashCardView({
     super.key,
@@ -53,6 +57,8 @@ class FlashCardView extends StatefulWidget {
     required this.frontController,
     required this.hintController,
     required this.backController,
+    required this.frontLabelController,
+    required this.backLabelController,
     this.editable = true,
     this.initialHintVisible = true,
     this.flipOnTap = false,
@@ -186,12 +192,14 @@ class _FlashCardViewState extends State<FlashCardView>
                         transform: Matrix4.rotationY(math.pi),
                         child: _BackFace(
                           controller: widget.backController,
+                          labelController: widget.backLabelController,
                           editable: widget.editable,
                         ),
                       )
                     : _FrontFace(
                         frontController: widget.frontController,
                         hintController: widget.hintController,
+                        labelController: widget.frontLabelController,
                         editable: widget.editable,
                         hintVisible: _hintVisible,
                         onToggleHint: () =>
@@ -208,9 +216,16 @@ class _FlashCardViewState extends State<FlashCardView>
 
 // ============================ Caras ============================
 
+/// Estilo del título según el modelo de tarjeta: serif grande en los estilos
+/// modernos, sans en negrita en el clásico.
+TextStyle _titleStyle(CardFaceStyle face, double size, {bool bold = false}) {
+  return CardFonts.title(color: face.title, size: size);
+}
+
 class _FrontFace extends StatelessWidget {
   final TextEditingController frontController;
   final TextEditingController hintController;
+  final TextEditingController labelController;
   final bool editable;
   final bool hintVisible;
   final VoidCallback onToggleHint;
@@ -218,6 +233,7 @@ class _FrontFace extends StatelessWidget {
   const _FrontFace({
     required this.frontController,
     required this.hintController,
+    required this.labelController,
     required this.editable,
     required this.hintVisible,
     required this.onToggleHint,
@@ -225,193 +241,362 @@ class _FrontFace extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return CardSurface(
+      isBack: false,
+      padding: const EdgeInsets.fromLTRB(26, 20, 18, 26),
+      child: _FrontContent(
+        frontController: frontController,
+        hintController: hintController,
+        labelController: labelController,
+        editable: editable,
+        hintVisible: hintVisible,
+        onToggleHint: onToggleHint,
+      ),
+    );
+  }
+}
+
+class _FrontContent extends StatelessWidget {
+  final TextEditingController frontController;
+  final TextEditingController hintController;
+  final TextEditingController labelController;
+  final bool editable;
+  final bool hintVisible;
+  final VoidCallback onToggleHint;
+
+  const _FrontContent({
+    required this.frontController,
+    required this.hintController,
+    required this.labelController,
+    required this.editable,
+    required this.hintVisible,
+    required this.onToggleHint,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final face = CardFaceScope.of(context);
     // Al editar siempre hay pista; al estudiar solo si la tarjeta la tiene.
     final hasHint = editable || hintController.text.isNotEmpty;
 
-    return CardSurface(
-      padding: const EdgeInsets.fromLTRB(28, 38, 28, 30),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          _InsetBox(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        SizedBox(
+          height: 40,
+          child: Row(
+            children: [
+              Expanded(
+                child: _CaptionField(
+                  controller: labelController,
+                  editable: editable,
+                  //aqui
+                  fallback: 'Test',
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 30),
+        _InsetBox(
+          enabled: editable,
+          child: _TitleText(
+            controller: frontController,
             editable: editable,
-            child: _FaceText(
-              controller: frontController,
-              editable: editable,
-              hintText: 'KEY_WORD_OR_PHRASE'.loc,
-              maxLines: 3,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
+            hintText: 'KEY_WORD_OR_PHRASE'.loc,
+            baseSize: 40,
+            bold: true,
+            maxLines: 4,
+          ),
+        ),
+        const SizedBox(height: 16),
+        const Center(child: CardAccentLine()),
+        if (hasHint) _HintToggle(visible: hintVisible, onTap: onToggleHint),
+        if (hasHint) ...[
+          const SizedBox(height: 18),
+          Expanded(
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 260),
+              switchInCurve: Curves.easeOut,
+              child: hintVisible
+                  ? _HintArea(
+                      key: const ValueKey('hint'),
+                      controller: hintController,
+                      editable: editable,
+                    )
+                  : const SizedBox.expand(key: ValueKey('no-hint')),
             ),
           ),
-          const SizedBox(height: 18),
-          const CardDivider(),
-          if (hasHint) ...[
-            const SizedBox(height: 18),
-            Center(
-              child: InkWell(
-                customBorder: const CircleBorder(),
-                onTap: onToggleHint,
-                child: HintBadge(size: 46, visible: hintVisible),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 260),
-                switchInCurve: Curves.easeOut,
-                child: hintVisible
-                    ? _HintPanel(
-                        key: const ValueKey('hint'),
-                        controller: hintController,
-                        editable: editable,
-                      )
-                    : const SizedBox.expand(key: ValueKey('no-hint')),
-              ),
-            ),
-          ],
         ],
-      ),
+      ],
     );
   }
 }
 
 class _BackFace extends StatelessWidget {
   final TextEditingController controller;
+  final TextEditingController labelController;
   final bool editable;
 
-  const _BackFace({required this.controller, required this.editable});
+  const _BackFace({
+    required this.controller,
+    required this.labelController,
+    required this.editable,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final p = context.cardPalette;
-
     return CardSurface(
-      padding: const EdgeInsets.fromLTRB(28, 38, 28, 30),
-      child: Stack(
-        children: [
-          // Comillas de fondo, muy suaves.
-          Positioned.fill(
-            child: Center(
-              child: Icon(
-                Icons.format_quote_rounded,
-                size: 150,
-                color: p.ink.withValues(alpha: 0.05),
-              ),
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              CardCaption('KEY_ANSWER'.loc),
-              const SizedBox(height: 14),
-              const CardDivider(),
-              Expanded(
-                child: Center(
-                  child: SingleChildScrollView(
-                    child: _FaceText(
-                      controller: controller,
-                      editable: editable,
-                      hintText: 'KEY_ANSWER'.loc,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 22),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
+      isBack: true,
+      padding: const EdgeInsets.fromLTRB(26, 20, 26, 26),
+      child: _BackContent(
+        controller: controller,
+        labelController: labelController,
+        editable: editable,
       ),
     );
   }
 }
 
+class _BackContent extends StatelessWidget {
+  final TextEditingController controller;
+  final TextEditingController labelController;
+  final bool editable;
+
+  const _BackContent({
+    required this.controller,
+    required this.labelController,
+    required this.editable,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final face = CardFaceScope.of(context);
+
+    final content = Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        SizedBox(
+          height: 40,
+          child: Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: _CaptionField(
+              controller: labelController,
+              editable: editable,
+              fallback: 'KEY_ANSWER'.loc,
+            ),
+          ),
+        ),
+       // if (face.isClassic) ...[const SizedBox(height: 4), const CardDivider()],
+        Expanded(
+          child: Center(
+            child: SingleChildScrollView(
+              child: _TitleText(
+                controller: controller,
+                editable: editable,
+                hintText: 'KEY_ANSWER'.loc,
+                baseSize: 38,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+
+    return content;
+  }
+}
+
 // ========================== Componentes ==========================
 
-/// Al editar: campo con fondo y borde. Al estudiar: solo el texto.
-class _InsetBox extends StatelessWidget {
+/// Título o respuesta: la letra se reduce sola cuando el texto es largo.
+class _TitleText extends StatelessWidget {
+  final TextEditingController controller;
   final bool editable;
+  final String hintText;
+  final double baseSize;
+  final bool bold;
+  final int? maxLines;
+
+  const _TitleText({
+    required this.controller,
+    required this.editable,
+    required this.hintText,
+    required this.baseSize,
+    this.bold = false,
+    this.maxLines,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final face = CardFaceScope.of(context);
+
+    return ValueListenableBuilder<TextEditingValue>(
+      valueListenable: controller,
+      builder: (context, value, _) {
+        final length = value.text.length;
+        final size = length <= 12
+            ? baseSize
+            : length <= 24
+                ? baseSize * 0.82
+                : baseSize * 0.64;
+
+        return _FaceText(
+          controller: controller,
+          editable: editable,
+          hintText: hintText,
+          textAlign: TextAlign.center,
+          maxLines: maxLines,
+          style: _titleStyle(face, size, bold: bold),
+        );
+      },
+    );
+  }
+}
+
+/// Rótulo de arriba a la izquierda ("ENGLISH"). Editable al crear la tarjeta;
+/// si está vacío muestra [fallback].
+class _CaptionField extends StatelessWidget {
+  final TextEditingController controller;
+  final bool editable;
+  final String fallback;
+
+  const _CaptionField({
+    required this.controller,
+    required this.editable,
+    required this.fallback,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final face = CardFaceScope.of(context);
+    final style = TextStyle(
+      fontSize: 11,
+      letterSpacing: 1.8,
+      fontWeight: FontWeight.w600,
+      color: face.caption,
+    );
+
+    if (!editable) {
+      final text = controller.text.trim().isEmpty ? fallback : controller.text;
+      return Text(
+        text.toUpperCase(),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: style,
+      );
+    }
+
+    return TextField(
+      controller: controller,
+      style: style,
+      maxLines: 1,
+      cursorColor: face.caption,
+      inputFormatters: [_UpperCaseFormatter(), LengthLimitingTextInputFormatter(24)],
+      decoration: InputDecoration.collapsed(
+        hintText: fallback.toUpperCase(),
+        hintStyle: style.copyWith(color: face.caption.withValues(alpha: 0.5)),
+      ),
+    );
+  }
+}
+
+class _UpperCaseFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    final upper = newValue.text.toUpperCase();
+    // Si cambia la longitud (ß -> SS) se deja tal cual para no descolocar el cursor.
+    return upper.length == newValue.text.length ? newValue.copyWith(text: upper) : newValue;
+  }
+}
+
+/// Botón del ojo para mostrar/ocultar la pista.
+class _HintToggle extends StatelessWidget {
+  final bool visible;
+  final VoidCallback onTap;
+
+  const _HintToggle({required this.visible, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final face = CardFaceScope.of(context);
+
+    return IconButton(
+      onPressed: onTap,
+      visualDensity: VisualDensity.compact,
+      iconSize: 20,
+      color: Color.fromRGBO(255, 167, 38, 1),
+      icon: Icon(visible ? Icons.visibility_outlined : Icons.visibility_off_outlined),
+    );
+  }
+}
+
+/// La pista: texto en cursiva bajo el título (moderno) o nota amarilla (clásico).
+class _HintArea extends StatelessWidget {
+  final TextEditingController controller;
+  final bool editable;
+
+  const _HintArea({super.key, required this.controller, required this.editable});
+
+  @override
+  Widget build(BuildContext context) {
+    final face = CardFaceScope.of(context);
+
+    return Align(
+      alignment: Alignment.topCenter,
+      child: SingleChildScrollView(
+        child: _FaceText(
+          controller: controller,
+          editable: editable,
+          hintText: 'KEY_HINT'.loc,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontStyle: FontStyle.italic,
+            fontSize: 17,
+            height: 1.35,
+            color: face.hint,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Al editar con el estilo clásico: campo con fondo y borde. En el resto, solo el texto.
+class _InsetBox extends StatelessWidget {
+  final bool enabled;
   final Widget child;
   final Color? borderColor;
   final double borderWidth;
   final bool expand;
 
   const _InsetBox({
-    required this.editable,
+    required this.enabled,
     required this.child,
-    this.borderColor,
+    this.borderColor ,
     this.borderWidth = 1.5,
     this.expand = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (!editable) return child;
+    if (!enabled) return child;
 
-    final p = context.cardPalette;
+    final face = CardFaceScope.of(context);
     return Container(
       width: double.infinity,
-      height: expand ? double.infinity : null,
+      height: expand ? double.infinity : 100,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: p.field,
+        color: face.fieldFill,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: borderColor ?? p.ink.withValues(alpha: 0.22),
+          color: borderColor ?? face.fieldBorder,
           width: borderWidth,
         ),
       ),
       child: child,
-    );
-  }
-}
-
-/// Panel de la pista: un campo amarillo al editar, una nota al estudiar.
-class _HintPanel extends StatelessWidget {
-  final TextEditingController controller;
-  final bool editable;
-
-  const _HintPanel({super.key, required this.controller, required this.editable});
-
-  @override
-  Widget build(BuildContext context) {
-    final p = context.cardPalette;
-    const style = TextStyle(fontSize: 15);
-
-    if (editable) {
-      return _InsetBox(
-        editable: true,
-        expand: true,
-        borderColor: p.accent,
-        borderWidth: 2,
-        child: SingleChildScrollView(
-          child: _FaceText(
-            controller: controller,
-            editable: true,
-            hintText: 'KEY_HINT'.loc,
-            style: style,
-          ),
-        ),
-      );
-    }
-
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: p.accent.withValues(alpha: 0.16),
-        borderRadius: BorderRadius.circular(12),
-        border: Border(left: BorderSide(color: p.accent, width: 4)),
-      ),
-      child: SingleChildScrollView(
-        child: _FaceText(
-          controller: controller,
-          editable: false,
-          hintText: '',
-          style: style,
-        ),
-      ),
     );
   }
 }
@@ -436,13 +621,10 @@ class _FaceText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ink = context.cardPalette.ink;
-    final base = style.copyWith(color: ink);
-
     if (!editable) {
       return Text(
         controller.text,
-        style: base,
+        style: style,
         textAlign: textAlign,
         maxLines: maxLines,
         overflow: maxLines == null ? null : TextOverflow.ellipsis,
@@ -451,13 +633,13 @@ class _FaceText extends StatelessWidget {
 
     return TextField(
       controller: controller,
-      style: base,
+      style: style,
       textAlign: textAlign,
       maxLines: maxLines,
-      cursorColor: ink,
+      cursorColor: style.color,
       decoration: InputDecoration.collapsed(
         hintText: hintText,
-        hintStyle: base.copyWith(color: ink.withValues(alpha: 0.4)),
+        hintStyle: style.copyWith(color: style.color?.withValues(alpha: 0.35)),
       ),
     );
   }

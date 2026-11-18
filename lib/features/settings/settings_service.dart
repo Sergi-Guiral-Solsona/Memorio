@@ -11,6 +11,7 @@ class SettingsService {
   static const String _kThemeMode = 'settings_theme_mode';
   static const String _kAccent = 'settings_accent';
   static const String _kAmoled = 'settings_amoled';
+  static const String _kCardStyle = 'settings_card_style';
 
   SharedPreferences? _prefs;
 
@@ -36,10 +37,18 @@ class SettingsService {
 
   AppAccent get accent =>
       AppAccent.values.asNameMap()[_prefs?.getString(_kAccent)] ??
-      AppAccent.indigo;
+      AppAccent.ink;
 
   Future<void> setAccent(AppAccent accent) async {
     await _prefs?.setString(_kAccent, accent.name);
+  }
+
+  CardStyle get cardStyle =>
+      CardStyle.values.asNameMap()[_prefs?.getString(_kCardStyle)] ??
+      CardStyle.minimal;
+
+  Future<void> setCardStyle(CardStyle style) async {
+    await _prefs?.setString(_kCardStyle, style.name);
   }
 
   bool get amoled => _prefs?.getBool(_kAmoled) ?? false;

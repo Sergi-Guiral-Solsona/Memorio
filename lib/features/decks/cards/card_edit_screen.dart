@@ -6,7 +6,17 @@ import 'package:memorio/barrel_file.dart';
 class CardEditScreen extends StatefulWidget {
   final CardModel? card;
 
-  const CardEditScreen({super.key, this.card});
+  /// Rótulos con los que empieza una tarjeta NUEVA (los de la última del mazo),
+  /// para no teclear "ENGLISH / ESPAÑOL" en cada una.
+  final String suggestedFrontLabel;
+  final String suggestedBackLabel;
+
+  const CardEditScreen({
+    super.key,
+    this.card,
+    this.suggestedFrontLabel = '',
+    this.suggestedBackLabel = '',
+  });
 
   @override
   State<CardEditScreen> createState() => _CardEditScreenState();
@@ -22,6 +32,13 @@ class _CardEditScreenState extends State<CardEditScreen> {
   late final TextEditingController _back =
       TextEditingController(text: _original.back);
 
+  late final TextEditingController _frontLabel = TextEditingController(
+    text: widget.card?.frontLabel ?? widget.suggestedFrontLabel,
+  );
+  late final TextEditingController _backLabel = TextEditingController(
+    text: widget.card?.backLabel ?? widget.suggestedBackLabel,
+  );
+
   final FlashCardController _flip = FlashCardController();
 
   @override
@@ -29,6 +46,8 @@ class _CardEditScreenState extends State<CardEditScreen> {
     _front.dispose();
     _hint.dispose();
     _back.dispose();
+    _frontLabel.dispose();
+    _backLabel.dispose();
     _flip.dispose();
     super.dispose();
   }
@@ -47,7 +66,13 @@ class _CardEditScreenState extends State<CardEditScreen> {
     // copyWith conserva id y estadísticas de la tarjeta original.
     Navigator.pop(
       context,
-      _original.copyWith(front: front, hint: _hint.text.trim(), back: back),
+      _original.copyWith(
+        front: front,
+        hint: _hint.text.trim(),
+        back: back,
+        frontLabel: _frontLabel.text.trim(),
+        backLabel: _backLabel.text.trim(),
+      ),
     );
   }
 
@@ -70,6 +95,8 @@ class _CardEditScreenState extends State<CardEditScreen> {
                     frontController: _front,
                     hintController: _hint,
                     backController: _back,
+                    frontLabelController: _frontLabel,
+                    backLabelController: _backLabel,
                   ),
                   const SizedBox(height: 28),
                   OutlinedButton.icon(

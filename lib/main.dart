@@ -1,4 +1,3 @@
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:memorio/barrel_file.dart';
 
 void main() async {
@@ -47,8 +46,10 @@ class _MyAppState extends State<MyApp> {
     final themes = ThemeService.instance;
     final localization = LocalizationService.instance;
 
-    return ListenableBuilder(
-      listenable: Listenable.merge([themes, localization]),
+    // AnimatedBuilder vale para cualquier Listenable y funciona en todas las
+    // versiones de Flutter.
+    return AnimatedBuilder(
+      animation: Listenable.merge([themes, localization]),
       builder: (context, _) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -56,11 +57,13 @@ class _MyAppState extends State<MyApp> {
           theme: themes.lightTheme,
           darkTheme: themes.darkTheme,
           themeMode: themes.mode,
-          // El idioma cambia también la dirección del texto (árabe = derecha a
-          // izquierda) y los textos propios de Flutter (copiar, pegar...).
-          locale: localization.currentLocale,
-          supportedLocales: localization.supportedLocales,
-          localizationsDelegates: GlobalMaterialLocalizations.delegates,
+          // Los textos de la app salen del CSV (.loc), así que no hace falta
+          // flutter_localizations. Solo se ajusta la dirección del texto para
+          // los idiomas de derecha a izquierda (árabe...).
+          builder: (context, child) => Directionality(
+            textDirection: localization.textDirection,
+            child: child ?? const SizedBox.shrink(),
+          ),
           home: const BottomNavScreen(),
         );
       },

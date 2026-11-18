@@ -1,88 +1,90 @@
 import 'dart:math' as math;
 import 'package:memorio/barrel_file.dart';
 
-/// Superficie con aspecto de tarjeta de verdad: papel con degradado, reborde
-/// redondeado, marco interior impreso, adornos en las esquinas, brillo y
-/// sombra. Los colores salen de [CardPalette], así sirve en claro y oscuro.
-/// La usan la tarjeta grande (FlashCardView) y las miniaturas (CardGridItem).
+/// Pone la cara resuelta ([CardFaceStyle]) a disposición de lo que haya dentro
+/// de un [CardSurface], para que textos y adornos tomen sus colores de ahí.
+class CardFaceScope extends InheritedWidget {
+  final CardFaceStyle face;
+
+  const CardFaceScope({super.key, required this.face, required super.child});
+
+  static CardFaceStyle of(BuildContext context) {
+    final scope = context.dependOnInheritedWidgetOfExactType<CardFaceScope>();
+    assert(scope != null, 'CardFaceScope.of() se usó fuera de un CardSurface');
+    return scope!.face;
+  }
+
+  @override
+  bool updateShouldNotify(CardFaceScope oldWidget) => face != oldWidget.face;
+}
+
+/// Superficie de una tarjeta. Su aspecto (fondo, borde, sombra, ornamentos)
+/// depende del estilo elegido en Ajustes y de la cara ([isBack]).
+/// La usan la tarjeta grande (FlashCardView), las miniaturas (CardGridItem) y
+/// las vistas previas de Apariencia (con [style] para forzar otro estilo).
 class CardSurface extends StatelessWidget {
   final Widget child;
   final EdgeInsetsGeometry padding;
-  final double radius;
-  final double borderWidth;
+  final bool isBack;
 
-  /// Versión pequeña (sombra corta, sin adornos de esquina) para el grid.
+  /// Fuerza un estilo concreto en vez del elegido (vistas previas).
+  final CardStyle? style;
+
+  /// Versión pequeña (sombra corta, radio menor) para miniaturas.
   final bool compact;
+  final double? radius;
 
   const CardSurface({
     super.key,
     required this.child,
     this.padding = EdgeInsets.zero,
-    this.radius = 28,
-    this.borderWidth = 2.5,
+    this.isBack = false,
+    this.style,
     this.compact = false,
+    this.radius,
   });
 
   @override
   Widget build(BuildContext context) {
-    final p = context.cardPalette;
-    final innerRadius = math.max(0.0, radius - borderWidth);
+    final face = context.cardLook.face(isBack: isBack, styleOverride: style);
+    final outerRadius = radius ?? (compact ? 18.0 : face.radius);
+    final borderWidth = compact ? face.borderWidth * 0.8 : face.borderWidth;
+    final innerRadius = math.max(0.0, outerRadius - borderWidth);
 
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [p.paperTop, p.paperBottom],
+    return CardFaceScope(
+      face: face,
+      child: Container(
+        decoration: BoxDecoration(
+          color: face.gradient == null ? face.color : null,
+          gradient: face.gradient,
+          borderRadius: BorderRadius.circular(outerRadius),
+          border: face.borderColor == null
+              ? null
+              : Border.all(color: face.borderColor!, width: borderWidth),
+          boxShadow: compact ? face.compactShadows : face.shadows,
         ),
-        borderRadius: BorderRadius.circular(radius),
-        border: Border.all(color: p.frame, width: borderWidth),
-        boxShadow: [
-          BoxShadow(
-            color: p.shadow.withValues(alpha: compact ? 0.22 : 0.32),
-            blurRadius: compact ? 12 : 32,
-            offset: Offset(0, compact ? 6 : 18),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(innerRadius),
+          child: Stack(
+            fit: StackFit.passthrough,
+            children: [
+              Padding(padding: padding, child: child),
+            ],
           ),
-          BoxShadow(
-            color: p.shadow.withValues(alpha: 0.14),
-            blurRadius: compact ? 3 : 6,
-            offset: Offset(0, compact ? 1 : 2),
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(innerRadius),
-        child: Stack(
-          fit: StackFit.passthrough,
-          children: [
-            Positioned.fill(
-              child: IgnorePointer(
-                child: CustomPaint(
-                  painter: _CardDecorationPainter(
-                    ink: p.ink,
-                    glossAlpha: p.glossAlpha,
-                    radius: innerRadius,
-                    compact: compact,
-                  ),
-                ),
-              ),
-            ),
-            Padding(padding: padding, child: child),
-          ],
         ),
       ),
     );
   }
 }
 
-/// Brillo, marco interior y adornos de las esquinas.
-class _CardDecorationPainter extends CustomPainter {
+/// Estilo clásico: brillo, marco interior impreso y rombos en las esquinas.
+class _ClassicPainter extends CustomPainter {
   final Color ink;
   final double glossAlpha;
   final double radius;
   final bool compact;
 
-  const _CardDecorationPainter({
+  const _ClassicPainter({
     required this.ink,
     required this.glossAlpha,
     required this.radius,
@@ -93,7 +95,6 @@ class _CardDecorationPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final rect = Offset.zero & size;
 
-    // Brillo suave arriba a la izquierda.
     canvas.drawRect(
       rect,
       Paint()
@@ -107,15 +108,12 @@ class _CardDecorationPainter extends CustomPainter {
         ).createShader(rect),
     );
 
-    // Marco interior impreso.
     final inset = compact ? 6.0 : 10.0;
-    final frameRadius = math.max(0.0, radius - inset);
-    final frame = RRect.fromRectAndRadius(
-      rect.deflate(inset),
-      Radius.circular(frameRadius),
-    );
     canvas.drawRRect(
-      frame,
+      RRect.fromRectAndRadius(
+        rect.deflate(inset),
+        Radius.circular(math.max(0.0, radius - inset)),
+      ),
       Paint()
         ..style = PaintingStyle.stroke
         ..strokeWidth = compact ? 1.0 : 1.4
@@ -124,102 +122,119 @@ class _CardDecorationPainter extends CustomPainter {
 
     if (compact) return;
 
-    // Rombos en las cuatro esquinas del marco.
     final fill = Paint()..color = ink.withValues(alpha: 0.4);
     final offset = inset + 15;
-    final corners = [
+    for (final c in [
       Offset(offset, offset),
       Offset(size.width - offset, offset),
       Offset(offset, size.height - offset),
       Offset(size.width - offset, size.height - offset),
-    ];
-    for (final c in corners) {
-      final path = Path()
-        ..moveTo(c.dx, c.dy - 4.5)
-        ..lineTo(c.dx + 4.5, c.dy)
-        ..lineTo(c.dx, c.dy + 4.5)
-        ..lineTo(c.dx - 4.5, c.dy)
-        ..close();
-      canvas.drawPath(path, fill);
+    ]) {
+      canvas.drawPath(
+        Path()
+          ..moveTo(c.dx, c.dy - 4.5)
+          ..lineTo(c.dx + 4.5, c.dy)
+          ..lineTo(c.dx, c.dy + 4.5)
+          ..lineTo(c.dx - 4.5, c.dy)
+          ..close(),
+        fill,
+      );
     }
   }
 
   @override
-  bool shouldRepaint(covariant _CardDecorationPainter old) =>
+  bool shouldRepaint(covariant _ClassicPainter old) =>
       old.ink != ink ||
       old.glossAlpha != glossAlpha ||
       old.radius != radius ||
       old.compact != compact;
 }
 
-/// Separador con rombo central, para dividir secciones dentro de una tarjeta.
-class CardDivider extends StatelessWidget {
-  const CardDivider({super.key});
+/// Línea corta de acento bajo el título (estilos Minimal, Tinta y Suave).
+class CardAccentLine extends StatelessWidget {
+  final double width;
+
+  const CardAccentLine({super.key, this.width = 26});
 
   @override
   Widget build(BuildContext context) {
-    final ink = context.cardPalette.ink;
-    Widget line() => Expanded(
-          child: Container(height: 1.5, color: ink.withValues(alpha: 0.3)),
-        );
-
-    return Row(
-      children: [
-        line(),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Transform.rotate(
-            angle: math.pi / 4,
-            child: Container(width: 7, height: 7, color: ink.withValues(alpha: 0.5)),
-          ),
-        ),
-        line(),
-      ],
-    );
-  }
-}
-
-/// Rótulo pequeño en mayúsculas ("RESPUESTA").
-class CardCaption extends StatelessWidget {
-  final String text;
-
-  const CardCaption(this.text, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text.toUpperCase(),
-      textAlign: TextAlign.center,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      style: TextStyle(
-        fontSize: 11,
-        letterSpacing: 1.6,
-        fontWeight: FontWeight.w600,
-        color: context.cardPalette.ink.withValues(alpha: 0.5),
+    return Container(
+      width: width,
+      height: 2,
+      decoration: BoxDecoration(
+        color: CardFaceScope.of(context).line,
+        borderRadius: BorderRadius.circular(1),
       ),
     );
   }
 }
 
-/// Círculo oscuro con el ojo amarillo de la pista.
+/// Separador con rombo central (estilo Clásico).
+class CardDivider extends StatelessWidget {
+  const CardDivider({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final line = CardFaceScope.of(context).line;
+    Widget half() => Expanded(child: Container(height: 1.5, color: line));
+
+    return Row(
+      children: [
+        half(),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Transform.rotate(
+            angle: math.pi / 4,
+            child: Container(width: 7, height: 7, color: line),
+          ),
+        ),
+        half(),
+      ],
+    );
+  }
+}
+
+/// Rótulo pequeño en mayúsculas ("ENGLISH").
+class CardCaption extends StatelessWidget {
+  final String text;
+  final double size;
+
+  const CardCaption(this.text, {super.key, this.size = 11});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text.toUpperCase(),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: TextStyle(
+        fontSize: size,
+        letterSpacing: size * 0.16,
+        fontWeight: FontWeight.w600,
+        color: CardFaceScope.of(context).caption,
+      ),
+    );
+  }
+}
+
+/// Círculo oscuro con el ojo amarillo de la pista (estilo Clásico).
 class HintBadge extends StatelessWidget {
   final double size;
   final bool visible;
 
-  const HintBadge({super.key, this.size = 44, this.visible = true});
+  const HintBadge({super.key, this.size = 34, this.visible = true});
 
   @override
   Widget build(BuildContext context) {
-    final p = context.cardPalette;
+    final face = CardFaceScope.of(context);
     return Container(
       width: size,
       height: size,
-      decoration: BoxDecoration(shape: BoxShape.circle, color: p.badge),
+      decoration: BoxDecoration(shape: BoxShape.circle, color: face.badge),
       child: Icon(
         visible ? Icons.visibility : Icons.visibility_off,
         size: size * 0.55,
-        color: p.accent,
+        color: face.hintAccent,
       ),
     );
   }

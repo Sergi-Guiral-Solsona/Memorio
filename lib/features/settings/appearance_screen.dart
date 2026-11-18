@@ -1,7 +1,7 @@
 import 'package:memorio/barrel_file.dart';
 
-/// Tema de la app: claro / oscuro / sistema, color de acento, negro AMOLED
-/// y una tarjeta de vista previa que cambia en directo.
+/// Tema de la app: claro / oscuro / sistema, color de acento, modelo de
+/// tarjeta y negro AMOLED. Los cambios se ven al instante.
 class AppearanceScreen extends StatelessWidget {
   const AppearanceScreen({super.key});
 
@@ -58,7 +58,7 @@ class AppearanceScreen extends StatelessWidget {
                     ),
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 28),
               SwitchListTile(
                 contentPadding: EdgeInsets.zero,
                 title: Text('KEY_AMOLED'.loc),
@@ -67,10 +67,16 @@ class AppearanceScreen extends StatelessWidget {
                 value: theme.amoled,
                 onChanged: theme.mode == ThemeMode.light ? null : theme.setAmoled,
               ),
-              const SizedBox(height: 20),
-              _SectionLabel('KEY_PREVIEW'.loc),
-              const Center(child: _CardPreview()),
               const SizedBox(height: 24),
+              _SectionLabel('KEY_CARD_STYLE'.loc),
+              for (final style in CardStyle.values)
+                _CardStyleTile(
+                  style: style,
+                  selected: style == theme.cardStyle,
+                  onTap: () => theme.setCardStyle(style),
+                ),
+              const SizedBox(height: 12),
+
             ],
           ),
         );
@@ -148,35 +154,130 @@ class _AccentDot extends StatelessWidget {
   }
 }
 
-/// Mini tarjeta para ver cómo quedan los colores del tema elegido.
-class _CardPreview extends StatelessWidget {
-  const _CardPreview();
+/// Un modelo de tarjeta: vista previa del anverso y del reverso + nombre y descripción.
+class _CardStyleTile extends StatelessWidget {
+  final CardStyle style;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _CardStyleTile({
+    required this.style,
+    required this.selected,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final ink = context.cardPalette.ink;
+    final scheme = Theme.of(context).colorScheme;
 
-    return SizedBox(
-      width: 230,
-      child: CardSurface(
-        radius: 22,
-        padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 26),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Memorio',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: ink),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 220),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: scheme.surfaceContainerLow,
+          border: Border.all(
+            color: selected ? scheme.primary : scheme.outlineVariant.withValues(alpha: 0.5),
+            width: selected ? 2 : 1,
+          ),
+        ),
+        child: Material(
+          type: MaterialType.transparency,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(20),
+            onTap: onTap,
+            child: Padding(
+              padding: const EdgeInsets.all(14),
+              child: Row(
+                children: [
+                  _MiniCard(style: style, isBack: false),
+                  const SizedBox(width: 10),
+                  _MiniCard(style: style, isBack: true),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          style.titleKey.loc,
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          style.descriptionKey.loc,
+                          style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 13),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Icon(
+                    selected ? Icons.check_circle : Icons.circle_outlined,
+                    color: selected ? scheme.primary : scheme.outline,
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 14),
-            const CardDivider(),
-            const SizedBox(height: 14),
-            const HintBadge(size: 38),
-            const SizedBox(height: 10),
-            CardCaption('KEY_HINT'.loc),
-          ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+/// Tarjetita de muestra con un estilo concreto (da igual cuál esté elegido).
+class _MiniCard extends StatelessWidget {
+  final CardStyle style;
+  final bool isBack;
+
+  const _MiniCard({required this.style, required this.isBack});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 68,
+      height: 94,
+      child: CardSurface(
+        style: style,
+        isBack: isBack,
+        compact: true,
+        radius: 12,
+        padding: const EdgeInsets.all(8),
+        child: _MiniContent(isBack: isBack),
+      ),
+    );
+  }
+}
+
+class _MiniContent extends StatelessWidget {
+  final bool isBack;
+
+  const _MiniContent({required this.isBack});
+
+  @override
+  Widget build(BuildContext context) {
+    final face = CardFaceScope.of(context);
+    final title = CardFonts.title(color: face.title, size: 15);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        CardCaption(isBack ? 'ES' : 'EN', size: 6),
+        if (isBack)
+          Expanded(
+            child: Center(
+              child: Text('Manzana', style: title.copyWith(fontSize: 12)),
+            ),
+          )
+        else ...[
+          const SizedBox(height: 8),
+          Text('Apple', textAlign: TextAlign.center, style: title),
+          const SizedBox(height: 5),
+          Center(
+            child: const CardAccentLine(width: 14),
+          ),
+        ],
+      ],
     );
   }
 }

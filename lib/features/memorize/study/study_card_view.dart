@@ -19,6 +19,10 @@ class _StudyCardViewState extends State<StudyCardView> {
       TextEditingController(text: widget.card.hint);
   late final TextEditingController _back =
       TextEditingController(text: widget.card.back);
+  late final TextEditingController _frontLabel =
+      TextEditingController(text: widget.card.frontLabel);
+  late final TextEditingController _backLabel =
+      TextEditingController(text: widget.card.backLabel);
 
   @override
   void didUpdateWidget(covariant StudyCardView oldWidget) {
@@ -27,6 +31,8 @@ class _StudyCardViewState extends State<StudyCardView> {
       _front.text = widget.card.front;
       _hint.text = widget.card.hint;
       _back.text = widget.card.back;
+      _frontLabel.text = widget.card.frontLabel;
+      _backLabel.text = widget.card.backLabel;
     }
   }
 
@@ -35,6 +41,8 @@ class _StudyCardViewState extends State<StudyCardView> {
     _front.dispose();
     _hint.dispose();
     _back.dispose();
+    _frontLabel.dispose();
+    _backLabel.dispose();
     super.dispose();
   }
 
@@ -45,6 +53,8 @@ class _StudyCardViewState extends State<StudyCardView> {
       frontController: _front,
       hintController: _hint,
       backController: _back,
+      frontLabelController: _frontLabel,
+      backLabelController: _backLabel,
       editable: false,
       initialHintVisible: false,
       flipOnTap: true,

@@ -29,6 +29,9 @@ enum StudyOrder {
 
   /// Memorio Learning: las que más fallas tienden a salir antes.
   memorio,
+
+  /// Valle del olvido: solo las que se están olvidando (+ unas pocas nuevas).
+  valley,
 }
 
 /// Lógica de una sesión de estudio: orden de las tarjetas, avance, resultados y
@@ -60,7 +63,8 @@ class StudySession {
   int get correct => _correct;
   int get incorrect => _incorrect;
   int get answeredCount => _correct + _incorrect;
-  int get total => _pool.length;
+  /// Tarjetas de la ronda actual (en el Valle del olvido pueden ser menos que el total).
+  int get total => _queue.length;
 
   bool get isFinished => _index >= _queue.length;
   StudyCard? get current => isFinished ? null : _queue[_index];
@@ -89,7 +93,13 @@ class StudySession {
   }
 
   void _arrangeRound({StudyCard? avoidFirst}) {
-    if (order == StudyOrder.memorio) {
+    if (order == StudyOrder.valley) {
+      _queue = ForgettingValley.plan<StudyCard>(
+        _pool,
+        (item) => item.latest,
+        random: _random,
+      ).session;
+    } else if (order == StudyOrder.memorio) {
       _queue = MemorioLearning.weightedOrder<StudyCard>(
         _pool,
         (item) => MemorioLearning.weightOf(item.latest),
