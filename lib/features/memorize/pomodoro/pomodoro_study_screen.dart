@@ -1,41 +1,97 @@
 import 'package:memorio/barrel_file.dart';
 
 /// Modo Pomodoro: periodos de enfoque en los que se estudian las tarjetas de
-/// los mazos elegidos, separados por descansos. Las tarjetas salen en el orden
-/// de Memorio Learning (cambia [_order] a StudyOrder.random si prefieres azar puro).
+/// los mazos elegidos, separados por descansos. El orden y los aciertos/fallos
+/// los gestiona [PomodoroMethod], con estadísticas propias.
+///
+/// La sesión dura un ciclo completo y termina sola al acabar el descanso largo
+/// (también se puede cerrar antes con el botón de terminar).
 class PomodoroStudyScreen extends StatefulWidget {
   final List<Deck> decks;
 
-  const PomodoroStudyScreen({super.key, required this.decks});
+  /// Tiempos elegidos por el usuario en [PomodoroSetupScreen].
+  final PomodoroConfig config;
+
+  /// Sesión de prueba (fases de 3 s): solo avisa en la cabecera con una
+  /// etiqueta "TEST".
+  final bool isTest;
+
+  const PomodoroStudyScreen({
+    super.key,
+    required this.decks,
+    this.config = const PomodoroConfig(),
+    this.isTest = false,
+  });
 
   @override
   State<PomodoroStudyScreen> createState() => _PomodoroStudyScreenState();
 }
 
-class _PomodoroStudyScreenState extends State<PomodoroStudyScreen> {
-  static const StudyOrder _order = StudyOrder.memorio;
-
+class _PomodoroStudyScreenState extends State<PomodoroStudyScreen>
+    with WidgetsBindingObserver {
   late final StudySession _session = StudySession(
     StudyCard.fromDecks(widget.decks),
     loop: true,
-    order: _order,
+    method: const PomodoroMethod(),
   );
 
-  late final PomodoroTimer _timer =
-      PomodoroTimer(onPhaseChanged: (_) => HapticFeedback.mediumImpact());
+  late final PomodoroTimer _timer = PomodoroTimer(
+    config: widget.config,
+    onPhaseChanged: (_) => HapticFeedback.mediumImpact(),
+    onCycleCompleted: _onCycleCompleted,
+  );
 
   bool _isFinished = false;
+
+  /// Si el diálogo de salir pausó el tiempo y hay que reanudarlo al seguir.
+  bool _resumeAfterExitDialog = false;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _timer.start();
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _timer.dispose();
     super.dispose();
+  }
+
+  /// Si la app pierde el foco (otra app, pantalla apagada, llamada, barra de
+  /// notificaciones...) el ENFOQUE se pausa. Al volver NO se reanuda solo: se
+  /// ve "Pausado" y se continúa con el botón de reanudar.
+  ///
+  /// Los DESCANSOS no se pausan: descansar es justo apartarse de la pantalla,
+  /// y si se pausaran al bloquear el móvil nunca acabarían. Al volver se
+  /// recalcula el tiempo por si el descanso terminó mientras estabas fuera.
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (_isFinished) return;
+
+    if (state == AppLifecycleState.resumed) {
+      _timer.syncNow();
+      return;
+    }
+
+    if (_timer.phase == PomodoroPhase.focus) {
+      _resumeAfterExitDialog = false; // ya está pausado por perder el foco
+      _timer.pause();
+    }
+  }
+
+  /// Al abrir el diálogo de salir el tiempo se detiene.
+  void _onExitDialogOpened() {
+    _resumeAfterExitDialog = _timer.isRunning;
+    _timer.pause();
+  }
+
+  /// Si decide seguir estudiando, el tiempo continúa donde estaba.
+  void _onExitDialogCancelled() {
+    if (_resumeAfterExitDialog && mounted) _timer.start();
+    _resumeAfterExitDialog = false;
   }
 
   Future<void> _answer(bool isCorrect) async {
@@ -43,26 +99,39 @@ class _PomodoroStudyScreenState extends State<PomodoroStudyScreen> {
     if (mounted) setState(() {});
   }
 
+  /// Terminar antes de tiempo (botón de la barra).
   void _finish() {
     _timer.pause();
     setState(() => _isFinished = true);
   }
 
+  /// El ciclo acabó solo (terminó el descanso largo): resumen final.
+  void _onCycleCompleted() {
+    HapticFeedback.heavyImpact();
+    if (mounted && !_isFinished) setState(() => _isFinished = true);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(StudyMode.pomodoro.title),
-        actions: [
-          if (!_isFinished)
-            IconButton(
-              tooltip: 'KEY_FINISH_SESSION'.loc,
-              icon: const Icon(Icons.stop_circle_outlined),
-              onPressed: _finish,
-            ),
-        ],
+    // Mientras la sesión está en marcha, "atrás" pregunta antes de salir.
+    return StudyExitGuard(
+      canExit: _isFinished,
+      onAsking: _onExitDialogOpened,
+      onStay: _onExitDialogCancelled,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(StudyMode.pomodoro.title),
+          actions: [
+            if (!_isFinished)
+              IconButton(
+                tooltip: 'KEY_FINISH_SESSION'.loc,
+                icon: const Icon(Icons.stop_circle_outlined),
+                onPressed: _finish,
+              ),
+          ],
+        ),
+        body: _isFinished ? _buildSummary() : _buildSession(),
       ),
-      body: _isFinished ? _buildSummary() : _buildSession(),
     );
   }
 
@@ -83,7 +152,7 @@ class _PomodoroStudyScreenState extends State<PomodoroStudyScreen> {
       listenable: _timer,
       builder: (context, _) => Column(
         children: [
-          _TimerHeader(timer: _timer),
+          _TimerHeader(timer: _timer, isTest: widget.isTest),
           Expanded(
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 350),
@@ -99,12 +168,24 @@ class _PomodoroStudyScreenState extends State<PomodoroStudyScreen> {
   /// (la tarjeta se anima sola), así el cambio animado es solo entre estados.
   Widget _buildContent() {
     if (_timer.phase != PomodoroPhase.focus) {
+      final isLong = _timer.phase == PomodoroPhase.longBreak;
       return EmptyStateView(
         key: const ValueKey('break'),
         icon: Icons.free_breakfast_outlined,
         title: 'KEY_TAKE_A_BREAK'.loc,
-        actionLabel: 'KEY_SKIP_BREAK'.loc,
-        actionIcon: Icons.skip_next,
+        // En pausa se avisa (antes el descanso parecía seguir corriendo).
+        subtitle: !_timer.isRunning
+            ? 'KEY_PAUSED'.loc
+            : isLong
+                ? 'KEY_POMODORO_LAST_BREAK'.locOr(
+                    'Último descanso: al terminar acaba la sesión.',
+                    'Last break: the session ends when it finishes.',
+                  )
+                : null,
+        // Saltar el descanso largo = terminar la sesión.
+        actionLabel:
+            isLong ? 'KEY_FINISH_SESSION'.loc : 'KEY_SKIP_BREAK'.loc,
+        actionIcon: isLong ? Icons.stop_circle_outlined : Icons.skip_next,
         onAction: _timer.skipBreak,
       );
     }
@@ -128,6 +209,8 @@ class _PomodoroStudyScreenState extends State<PomodoroStudyScreen> {
       child: StudyCardPlayer(
         key: ValueKey(_session.answeredCount),
         card: card,
+        frontLabel: current.frontLabel,
+        backLabel: current.backLabel,
         onAnswer: _answer,
       ),
     );
@@ -160,8 +243,9 @@ Color _phaseColor(PomodoroPhase phase) {
 
 class _TimerHeader extends StatelessWidget {
   final PomodoroTimer timer;
+  final bool isTest;
 
-  const _TimerHeader({required this.timer});
+  const _TimerHeader({required this.timer, this.isTest = false});
 
   @override
   Widget build(BuildContext context) {
@@ -211,13 +295,39 @@ class _TimerHeader extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      _phaseLabel(timer.phase),
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: color,
-                      ),
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            _phaseLabel(timer.phase),
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: color,
+                            ),
+                          ),
+                        ),
+                        if (isTest) ...[
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: scheme.errorContainer,
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Text(
+                              'TEST',
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold,
+                                color: scheme.onErrorContainer,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
                     const SizedBox(height: 4),
                     Text(

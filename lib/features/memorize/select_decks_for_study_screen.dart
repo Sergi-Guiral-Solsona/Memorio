@@ -76,7 +76,7 @@ class _SelectDecksForStudyScreenState extends State<SelectDecksForStudyScreen> {
       case StudyMode.memorio:
         return MemorioLearningScreen(decks: decks);
       case StudyMode.pomodoro:
-        return PomodoroStudyScreen(decks: decks);
+        return PomodoroSetupScreen(decks: decks);
       case StudyMode.random:
         return RandomStudyScreen(decks: decks);
       case StudyMode.valley:
@@ -92,6 +92,7 @@ class _SelectDecksForStudyScreenState extends State<SelectDecksForStudyScreen> {
       appBar: AppBar(
         title: Text('${'KEY_MODE'.loc} : ${widget.mode.title}'),
         actions: [
+          StudyModeInfoButton(mode: widget.mode),
           TextButton(
             onPressed: _toggleAllVisible,
             child: Text(

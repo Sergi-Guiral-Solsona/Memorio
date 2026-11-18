@@ -49,9 +49,17 @@ class StudyModeTile extends StatelessWidget {
             style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 13),
           ),
         ),
-        trailing: mode.isAvailable
-            ? Icon(Icons.arrow_forward_ios, size: 16, color: scheme.outline)
-            : const _ComingSoonChip(),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // El (i) explica el método sin entrar en él.
+            StudyModeInfoButton(mode: mode, color: scheme.onSurfaceVariant),
+            if (mode.isAvailable)
+              Icon(Icons.arrow_forward_ios, size: 16, color: scheme.outline)
+            else
+              const _ComingSoonChip(),
+          ],
+        ),
         onTap: mode.isAvailable ? onTap : null,
       ),
     );

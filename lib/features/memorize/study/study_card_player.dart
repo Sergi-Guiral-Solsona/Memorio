@@ -11,6 +11,10 @@ import 'package:memorio/barrel_file.dart';
 /// Ponle una `key` distinta en cada tarjeta para que se reinicie el estado.
 class StudyCardPlayer extends StatefulWidget {
   final CardModel card;
+
+  /// Rótulo del anverso (el del mazo de la tarjeta).
+  final String frontLabel;
+  final String backLabel;
   final Future<void> Function(bool isCorrect) onAnswer;
 
   /// Widget opcional sobre la tarjeta (p. ej. la prioridad en Memorio Learning).
@@ -19,6 +23,8 @@ class StudyCardPlayer extends StatefulWidget {
   const StudyCardPlayer({
     super.key,
     required this.card,
+    required this.frontLabel,
+    this.backLabel = '',
     required this.onAnswer,
     this.header,
   });
@@ -150,7 +156,12 @@ class _StudyCardPlayerState extends State<StudyCardPlayer>
       },
       child: SizedBox(
         width: cardWidth,
-        child: StudyCardView(card: widget.card, controller: _flip),
+        child: StudyCardView(
+          card: widget.card,
+          frontLabel: widget.frontLabel,
+          backLabel: widget.backLabel,
+          controller: _flip,
+        ),
       ),
     );
   }

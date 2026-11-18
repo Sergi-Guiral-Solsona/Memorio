@@ -110,3 +110,111 @@ KEY_LONG_BREAK_TIME,Descanso largo,Long break,,,,,,,,,,,,,
 KEY_RESET_DEFAULTS,Valores por defecto,Reset to defaults,,,,,,,,,,,,,
 KEY_YOUR_SESSION,Tu sesión,Your session,,,,,,,,,,,,,
 KEY_UNSUPPORTED_CARD,Esta tarjeta usa un formato que esta versión de la app no reconoce.,This card uses a format this version of the app does not recognise.,,,,,,,,,,,,,
+KEY_MEMORIZE,Memorizar,Memorize
+KEY_DECKS,Mazos,Decks
+KEY_SETTINGS,Ajustes,Settings
+KEY_STATISTICS,Estadísticas,Statistics
+KEY_MODE,Modo,Mode
+KEY_MEMORIO_LEARNING,Memorio Learning,Memorio Learning
+KEY_MEMORIO_LEARNING_DESC,Repetición espaciada inteligente,Smart spaced repetition
+KEY_POMODORO,Pomodoro,Pomodoro
+KEY_FOCUSED_STUDY,Estudio enfocado,Focused study
+KEY_RANDOM,Aleatorio,Random
+KEY_RANDOM_CARDS,Tarjetas aleatorias,Random cards
+KEY_FORGETTING_VALLEY,Valle del olvido,Forgetting valley
+KEY_FORGETTING_VALLEY_DESC,Repasa justo cuando empiezas a olvidar,Review just as you start forgetting
+KEY_SELECT_DECKS,Selecciona mazos,Select decks
+KEY_DECKS_COLON,Mazos:,Decks:
+KEY_CARDS,Tarjetas,Cards
+KEY_START,Iniciar,Start
+KEY_SELECT_ALL,Seleccionar todo,Select all
+KEY_DESELECT_ALL,Desmarcar todo,Deselect all
+KEY_NO_DECKS,No hay mazos,No decks
+KEY_NO_CARDS,No hay tarjetas,No cards
+KEY_CREATE_FIRST_CARD,Crea tu primera tarjeta,Create your first card
+KEY_CREATE_CARD,Crear tarjeta,Create card
+KEY_GO_TO_CREATE_DECK,Ir a crear mazo,Go to create deck
+KEY_NO_RESULTS,Sin resultados,No results
+KEY_FINISH_SESSION,Finalizar sesión,Finish session
+KEY_POMODOROS_DONE,Pomodoros hechos,Pomodoros done
+KEY_TAKE_A_BREAK,Toma un descanso,Take a break
+KEY_SKIP_BREAK,Saltar descanso,Skip break
+KEY_PAUSED,Pausado,Paused
+KEY_RESUME,Reanudar,Resume
+KEY_FOCUS,Foco,Focus
+KEY_BREAK,Descanso,Break
+KEY_LONG_BREAK,Descanso largo,Long break
+KEY_SESSION_COMPLETE,Sesión completada,Session complete
+KEY_CORRECT,Aciertos,Correct
+KEY_INCORRECT,Fallos,Incorrect
+KEY_ACCURACY,Precisión,Accuracy
+KEY_REPEAT,Repetir,Repeat
+KEY_EXIT,Salir,Exit
+KEY_FORGETTING_VALLEY_INFO,El Valle del olvido programa los repasos justo cuando la memoria empieza a decaer. Las tarjetas "en el valle" son las que toca repasar hoy; las "nuevas" se intercalan para que no se acumulen.,The Forgetting Valley schedules reviews right when memory starts to decay. Cards "in the valley" are due today; "new" ones are interleaved so they don't pile up.
+KEY_DUE_CARDS,Por repasar,Due cards
+KEY_NEW_CARDS,Nuevas,New cards
+KEY_UP_TO_DATE,Al día,Up to date
+KEY_START,Iniciar,Start
+KEY_STUDY_ANYWAY,Estudiar de todos modos,Study anyway
+KEY_NOTHING_TO_REVIEW,Nada que repasar,Nothing to review
+KEY_NEXT_REVIEW,Próximo repaso,Next review
+KEY_UNIT_MIN,min,min
+KEY_UNIT_HOUR,h,h
+KEY_UNIT_DAY,d,d
+KEY_PRIORITY,Prioridad,Priority
+KEY_NEW_CARD,Tarjeta nueva,New card
+KEY_FLIP,Voltear,Flip
+KEY_KNEW_IT,Lo sabía,Knew it
+KEY_DIDNT_KNOW,No lo sabía,Didn't know
+KEY_REFRESH,Actualizar,Refresh
+KEY_NO_STATS_YET,Aún no hay estadísticas,No stats yet
+KEY_START_STUDYING,¡Empieza a estudiar!,Start studying
+KEY_GLOBAL_STATS,Estadísticas globales,Global stats
+KEY_TOTAL_CARDS_STUDIED,Tarjetas estudiadas: {0},Total cards studied: {0}
+KEY_BY_METHOD,Por método,By method
+KEY_CARDS_STUDIED,Tarjetas estudiadas: {0},Cards studied: {0}
+KEY_MAX_STREAK,Racha máxima,Max streak
+KEY_RECENT_SESSIONS,Sesiones recientes,Recent sessions
+KEY_MOST_DIFFICULT_CARDS,Tarjetas más difíciles,Most difficult cards
+KEY_NO_DATA_YET,Aún no hay datos,No data yet
+KEY_NO_DIFFICULT_CARDS,¡Ninguna tarjeta difícil!,No difficult cards
+KEY_VIEW_DETAILED_STATS,Ver estadísticas detalladas,View detailed stats
+KEY_JUST_NOW,Ahora mismo,Just now
+KEY_MIN_AGO,hace {0} min,{0} min ago
+KEY_HOURS_AGO,hace {0} h,{0} h ago
+KEY_CARD_STATS,Estadísticas,Statistics
+KEY_DELETE,Eliminar,Delete
+KEY_DELETE_CARDS_MSG,Se eliminarán {count} tarjetas. Esta acción no se puede deshacer.,{count} cards will be deleted. This cannot be undone.
+KEY_DELETE_CARDS_TITLE,¿Eliminar {count} tarjetas?,Delete {count} cards?
+KEY_DELETE_CARD_MSG,Se eliminará la tarjeta «{name}». Esta acción no se puede deshacer.,"The card ""{name}"" will be deleted. This cannot be undone."
+KEY_DELETE_CARD_TITLE,¿Eliminar tarjeta?,Delete card?
+KEY_DELETE_DECKS_MSG,Se eliminarán {count} mazos con un total de {cards} tarjetas. Esta acción no se puede deshacer.,{count} decks with a total of {cards} cards will be deleted. This cannot be undone.
+KEY_DELETE_DECKS_TITLE,¿Eliminar {count} mazos?,Delete {count} decks?
+KEY_DELETE_DECK_MSG,Se eliminará el mazo «{name}» y sus {count} tarjetas. Esta acción no se puede deshacer.,"The deck ""{name}"" and its {count} cards will be deleted. This cannot be undone."
+KEY_DELETE_DECK_TITLE,¿Eliminar mazo?,Delete deck?
+KEY_HOW_IT_WORKS,Cómo funciona,How it works
+KEY_LEGACY_STATS,Anteriores,Previous
+KEY_MEMORIO_INFO_BEST_FOR,Ideal para estudiar un mazo entero centrándote en lo que se te resiste.,Great for studying a whole deck while focusing on what you find hard.
+KEY_MEMORIO_INFO_STEP_1,Gira la tarjeta y marca si la sabías o no.,Flip the card and mark whether you knew it.
+KEY_MEMORIO_INFO_STEP_2,Cada fallo sube la prioridad de la tarjeta y cada acierto la baja. Las nuevas empiezan con prioridad máxima.,Each miss raises the priority of a card and each hit lowers it. New cards start at maximum priority.
+KEY_MEMORIO_INFO_STEP_3,"Cada tarjeta sale una vez por ronda. El orden tiene algo de azar: las difíciles suelen salir antes, pero no siempre las primeras.","Each card shows up once per round. The order has some randomness: hard cards usually come earlier, but not always first."
+KEY_MEMORIO_INFO_SUMMARY,Repasa todas tus tarjetas una vez; las que más fallas tienden a salir primero.,Review all your cards once; the ones you miss most tend to come first.
+KEY_NOT_STUDIED_YET,Sin estudiar,Not studied yet
+KEY_POMODORO_INFO_BEST_FOR,Ideal para sesiones largas en las que necesitas mantener la concentración.,Great for long sessions where you need to stay focused.
+KEY_POMODORO_INFO_STEP_1,Estudias {focus} minutos seguidos con las tarjetas de tus mazos.,You study {focus} minutes in a row with the cards from your decks.
+KEY_POMODORO_INFO_STEP_2,Después descansas {short} minutos. Cada {sessions} bloques el descanso es largo ({long} minutos).,Then you rest for {short} minutes. Every {sessions} blocks the break is longer ({long} minutes).
+KEY_POMODORO_INFO_STEP_3,"Las tarjetas se repiten en rondas, con las que más fallas primero, hasta que termines la sesión.","Cards repeat in rounds, with the ones you miss most first, until you end the session."
+KEY_POMODORO_INFO_SUMMARY,"Estudia por bloques de concentración con descansos, para mantener la atención sin agotarte.","Study in focused blocks with breaks, to keep your attention without burning out."
+KEY_RANDOM_INFO_BEST_FOR,"Ideal para un repaso rápido, sin preparación.",Great for a quick review with no setup.
+KEY_RANDOM_INFO_STEP_1,Se mezclan las tarjetas de los mazos que elijas.,The cards from the decks you choose are shuffled.
+KEY_RANDOM_INFO_STEP_2,Todas tienen la misma probabilidad: no importa cuánto las hayas fallado.,Every card has the same chance: it does not matter how often you missed it.
+KEY_RANDOM_INFO_STEP_3,Al terminar ves tu resultado y puedes repetir con un orden nuevo.,When you finish you see your result and can repeat in a new order.
+KEY_RANDOM_INFO_SUMMARY,"Todas las tarjetas, una vez cada una, en orden aleatorio.","All cards, once each, in random order."
+KEY_SELECTED_COUNT,{count} seleccionados,{count} selected
+KEY_SHARED_FRONT_LABEL,El rótulo del anverso es común a todo el mazo,The front label is shared by the whole deck
+KEY_STUDY_STATS_NOTE,Cada método guarda sus propios aciertos y fallos.,Each method keeps its own hits and misses.
+KEY_TOTAL,Total,Total
+KEY_VALLEY_INFO_BEST_FOR,"Ideal para recordar a largo plazo con pocos repasos, de forma constante.","Great for long-term memory with few reviews, done consistently."
+KEY_VALLEY_INFO_STEP_1,"Cada tarjeta se va olvidando con el tiempo. Cuantos más aciertos seguidos, más tarda: 1, 2, 4, 8... días.","Every card fades from memory over time. The more hits in a row, the longer it lasts: 1, 2, 4, 8... days."
+KEY_VALLEY_INFO_STEP_2,"Solo repasas lo que empieza a olvidarse, justo a tiempo, más unas pocas tarjetas nuevas (hasta {new} por sesión).","You only review what is starting to fade, just in time, plus a few new cards (up to {new} per session)."
+KEY_VALLEY_INFO_STEP_3,"Si fallas una tarjeta, vuelve a empezar desde 1 día. Si hoy no toca nada, te dice cuándo volver.","If you miss a card it starts again from 1 day. If nothing is due today, it tells you when to come back."

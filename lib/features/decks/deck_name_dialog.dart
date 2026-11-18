@@ -37,6 +37,8 @@ class _DeckNameDialogState extends State<DeckNameDialog> {
       content: TextField(
         controller: _controller,
         autofocus: true,
+        // Primera letra en mayúscula por defecto (el teclado la deja cambiar).
+        textCapitalization: kAutoCapitalization,
         onSubmitted: (_) => _submit(),
         decoration: InputDecoration(hintText: 'KEY_DECK_NAME'.loc),
       ),

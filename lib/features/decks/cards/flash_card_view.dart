@@ -636,6 +636,8 @@ class _FaceText extends StatelessWidget {
       style: style,
       textAlign: textAlign,
       maxLines: maxLines,
+      // Primera letra en mayúscula por defecto (el teclado la deja cambiar).
+      textCapitalization: kAutoCapitalization,
       cursorColor: style.color,
       decoration: InputDecoration.collapsed(
         hintText: hintText,

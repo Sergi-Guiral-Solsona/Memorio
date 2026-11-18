@@ -15,6 +15,12 @@ class StudyCard {
     return index == -1 ? card : deck.cards[index];
   }
 
+  /// Rótulo del anverso (es del mazo, igual para todas sus tarjetas).
+  String get frontLabel => deck.effectiveFrontLabel;
+
+  /// Rótulo del reverso (también es del mazo; vacío = el por defecto).
+  String get backLabel => deck.backLabel;
+
   /// Todas las tarjetas de los mazos dados.
   static List<StudyCard> fromDecks(Iterable<Deck> decks) => [
         for (final deck in decks)
@@ -22,27 +28,16 @@ class StudyCard {
       ];
 }
 
-/// Cómo se ordenan las tarjetas de una ronda.
-enum StudyOrder {
-  /// Todas con la misma probabilidad.
-  random,
-
-  /// Memorio Learning: las que más fallas tienden a salir antes.
-  memorio,
-
-  /// Valle del olvido: solo las que se están olvidando (+ unas pocas nuevas).
-  valley,
-}
-
-/// Lógica de una sesión de estudio: orden de las tarjetas, avance, resultados y
-/// guardado de cada respuesta. Sirve para cualquier modo.
+/// Lógica de una sesión de estudio: avance, resultados y guardado de cada
+/// respuesta. El orden de las tarjetas y las estadísticas que se guardan las
+/// pone el [method]; la sesión no sabe nada de ningún método concreto.
 ///
 /// - [loop] false: una pasada y termina.
-/// - [loop] true: al acabar la ronda empieza otra (recalculando el orden con
-///   los resultados nuevos).
+/// - [loop] true: al acabar la ronda empieza otra (el método recalcula el orden
+///   con los resultados nuevos).
 class StudySession {
+  final StudyMethod method;
   final bool loop;
-  final StudyOrder order;
   final List<StudyCard> _pool;
   final math.Random _random;
   List<StudyCard> _queue = [];
@@ -52,17 +47,19 @@ class StudySession {
 
   StudySession(
     Iterable<StudyCard> cards, {
+    required this.method,
     this.loop = false,
-    this.order = StudyOrder.random,
     math.Random? random,
   })  : _pool = List.of(cards),
         _random = random ?? math.Random() {
     _arrangeRound();
   }
 
+  /// Aciertos y fallos de ESTA sesión (los acumulados viven en cada tarjeta).
   int get correct => _correct;
   int get incorrect => _incorrect;
   int get answeredCount => _correct + _incorrect;
+
   /// Tarjetas de la ronda actual (en el Valle del olvido pueden ser menos que el total).
   int get total => _queue.length;
 
@@ -75,12 +72,18 @@ class StudySession {
   /// Nº de la tarjeta actual dentro de la ronda (1..total).
   int get position => math.min(_index + 1, total);
 
-  /// Guarda el resultado de la tarjeta actual y avanza a la siguiente.
+  /// Guarda el resultado de la tarjeta actual (en las estadísticas del método)
+  /// y avanza a la siguiente.
   Future<void> answer(bool isCorrect) async {
     final item = current;
     if (item == null) return;
 
-    await DeckController.recordCardResult(item.deck, item.card.id, isCorrect);
+    await DeckController.recordCardResult(
+      item.deck,
+      item.card.id,
+      method.id,
+      isCorrect,
+    );
 
     if (isCorrect) {
       _correct++;
@@ -93,21 +96,7 @@ class StudySession {
   }
 
   void _arrangeRound({StudyCard? avoidFirst}) {
-    if (order == StudyOrder.valley) {
-      _queue = ForgettingValley.plan<StudyCard>(
-        _pool,
-        (item) => item.latest,
-        random: _random,
-      ).session;
-    } else if (order == StudyOrder.memorio) {
-      _queue = MemorioLearning.weightedOrder<StudyCard>(
-        _pool,
-        (item) => MemorioLearning.weightOf(item.latest),
-        random: _random,
-      );
-    } else {
-      _queue = List.of(_pool)..shuffle(_random);
-    }
+    _queue = List.of(method.arrange(_pool, _random));
     _index = 0;
 
     // Evita que la última tarjeta respondida salga la primera de la nueva ronda.

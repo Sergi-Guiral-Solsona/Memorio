@@ -10,7 +10,7 @@ class RandomStudyScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SinglePassStudyScreen(
       mode: StudyMode.random,
-      order: StudyOrder.random,
+      method: const RandomMethod(),
       decks: decks,
     );
   }

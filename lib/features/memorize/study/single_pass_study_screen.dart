@@ -1,11 +1,11 @@
 import 'package:memorio/barrel_file.dart';
 
 /// Sesión de una sola pasada: todas las tarjetas de los mazos elegidos, una vez
-/// cada una, en el orden [order]. Al terminar muestra el resultado.
+/// cada una, en el orden que decida [method]. Al terminar muestra el resultado.
 /// La usan los modos Aleatorio y Memorio Learning.
 class SinglePassStudyScreen extends StatefulWidget {
   final StudyMode mode;
-  final StudyOrder order;
+  final StudyMethod method;
   final List<Deck> decks;
 
   /// Muestra sobre cada tarjeta su prioridad (solo tiene sentido en Memorio Learning).
@@ -18,7 +18,7 @@ class SinglePassStudyScreen extends StatefulWidget {
   const SinglePassStudyScreen({
     super.key,
     required this.mode,
-    required this.order,
+    required this.method,
     required this.decks,
     this.showPriority = false,
     this.allowRepeat = true,
@@ -33,7 +33,7 @@ class _SinglePassStudyScreenState extends State<SinglePassStudyScreen> {
 
   StudySession _newSession() => StudySession(
         StudyCard.fromDecks(widget.decks),
-        order: widget.order,
+        method: widget.method,
       );
 
   Future<void> _answer(bool isCorrect) async {
@@ -45,13 +45,17 @@ class _SinglePassStudyScreenState extends State<SinglePassStudyScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(widget.mode.title)),
-      body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 350),
-        child: _session.isFinished
-            ? KeyedSubtree(key: const ValueKey('summary'), child: _buildSummary())
-            : KeyedSubtree(key: const ValueKey('study'), child: _buildStudy()),
+    // Mientras la sesión está en marcha, "atrás" pregunta antes de salir.
+    return StudyExitGuard(
+      canExit: _session.isFinished,
+      child: Scaffold(
+        appBar: AppBar(title: Text(widget.mode.title)),
+        body: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 350),
+          child: _session.isFinished
+              ? KeyedSubtree(key: const ValueKey('summary'), child: _buildSummary())
+              : KeyedSubtree(key: const ValueKey('study'), child: _buildStudy()),
+        ),
       ),
     );
   }
@@ -79,6 +83,8 @@ class _SinglePassStudyScreenState extends State<SinglePassStudyScreen> {
           child: StudyCardPlayer(
             key: ValueKey(_session.answeredCount),
             card: card,
+            frontLabel: current.frontLabel,
+            backLabel: current.backLabel,
             header: widget.showPriority ? _PriorityChip(card: card) : null,
             onAnswer: _answer,
           ),
@@ -97,8 +103,8 @@ class _PriorityChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    final isNew = card.attempts == 0;
-    final percent = (MemorioLearning.weightOf(card) * 100).round();
+    final isNew = card.statsFor(MemorioMethod.methodId).attempts == 0;
+    final percent = (MemorioMethod.weightOf(card) * 100).round();
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),

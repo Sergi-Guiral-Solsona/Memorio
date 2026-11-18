@@ -12,6 +12,10 @@ class SettingsService {
   static const String _kAccent = 'settings_accent';
   static const String _kAmoled = 'settings_amoled';
   static const String _kCardStyle = 'settings_card_style';
+  static const String _kPomodoroFocus = 'settings_pomodoro_focus_min';
+  static const String _kPomodoroShort = 'settings_pomodoro_short_min';
+  static const String _kPomodoroLong = 'settings_pomodoro_long_min';
+  static const String _kPomodoroCycles = 'settings_pomodoro_cycles';
 
   SharedPreferences? _prefs;
 
@@ -49,6 +53,44 @@ class SettingsService {
 
   Future<void> setCardStyle(CardStyle style) async {
     await _prefs?.setString(_kCardStyle, style.name);
+  }
+
+  // ---- Pomodoro (tiempos elegidos por el usuario) ----
+  PomodoroConfig get pomodoroConfig {
+    const defaults = PomodoroConfig();
+    int read(String key, int fallback, int min, int max) =>
+        (_prefs?.getInt(key) ?? fallback).clamp(min, max);
+
+    return PomodoroConfig(
+      focus: Duration(
+        minutes: read(_kPomodoroFocus, defaults.focus.inMinutes,
+            PomodoroConfig.minFocusMinutes, PomodoroConfig.maxFocusMinutes),
+      ),
+      shortBreak: Duration(
+        minutes: read(_kPomodoroShort, defaults.shortBreak.inMinutes,
+            PomodoroConfig.minShortBreakMinutes,
+            PomodoroConfig.maxShortBreakMinutes),
+      ),
+      longBreak: Duration(
+        minutes: read(_kPomodoroLong, defaults.longBreak.inMinutes,
+            PomodoroConfig.minLongBreakMinutes,
+            PomodoroConfig.maxLongBreakMinutes),
+      ),
+      focusSessionsBeforeLongBreak: read(
+        _kPomodoroCycles,
+        defaults.focusSessionsBeforeLongBreak,
+        PomodoroConfig.minSessionsBeforeLongBreak,
+        PomodoroConfig.maxSessionsBeforeLongBreak,
+      ),
+    );
+  }
+
+  Future<void> setPomodoroConfig(PomodoroConfig config) async {
+    await _prefs?.setInt(_kPomodoroFocus, config.focus.inMinutes);
+    await _prefs?.setInt(_kPomodoroShort, config.shortBreak.inMinutes);
+    await _prefs?.setInt(_kPomodoroLong, config.longBreak.inMinutes);
+    await _prefs?.setInt(
+        _kPomodoroCycles, config.focusSessionsBeforeLongBreak);
   }
 
   bool get amoled => _prefs?.getBool(_kAmoled) ?? false;

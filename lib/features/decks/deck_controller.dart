@@ -38,6 +38,31 @@ class DeckController {
     return decks;
   }
 
+  /// Cambia el rótulo del anverso de TODAS las tarjetas del mazo. Vacío (o
+  /// igual al nombre del mazo) vuelve al rótulo por defecto: el nombre del mazo.
+  static Future<void> updateFrontLabel(Deck deck, String label) async {
+    final clean = label.trim();
+    deck.frontLabel = clean == deck.title ? '' : clean;
+    await _persistDeck(deck);
+  }
+
+  /// Cambia el rótulo del reverso de TODAS las tarjetas del mazo. Vacío vuelve
+  /// al rótulo por defecto ("Respuesta").
+  static Future<void> updateBackLabel(Deck deck, String label) async {
+    deck.backLabel = label.trim();
+    await _persistDeck(deck);
+  }
+
+  /// Elimina varios mazos de una vez (una sola escritura).
+  static Future<List<Deck>> deleteDecks(
+    List<Deck> decks,
+    Set<String> deckIds,
+  ) async {
+    decks.removeWhere((d) => deckIds.contains(d.id));
+    await saveDecks(decks);
+    return decks;
+  }
+
   // ---------------------------- Tarjetas -----------------------------
 
   /// Añade la tarjeta al mazo asignándole un id nuevo.
@@ -59,21 +84,24 @@ class DeckController {
     await _persistDeck(deck);
   }
 
+  /// Elimina varias tarjetas del mazo de una vez (una sola escritura).
+  static Future<void> deleteCardsFromDeck(Deck deck, Set<String> cardIds) async {
+    deck.cards.removeWhere((c) => cardIds.contains(c.id));
+    await _persistDeck(deck);
+  }
+
+  /// Anota una respuesta en las estadísticas del método [methodId]; las de los
+  /// demás métodos no se tocan.
   static Future<void> recordCardResult(
     Deck deck,
     String cardId,
+    String methodId,
     bool isCorrect,
   ) async {
     final index = _indexOfCard(deck, cardId);
     if (index == -1) return;
 
-    final card = deck.cards[index];
-    deck.cards[index] = card.copyWith(
-      correctCount: card.correctCount + (isCorrect ? 1 : 0),
-      incorrectCount: card.incorrectCount + (isCorrect ? 0 : 1),
-      streak: isCorrect ? card.streak + 1 : 0,
-      lastReviewed: DateTime.now(),
-    );
+    deck.cards[index] = deck.cards[index].withResult(methodId, isCorrect);
     await _persistDeck(deck);
   }
 

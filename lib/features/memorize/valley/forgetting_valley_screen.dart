@@ -16,21 +16,19 @@ class ForgettingValleyScreen extends StatefulWidget {
 class _ForgettingValleyScreenState extends State<ForgettingValleyScreen> {
   late ValleyPlan<StudyCard> _plan = _computePlan();
 
-  ValleyPlan<StudyCard> _computePlan() => ForgettingValley.plan<StudyCard>(
-        StudyCard.fromDecks(widget.decks),
-        (item) => item.latest,
-      );
+  ValleyPlan<StudyCard> _computePlan() =>
+      ValleyMethod.planFor(StudyCard.fromDecks(widget.decks));
 
   /// Abre la sesión y, al volver, recalcula (lo repasado ya está fresco).
-  Future<void> _open(StudyOrder order, {required bool allowRepeat}) async {
+  Future<void> _open({required bool studyAll}) async {
     await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (_) => SinglePassStudyScreen(
           mode: StudyMode.valley,
-          order: order,
+          method: ValleyMethod(studyAll: studyAll),
           decks: widget.decks,
-          allowRepeat: allowRepeat,
+          allowRepeat: studyAll,
         ),
       ),
     );
@@ -88,7 +86,7 @@ class _ForgettingValleyScreenState extends State<ForgettingValleyScreen> {
           if (plan.isEmpty) ..._buildNothingToReview(scheme, plan) else ..._buildReady(plan),
           const SizedBox(height: 8),
           TextButton(
-            onPressed: () => _open(StudyOrder.memorio, allowRepeat: true),
+            onPressed: () => _open(studyAll: true),
             child: Text('KEY_STUDY_ANYWAY'.loc),
           ),
         ],
@@ -99,7 +97,7 @@ class _ForgettingValleyScreenState extends State<ForgettingValleyScreen> {
   List<Widget> _buildReady(ValleyPlan<StudyCard> plan) {
     return [
       FilledButton.icon(
-        onPressed: () => _open(StudyOrder.valley, allowRepeat: false),
+        onPressed: () => _open(studyAll: false),
         icon: const Icon(Icons.play_arrow_rounded),
         label: Text('${'KEY_START'.loc} · ${plan.session.length}'),
       ),
@@ -153,7 +151,7 @@ class _InfoCard extends StatelessWidget {
             height: 96,
             width: double.infinity,
             child: CustomPaint(
-              painter: _ForgettingCurvePainter(
+              painter: ForgettingCurvePainter(
                 line: scheme.primary,
                 valley: scheme.error,
                 threshold: scheme.outline,
@@ -205,12 +203,12 @@ class _StatTile extends StatelessWidget {
 
 /// Dibuja la curva del olvido y sombrea el "valle": la zona donde la retención
 /// cae por debajo del umbral de repaso.
-class _ForgettingCurvePainter extends CustomPainter {
+class ForgettingCurvePainter extends CustomPainter {
   final Color line;
   final Color valley;
   final Color threshold;
 
-  const _ForgettingCurvePainter({
+  const ForgettingCurvePainter({
     required this.line,
     required this.valley,
     required this.threshold,
@@ -265,6 +263,6 @@ class _ForgettingCurvePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _ForgettingCurvePainter old) =>
+  bool shouldRepaint(covariant ForgettingCurvePainter old) =>
       old.line != line || old.valley != valley || old.threshold != threshold;
 }
