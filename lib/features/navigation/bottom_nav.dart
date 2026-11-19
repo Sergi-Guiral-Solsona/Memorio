@@ -13,8 +13,16 @@ class BottomNavScreen extends StatefulWidget {
 class BottomNavScreenState extends State<BottomNavScreen> {
   int _currentIndex = 0;
 
-  void openDecks() {
-    setState(() => _currentIndex = 0);
+  /// Pide abrir el diálogo de crear mazo al mostrar la pestaña de mazos.
+  /// Se consume una sola vez (al abrirse), para no repetirse al cambiar de pestaña.
+  bool _pendingCreateDeck = false;
+
+  /// Abre la pestaña de mazos. Con [createDeck] abre además el menú de crear mazo.
+  void openDecks({bool createDeck = false}) {
+    setState(() {
+      _pendingCreateDeck = createDeck;
+      _currentIndex = 0;
+    });
   }
 
   void openMemorize() {
@@ -25,16 +33,24 @@ class BottomNavScreenState extends State<BottomNavScreen> {
     setState(() => _currentIndex = 2);
   }
 
-  final List<Widget> _screens = const [
-    DecksScreen(),
-    MemorizeScreen(),
-    SettingsScreen(),
-  ];
+  Widget _screenAt(int index) {
+    switch (index) {
+      case 0:
+        return DecksScreen(
+          openCreateDialogOnStart: _pendingCreateDeck,
+          onCreateDialogRequestHandled: () => _pendingCreateDeck = false,
+        );
+      case 1:
+        return const MemorizeScreen();
+      default:
+        return const SettingsScreen();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_currentIndex],
+      body: _screenAt(_currentIndex),
       bottomNavigationBar: _BottomBar(
         currentIndex: _currentIndex,
         onTap: (index) => setState(() => _currentIndex = index),

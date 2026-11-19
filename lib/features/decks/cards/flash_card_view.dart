@@ -89,6 +89,13 @@ class _FlashCardViewState extends State<FlashCardView>
   // Vive aquí (y no en la cara) porque la cara frontal se destruye al girar.
   late bool _hintVisible = widget.initialHintVisible;
 
+  // Foco de cada campo editable. También viven aquí por la misma razón: las
+  // caras se destruyen al girar, y los disparadores invisibles necesitan
+  // un nodo estable al que pedir el foco.
+  final FocusNode _frontFocus = FocusNode(debugLabel: 'card-front');
+  final FocusNode _hintFocus = FocusNode(debugLabel: 'card-hint');
+  final FocusNode _backFocus = FocusNode(debugLabel: 'card-back');
+
   double get _dragExtent => (context.size?.width ?? 300) * _dragExtentFactor;
 
   @override
@@ -112,6 +119,9 @@ class _FlashCardViewState extends State<FlashCardView>
   void dispose() {
     if (widget.controller._state == this) widget.controller._state = null;
     _turn.dispose();
+    _frontFocus.dispose();
+    _hintFocus.dispose();
+    _backFocus.dispose();
     super.dispose();
   }
 
@@ -123,10 +133,10 @@ class _FlashCardViewState extends State<FlashCardView>
   }
 
   void _settleOn(
-    int face, {
-    Duration duration = _dragSettleDuration,
-    Curve curve = Curves.easeOutCubic,
-  }) {
+      int face, {
+        Duration duration = _dragSettleDuration,
+        Curve curve = Curves.easeOutCubic,
+      }) {
     _face = face;
     _turn
         .animateTo(face.toDouble(), duration: duration, curve: curve)
@@ -186,25 +196,28 @@ class _FlashCardViewState extends State<FlashCardView>
                   ..setEntry(3, 2, 0.001)
                   ..rotateY(value * math.pi),
                 child: showingBack
-                    // Se gira otra vez para que el texto no salga en espejo.
+                // Se gira otra vez para que el texto no salga en espejo.
                     ? Transform(
-                        alignment: Alignment.center,
-                        transform: Matrix4.rotationY(math.pi),
-                        child: _BackFace(
-                          controller: widget.backController,
-                          labelController: widget.backLabelController,
-                          editable: widget.editable,
-                        ),
-                      )
+                  alignment: Alignment.center,
+                  transform: Matrix4.rotationY(math.pi),
+                  child: _BackFace(
+                    controller: widget.backController,
+                    labelController: widget.backLabelController,
+                    editable: widget.editable,
+                    focusNode: _backFocus,
+                  ),
+                )
                     : _FrontFace(
-                        frontController: widget.frontController,
-                        hintController: widget.hintController,
-                        labelController: widget.frontLabelController,
-                        editable: widget.editable,
-                        hintVisible: _hintVisible,
-                        onToggleHint: () =>
-                            setState(() => _hintVisible = !_hintVisible),
-                      ),
+                  frontController: widget.frontController,
+                  hintController: widget.hintController,
+                  labelController: widget.frontLabelController,
+                  editable: widget.editable,
+                  frontFocus: _frontFocus,
+                  hintFocus: _hintFocus,
+                  hintVisible: _hintVisible,
+                  onToggleHint: () =>
+                      setState(() => _hintVisible = !_hintVisible),
+                ),
               ),
             );
           },
@@ -227,6 +240,8 @@ class _FrontFace extends StatelessWidget {
   final TextEditingController hintController;
   final TextEditingController labelController;
   final bool editable;
+  final FocusNode frontFocus;
+  final FocusNode hintFocus;
   final bool hintVisible;
   final VoidCallback onToggleHint;
 
@@ -235,6 +250,8 @@ class _FrontFace extends StatelessWidget {
     required this.hintController,
     required this.labelController,
     required this.editable,
+    required this.frontFocus,
+    required this.hintFocus,
     required this.hintVisible,
     required this.onToggleHint,
   });
@@ -249,6 +266,8 @@ class _FrontFace extends StatelessWidget {
         hintController: hintController,
         labelController: labelController,
         editable: editable,
+        frontFocus: frontFocus,
+        hintFocus: hintFocus,
         hintVisible: hintVisible,
         onToggleHint: onToggleHint,
       ),
@@ -261,6 +280,8 @@ class _FrontContent extends StatelessWidget {
   final TextEditingController hintController;
   final TextEditingController labelController;
   final bool editable;
+  final FocusNode frontFocus;
+  final FocusNode hintFocus;
   final bool hintVisible;
   final VoidCallback onToggleHint;
 
@@ -269,6 +290,8 @@ class _FrontContent extends StatelessWidget {
     required this.hintController,
     required this.labelController,
     required this.editable,
+    required this.frontFocus,
+    required this.hintFocus,
     required this.hintVisible,
     required this.onToggleHint,
   });
@@ -297,37 +320,54 @@ class _FrontContent extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: 30),
-        _InsetBox(
-          enabled: editable,
-          child: _TitleText(
-            controller: frontController,
-            editable: editable,
-            hintText: 'KEY_WORD_OR_PHRASE'.loc,
-            baseSize: 40,
-            bold: true,
-            maxLines: 4,
-          ),
-        ),
-        const SizedBox(height: 16),
-        const Center(child: CardAccentLine()),
-        if (hasHint) _HintToggle(visible: hintVisible, onTap: onToggleHint),
-        if (hasHint) ...[
-          const SizedBox(height: 18),
-          Expanded(
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 260),
-              switchInCurve: Curves.easeOut,
-              child: hintVisible
-                  ? _HintArea(
-                      key: const ValueKey('hint'),
-                      controller: hintController,
-                      editable: editable,
-                    )
-                  : const SizedBox.expand(key: ValueKey('no-hint')),
+        // La palabra ocupa la zona principal y va centrada en ella; pista y
+        // ojo quedan justo debajo, de modo que todo el conjunto se ve centrado
+        // en la tarjeta y no "salta" al mostrar u ocultar la pista.
+        Expanded(
+          flex: 5,
+          child: Align(
+            alignment: Alignment.center,
+            // Toda la caja de la palabra enfoca el campo, no solo la línea de texto.
+            child: _TapToFocus(
+              enabled: editable,
+              controller: frontController,
+              focusNode: frontFocus,
+              child: _InsetBox(
+                enabled: editable,
+                height: 150,
+                child: _TitleText(
+                  controller: frontController,
+                  focusNode: frontFocus,
+                  editable: editable,
+                  hintText: 'KEY_WORD_OR_PHRASE'.loc,
+                  baseSize: 54,
+                  bold: true,
+                  maxLines: 4,
+                ),
+              ),
             ),
           ),
-        ],
+        ),
+        const SizedBox(height: 8),
+        const Center(child: CardAccentLine()),
+        if (hasHint) _HintToggle(visible: hintVisible, onTap: onToggleHint),
+        Expanded(
+          flex: 4,
+          child: hasHint
+              ? AnimatedSwitcher(
+            duration: const Duration(milliseconds: 260),
+            switchInCurve: Curves.easeOut,
+            child: hintVisible
+                ? _HintArea(
+              key: const ValueKey('hint'),
+              controller: hintController,
+              focusNode: hintFocus,
+              editable: editable,
+            )
+                : const SizedBox.expand(key: ValueKey('no-hint')),
+          )
+              : const SizedBox.shrink(),
+        ),
       ],
     );
   }
@@ -337,11 +377,13 @@ class _BackFace extends StatelessWidget {
   final TextEditingController controller;
   final TextEditingController labelController;
   final bool editable;
+  final FocusNode focusNode;
 
   const _BackFace({
     required this.controller,
     required this.labelController,
     required this.editable,
+    required this.focusNode,
   });
 
   @override
@@ -353,6 +395,7 @@ class _BackFace extends StatelessWidget {
         controller: controller,
         labelController: labelController,
         editable: editable,
+        focusNode: focusNode,
       ),
     );
   }
@@ -362,11 +405,13 @@ class _BackContent extends StatelessWidget {
   final TextEditingController controller;
   final TextEditingController labelController;
   final bool editable;
+  final FocusNode focusNode;
 
   const _BackContent({
     required this.controller,
     required this.labelController,
     required this.editable,
+    required this.focusNode,
   });
 
   @override
@@ -387,15 +432,22 @@ class _BackContent extends StatelessWidget {
             ),
           ),
         ),
-       // if (face.isClassic) ...[const SizedBox(height: 4), const CardDivider()],
+        // if (face.isClassic) ...[const SizedBox(height: 4), const CardDivider()],
+        // Toda la zona bajo el rótulo enfoca la respuesta.
         Expanded(
-          child: Center(
-            child: SingleChildScrollView(
-              child: _TitleText(
-                controller: controller,
-                editable: editable,
-                hintText: 'KEY_ANSWER'.loc,
-                baseSize: 38,
+          child: _TapToFocus(
+            enabled: editable,
+            controller: controller,
+            focusNode: focusNode,
+            child: Center(
+              child: SingleChildScrollView(
+                child: _TitleText(
+                  controller: controller,
+                  focusNode: focusNode,
+                  editable: editable,
+                  hintText: 'KEY_ANSWER'.loc,
+                  baseSize: 48,
+                ),
               ),
             ),
           ),
@@ -412,6 +464,7 @@ class _BackContent extends StatelessWidget {
 /// Título o respuesta: la letra se reduce sola cuando el texto es largo.
 class _TitleText extends StatelessWidget {
   final TextEditingController controller;
+  final FocusNode? focusNode;
   final bool editable;
   final String hintText;
   final double baseSize;
@@ -420,6 +473,7 @@ class _TitleText extends StatelessWidget {
 
   const _TitleText({
     required this.controller,
+    this.focusNode,
     required this.editable,
     required this.hintText,
     required this.baseSize,
@@ -438,11 +492,12 @@ class _TitleText extends StatelessWidget {
         final size = length <= 12
             ? baseSize
             : length <= 24
-                ? baseSize * 0.82
-                : baseSize * 0.64;
+            ? baseSize * 0.82
+            : baseSize * 0.64;
 
         return _FaceText(
           controller: controller,
+          focusNode: focusNode,
           editable: editable,
           hintText: hintText,
           textAlign: TextAlign.center,
@@ -534,27 +589,40 @@ class _HintToggle extends StatelessWidget {
 /// La pista: texto en cursiva bajo el título (moderno) o nota amarilla (clásico).
 class _HintArea extends StatelessWidget {
   final TextEditingController controller;
+  final FocusNode focusNode;
   final bool editable;
 
-  const _HintArea({super.key, required this.controller, required this.editable});
+  const _HintArea({
+    super.key,
+    required this.controller,
+    required this.focusNode,
+    required this.editable,
+  });
 
   @override
   Widget build(BuildContext context) {
     final face = CardFaceScope.of(context);
 
-    return Align(
-      alignment: Alignment.topCenter,
-      child: SingleChildScrollView(
-        child: _FaceText(
-          controller: controller,
-          editable: editable,
-          hintText: 'KEY_HINT'.loc,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontStyle: FontStyle.italic,
-            fontSize: 17,
-            height: 1.35,
-            color: face.hint,
+    // Toda la zona de la pista enfoca su campo, aunque el texto sea corto.
+    return _TapToFocus(
+      enabled: editable,
+      controller: controller,
+      focusNode: focusNode,
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: SingleChildScrollView(
+          child: _FaceText(
+            controller: controller,
+            focusNode: focusNode,
+            editable: editable,
+            hintText: 'KEY_HINT'.loc,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontStyle: FontStyle.italic,
+              fontSize: 21,
+              height: 1.35,
+              color: face.hint,
+            ),
           ),
         ),
       ),
@@ -569,6 +637,7 @@ class _InsetBox extends StatelessWidget {
   final Color? borderColor;
   final double borderWidth;
   final bool expand;
+  final double height;
 
   const _InsetBox({
     required this.enabled,
@@ -576,6 +645,7 @@ class _InsetBox extends StatelessWidget {
     this.borderColor ,
     this.borderWidth = 1.5,
     this.expand = false,
+    this.height = 100,
   });
 
   @override
@@ -585,7 +655,7 @@ class _InsetBox extends StatelessWidget {
     final face = CardFaceScope.of(context);
     return Container(
       width: double.infinity,
-      height: expand ? double.infinity : 100,
+      height: expand ? double.infinity : height,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       alignment: Alignment.center,
       decoration: BoxDecoration(
@@ -601,9 +671,51 @@ class _InsetBox extends StatelessWidget {
   }
 }
 
+/// Disparador invisible: un toque en cualquier punto de [child] da el foco a
+/// [focusNode] (y abre el teclado). Así no hace falta acertar justo sobre la
+/// línea de texto, que es muy pequeña, sobre todo con el campo vacío.
+///
+/// Los toques que caen sobre el propio TextField los resuelve él (colocando
+/// el cursor donde se toca); este detector solo recoge los que caen alrededor.
+/// Con [enabled] = false (modo estudio) no añade nada.
+class _TapToFocus extends StatelessWidget {
+  final bool enabled;
+  final TextEditingController controller;
+  final FocusNode focusNode;
+  final Widget child;
+
+  const _TapToFocus({
+    required this.enabled,
+    required this.controller,
+    required this.focusNode,
+    required this.child,
+  });
+
+  void _focus() {
+    if (!focusNode.hasFocus) {
+      // Cursor al final del texto (en un campo recién creado la selección
+      // aún no es válida).
+      controller.selection = TextSelection.collapsed(offset: controller.text.length);
+    }
+    focusNode.requestFocus();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!enabled) return child;
+
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: _focus,
+      child: child,
+    );
+  }
+}
+
 /// Texto que es un TextField si [editable] y un Text si no.
 class _FaceText extends StatelessWidget {
   final TextEditingController controller;
+  final FocusNode? focusNode;
   final bool editable;
   final String hintText;
   final TextStyle style;
@@ -612,6 +724,7 @@ class _FaceText extends StatelessWidget {
 
   const _FaceText({
     required this.controller,
+    this.focusNode,
     required this.editable,
     required this.hintText,
     required this.style,
@@ -633,6 +746,7 @@ class _FaceText extends StatelessWidget {
 
     return TextField(
       controller: controller,
+      focusNode: focusNode,
       style: style,
       textAlign: textAlign,
       maxLines: maxLines,

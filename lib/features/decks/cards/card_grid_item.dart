@@ -4,7 +4,8 @@ import 'package:memorio/barrel_file.dart';
 /// Ajustes. Anverso, pista y reverso van en zonas separadas por una línea fina,
 /// cada una con su icono a la izquierda y el texto centrado (recortado con "…"
 /// si no cabe). La pista (icono y líneas) va en amarillo. Abajo van las
-/// estadísticas y, a la derecha, los iconos de información y de borrar. Tocar la tarjeta abre el editor.
+/// estadísticas a la izquierda y el icono de borrar a la derecha; el de
+/// información va arriba, centrado. Tocar la tarjeta abre el editor.
 ///
 /// En modo selección ([selectionMode]) se ocultan los botones, aparece un
 /// círculo de selección y la tarjeta marcada ([selected]) se resalta.
@@ -45,7 +46,7 @@ class CardGridItem extends StatelessWidget {
                 onTap: onTap,
                 onLongPress: onLongPress,
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(12, 10, 8, 4),
+                  padding: const EdgeInsets.fromLTRB(14, 4, 10, 4),
                   child: ClipRect(
                     child: _Content(
                       card: card,
@@ -131,6 +132,16 @@ class _Content extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        // Botón de información, arriba y centrado. Con la selección activa se
+        // deja el hueco para que la tarjeta no "salte".
+        SizedBox(
+          height: 30,
+          child: showActions
+              ? Center(
+            child: CardStatsButton(card: card, color: face.caption),
+          )
+              : null,
+        ),
         Expanded(
           flex: 3,
           child: _Section(
@@ -139,7 +150,7 @@ class _Content extends StatelessWidget {
             child: _FitText(
               card.front,
               maxLinesCap: 4,
-              style: CardFonts.title(color: face.title, size: 18),
+              style: CardFonts.title(color: face.title, size: 20),
             ),
           ),
         ),
@@ -157,7 +168,7 @@ class _Content extends StatelessWidget {
                 maxLinesCap: 3,
                 style: TextStyle(
                   color: face.hint,
-                  fontSize: 12,
+                  fontSize: 13,
                   height: 1.25,
                   fontStyle: FontStyle.italic,
                 ),
@@ -176,8 +187,8 @@ class _Content extends StatelessWidget {
               maxLinesCap: 5,
               style: TextStyle(
                 color: face.title,
-                fontWeight: FontWeight.w500,
-                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
                 height: 1.25,
               ),
             ),
@@ -215,9 +226,9 @@ class _Section extends StatelessWidget {
         Semantics(
           label: semanticLabel,
           excludeSemantics: true,
-          child: Icon(icon, size: 16, color: iconColor ?? caption),
+          child: Icon(icon, size: 18, color: iconColor ?? caption),
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: 10),
         Expanded(
           child: Align(
             alignment: AlignmentDirectional.centerStart,
@@ -241,7 +252,7 @@ class _SectionDivider extends StatelessWidget {
         CardFaceScope.of(context).caption.withValues(alpha: 0.22);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 3),
+      padding: const EdgeInsets.symmetric(vertical: 4),
       child: Container(height: 1, color: line),
     );
   }
@@ -308,8 +319,7 @@ class _Footer extends StatelessWidget {
               ),
             ),
           ),
-          if (showActions) ...[
-            CardStatsButton(card: card, color: color),
+          if (showActions)
             IconButton(
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints.tightFor(width: 30, height: 30),
@@ -318,7 +328,6 @@ class _Footer extends StatelessWidget {
               icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
               onPressed: onDelete,
             ),
-          ],
         ],
       ),
     );

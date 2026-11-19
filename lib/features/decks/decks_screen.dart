@@ -1,7 +1,17 @@
 import 'package:memorio/barrel_file.dart';
 
 class DecksScreen extends StatefulWidget {
-  const DecksScreen({super.key});
+  /// Si es true, al mostrarse la pantalla se abre sola la ventana de crear mazo.
+  final bool openCreateDialogOnStart;
+
+  /// Avisa de que esa petición ya se atendió (para que no se repita).
+  final VoidCallback? onCreateDialogRequestHandled;
+
+  const DecksScreen({
+    super.key,
+    this.openCreateDialogOnStart = false,
+    this.onCreateDialogRequestHandled,
+  });
 
   @override
   State<DecksScreen> createState() => _DecksScreenState();
@@ -28,7 +38,12 @@ class _DecksScreenState extends State<DecksScreen> {
   @override
   void initState() {
     super.initState();
-    _fetchDecks();
+    _fetchDecks().then((_) {
+      if (!widget.openCreateDialogOnStart) return;
+      widget.onCreateDialogRequestHandled?.call();
+      // Se espera a que la lista esté cargada para no pisar los mazos guardados.
+      if (mounted) _showDeckDialog();
+    });
   }
 
   Future<void> _fetchDecks() async {

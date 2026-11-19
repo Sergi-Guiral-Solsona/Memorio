@@ -50,6 +50,21 @@ class SettingsScreen extends StatelessWidget {
                   MaterialPageRoute(builder: (_) => const AppearanceScreen()),
                 ),
               ),
+              SettingsButton(
+                icon: Icons.file_download_outlined,
+                color: scheme.secondary,
+                title: 'KEY_IMPORT_DECKS'.locOr('Importar mazos', 'Import decks'),
+                onTap: () => importDecksFlow(context),
+              ),
+              SettingsButton(
+                icon: Icons.file_upload_outlined,
+                color: scheme.primary,
+                title: 'KEY_EXPORT_DECKS'.locOr('Exportar mazos', 'Export decks'),
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const DeckExportScreen()),
+                ),
+              ),
               // Futuros botones: SettingsButton(...)
             ],
           ),
