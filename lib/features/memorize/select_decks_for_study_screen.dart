@@ -120,7 +120,7 @@ class _SelectDecksForStudyScreenState extends State<SelectDecksForStudyScreen> {
             ),
           ),
           AppSearchBar(
-            hintText: 'KEY_SEARCH_DECKS'.locOr('Buscar mazos', 'Search decks'),
+            hintText: 'KEY_SEARCH_DECKS'.loc,
             onChanged: (value) => setState(() => _query = value),
           ),
           Expanded(child: _buildList()),

@@ -64,20 +64,14 @@ class _DeckExportScreenState extends State<DeckExportScreen> {
 
       messenger.showSnackBar(SnackBar(
         content: Text('KEY_EXPORT_DONE'
-            .locOr(
-              'Exportados {count} mazos.',
-              'Exported {count} decks.',
-            )
+            .loc
             .fill({'count': chosen.length})),
       ));
       if (mounted) Navigator.pop(context);
     } catch (e, stack) {
       AppLogger.error('Error al exportar mazos', error: e, stackTrace: stack);
       messenger.showSnackBar(SnackBar(
-        content: Text('KEY_EXPORT_ERROR'.locOr(
-          'No se pudo exportar.',
-          'Could not export.',
-        )),
+        content: Text('KEY_EXPORT_ERROR'.loc),
       ));
     } finally {
       if (mounted) setState(() => _busy = false);
@@ -88,7 +82,7 @@ class _DeckExportScreenState extends State<DeckExportScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('KEY_EXPORT_DECKS'.locOr('Exportar mazos', 'Export decks')),
+        title: Text('KEY_EXPORT_DECKS'.loc),
       ),
       body: _buildBody(),
     );
@@ -111,7 +105,7 @@ class _DeckExportScreenState extends State<DeckExportScreen> {
           value: _allSelected,
           onChanged: (_) => _toggleAll(),
           title: Text(
-            'KEY_SELECT_ALL'.locOr('Seleccionar todos', 'Select all'),
+            'KEY_SELECT_ALL'.loc,
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
@@ -126,7 +120,7 @@ class _DeckExportScreenState extends State<DeckExportScreen> {
                 onChanged: (_) => _toggle(deck),
                 title: Text(deck.title),
                 subtitle: Text(
-                  '${deck.cards.length} ${'KEY_CARDS'.locOr('tarjetas', 'cards')}',
+                  '${deck.cards.length} ${'KEY_CARDS'.loc}',
                 ),
               );
             },
@@ -137,11 +131,8 @@ class _DeckExportScreenState extends State<DeckExportScreen> {
           value: _includeProgress,
           onChanged: (v) => setState(() => _includeProgress = v),
           title: Text('KEY_EXPORT_INCLUDE_PROGRESS'
-              .locOr('Incluir progreso de estudio', 'Include study progress')),
-          subtitle: Text('KEY_EXPORT_INCLUDE_PROGRESS_SUB'.locOr(
-            'Aciertos, fallos y rachas de cada tarjeta',
-            'Correct answers, mistakes and streaks of each card',
-          )),
+              .loc),
+          subtitle: Text('KEY_EXPORT_INCLUDE_PROGRESS_SUB'.loc),
         ),
         SafeArea(
           top: false,
@@ -159,7 +150,7 @@ class _DeckExportScreenState extends State<DeckExportScreen> {
                       )
                     : const Icon(Icons.file_upload_outlined),
                 label: Text(
-                  '${'KEY_EXPORT_BUTTON'.locOr('Exportar', 'Export')} (${_selectedIds.length})',
+                  '${'KEY_EXPORT_BUTTON'.loc} (${_selectedIds.length})',
                 ),
               ),
             ),

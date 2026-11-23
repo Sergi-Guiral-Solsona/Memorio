@@ -35,7 +35,7 @@ class SelectionAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       title: Text(
         'KEY_SELECTED_COUNT'
-            .locOr('{count} seleccionados', '{count} selected')
+            .loc
             .fill({'count': count}),
         style: const TextStyle(fontWeight: FontWeight.w600),
       ),
@@ -48,7 +48,7 @@ class SelectionAppBar extends StatelessWidget implements PreferredSizeWidget {
           onPressed: onToggleAll,
         ),
         IconButton(
-          tooltip: 'KEY_DELETE'.locOr('Eliminar', 'Delete'),
+          tooltip: 'KEY_DELETE'.loc,
           icon: Icon(Icons.delete_outline_rounded, color: scheme.error),
           onPressed: onDelete,
         ),

@@ -125,7 +125,7 @@ class _DeckEditScreenState extends State<DeckEditScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('KEY_EDIT_DECK_STYLE'.locOr('Editar estilo de mazo', 'Edit deck style')),
+        title: Text('KEY_EDIT_DECK_STYLE'.loc),
       ),
       body: SafeArea(
         child: ListView(
@@ -158,12 +158,12 @@ class _DeckEditScreenState extends State<DeckEditScreen> {
             const SizedBox(height: 20),
 
             _SectionLabel(
-                'KEY_CARD_LABELS'.locOr('Rótulos de la tarjeta', 'Card labels')),
+                'KEY_CARD_LABELS'.loc),
             TextField(
               controller: _frontLabel,
               textCapitalization: kAutoCapitalization,
               decoration: InputDecoration(
-                labelText: 'KEY_FRONT_LABEL'.locOr('Anverso', 'Front'),
+                labelText: 'KEY_FRONT_LABEL'.loc,
                 hintText: _title.text.trim().isEmpty ? _deck.title : _title.text.trim(),
                 border: const OutlineInputBorder(),
               ),
@@ -173,17 +173,14 @@ class _DeckEditScreenState extends State<DeckEditScreen> {
               controller: _backLabel,
               textCapitalization: kAutoCapitalization,
               decoration: InputDecoration(
-                labelText: 'KEY_BACK_LABEL'.locOr('Reverso', 'Back'),
+                labelText: 'KEY_BACK_LABEL'.loc,
                 hintText: 'KEY_ANSWER'.loc,
                 border: const OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 8),
             Text(
-              'KEY_SHARED_LABELS'.locOr(
-                'Los rótulos del anverso y del reverso son comunes a todo el mazo',
-                'The front and back labels are shared by the whole deck',
-              ),
+              'KEY_SHARED_LABELS'.loc,
               style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 12),
             ),
             const SizedBox(height: 28),
@@ -227,20 +224,20 @@ class _DeckEditScreenState extends State<DeckEditScreen> {
               ),
             const SizedBox(height: 16),
 
-            _SectionLabel('KEY_CARD_BORDER'.locOr('Borde', 'Border')),
+            _SectionLabel('KEY_CARD_BORDER'.loc),
             Wrap(
               spacing: 8,
               runSpacing: 8,
               children: [
                 ChoiceChip(
                   label: Text(
-                      'KEY_DECK_DEFAULT'.locOr('Como en Ajustes', 'Same as Settings')),
+                      'KEY_DECK_DEFAULT'.loc),
                   selected: _border == null,
                   onSelected: (_) => _set(() => _border = null),
                 ),
                 for (final b in CardBorder.values)
                   ChoiceChip(
-                    label: Text(b.titleKey.locOr(b.fallbackEs, b.fallbackEn)),
+                    label: Text(b.titleKey.loc),
                     selected: _border == b,
                     onSelected: (_) => _set(() => _border = b),
                   ),
@@ -253,10 +250,7 @@ class _DeckEditScreenState extends State<DeckEditScreen> {
             ),
             const SizedBox(height: 4),
             Text(
-              'KEY_CARD_BORDER_DESC'.locOr(
-                'Sin color elegido, el borde usa el color del estilo.',
-                'With no colour chosen, the border uses the style colour.',
-              ),
+              'KEY_CARD_BORDER_DESC'.loc,
               style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 12),
             ),
 
@@ -419,7 +413,7 @@ class _DefaultDot extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
 
     return Tooltip(
-      message: 'KEY_DECK_DEFAULT'.locOr('Como en Ajustes', 'Same as Settings'),
+      message: 'KEY_DECK_DEFAULT'.loc,
       child: GestureDetector(
         onTap: onTap,
         child: AnimatedContainer(
@@ -509,13 +503,10 @@ class _StyleTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final title = style == null
-        ? 'KEY_DECK_DEFAULT'.locOr('Como en Ajustes', 'Same as Settings')
+        ? 'KEY_DECK_DEFAULT'.loc
         : style!.titleKey.loc;
     final description = style == null
-        ? 'KEY_DECK_STYLE_DEFAULT_DESC'.locOr(
-            'Usa el modelo elegido en Ajustes > Apariencia',
-            'Uses the style chosen in Settings > Appearance',
-          )
+        ? 'KEY_DECK_STYLE_DEFAULT_DESC'.loc
         : style!.descriptionKey.loc;
 
     return Padding(
@@ -631,7 +622,7 @@ class BorderColorPicker extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'KEY_BORDER_COLOR'.locOr('Color del borde', 'Border colour'),
+          'KEY_BORDER_COLOR'.loc,
           style: TextStyle(
             fontWeight: FontWeight.w600,
             color: scheme.onSurfaceVariant,
@@ -645,7 +636,7 @@ class BorderColorPicker extends StatelessWidget {
           children: [
             for (final c in CardBorderColor.values)
               Tooltip(
-                message: c.titleKey.locOr(c.fallbackEs, c.fallbackEn),
+                message: c.titleKey.loc,
                 child: GestureDetector(
                   onTap: () => onChanged(c),
                   child: AnimatedContainer(
@@ -683,10 +674,7 @@ class BorderColorPicker extends StatelessWidget {
           onPressed: matched ? null : () => onChanged(null),
           icon: Icon(matched ? Icons.check : Icons.link_rounded, size: 18),
           label: Text(
-            'KEY_BORDER_MATCH'.locOr(
-              'Igualar borde y estilo',
-              'Match border to style',
-            ),
+            'KEY_BORDER_MATCH'.loc,
           ),
         ),
       ],

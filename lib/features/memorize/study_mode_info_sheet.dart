@@ -10,7 +10,7 @@ class StudyModeInfoButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      tooltip: 'KEY_HOW_IT_WORKS'.locOr('Cómo funciona', 'How it works'),
+      tooltip: 'KEY_HOW_IT_WORKS'.loc,
       color: color,
       icon: const Icon(Icons.info_outline_rounded),
       onPressed: () => showStudyModeInfo(context, mode),
@@ -75,7 +75,7 @@ class _StudyModeInfoSheet extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Text(
-                'KEY_HOW_IT_WORKS'.locOr('Cómo funciona', 'How it works').toUpperCase(),
+                'KEY_HOW_IT_WORKS'.loc.toUpperCase(),
                 style: TextStyle(
                   fontSize: 12,
                   letterSpacing: 1.2,
@@ -97,10 +97,7 @@ class _StudyModeInfoSheet extends StatelessWidget {
                   const SizedBox(width: 6),
                   Expanded(
                     child: Text(
-                      'KEY_STUDY_STATS_NOTE'.locOr(
-                        'Cada método guarda sus propios aciertos y fallos.',
-                        'Each method keeps its own hits and misses.',
-                      ),
+                      'KEY_STUDY_STATS_NOTE'.loc,
                       style: TextStyle(fontSize: 12, color: scheme.onSurfaceVariant),
                     ),
                   ),

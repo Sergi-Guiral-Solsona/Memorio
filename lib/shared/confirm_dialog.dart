@@ -40,7 +40,7 @@ Future<bool> confirmDelete(
               foregroundColor: scheme.onError,
             ),
             onPressed: () => Navigator.pop(dialogContext, true),
-            child: Text('KEY_DELETE'.locOr('Eliminar', 'Delete')),
+            child: Text('KEY_DELETE'.loc),
           ),
         ],
       );

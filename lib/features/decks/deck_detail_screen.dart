@@ -131,12 +131,9 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
   Future<void> _deleteCard(CardModel card) async {
     final confirmed = await confirmDelete(
       context,
-      title: 'KEY_DELETE_CARD_TITLE'.locOr('¿Eliminar tarjeta?', 'Delete card?'),
+      title: 'KEY_DELETE_CARD_TITLE'.loc,
       message: 'KEY_DELETE_CARD_MSG'
-          .locOr(
-            'Se eliminará la tarjeta «{name}». Esta acción no se puede deshacer.',
-            'The card "{name}" will be deleted. This cannot be undone.',
-          )
+          .loc
           .fill({'name': card.front}),
     );
     if (!confirmed || !mounted) return;
@@ -153,13 +150,10 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
     final confirmed = await confirmDelete(
       context,
       title: 'KEY_DELETE_CARDS_TITLE'
-          .locOr('¿Eliminar {count} tarjetas?', 'Delete {count} cards?')
+          .loc
           .fill({'count': ids.length}),
       message: 'KEY_DELETE_CARDS_MSG'
-          .locOr(
-            'Se eliminarán {count} tarjetas. Esta acción no se puede deshacer.',
-            '{count} cards will be deleted. This cannot be undone.',
-          )
+          .loc
           .fill({'count': ids.length}),
     );
     if (!confirmed || !mounted) return;
@@ -199,7 +193,7 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
                     padding: const EdgeInsetsDirectional.only(end: 8),
                     child: TextButton.icon(
                       icon: const Icon(Icons.edit_outlined, size: 20),
-                      label: Text('KEY_STYLE'.locOr('Estilo', 'Style')),
+                      label: Text('KEY_STYLE'.loc),
                       onPressed: _openDeckSettings,
                     ),
                   ),
@@ -232,7 +226,7 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
     return Column(
       children: [
         AppSearchBar(
-          hintText: 'KEY_SEARCH_CARDS'.locOr('Buscar tarjetas', 'Search cards'),
+          hintText: 'KEY_SEARCH_CARDS'.loc,
           // Al buscar se limpia la selección: así nunca se borra algo oculto.
           onChanged: (value) => setState(() {
             _query = value;
@@ -278,18 +272,18 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 4),
         children: [
           chip(_CardFilter.all,
-              '${'KEY_FILTER_ALL'.locOr('Todas', 'All')} (${_deck.cards.length})'),
+              '${'KEY_FILTER_ALL'.loc} (${_deck.cards.length})'),
           const SizedBox(width: 8),
           chip(
             _CardFilter.complete,
-            '${'KEY_FILTER_COMPLETE'.locOr('Completas', 'Complete')} ($complete)',
+            '${'KEY_FILTER_COMPLETE'.loc} ($complete)',
             icon: Icons.check_circle_outline,
             color: Colors.green,
           ),
           const SizedBox(width: 8),
           chip(
             _CardFilter.incomplete,
-            '${'KEY_FILTER_INCOMPLETE'.locOr('Incompletas', 'Incomplete')} ($incomplete)',
+            '${'KEY_FILTER_INCOMPLETE'.loc} ($incomplete)',
             icon: Icons.warning_amber_rounded,
             color: Colors.redAccent,
           ),
