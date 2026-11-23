@@ -62,18 +62,23 @@ class _DecksScreenState extends State<DecksScreen> {
     setState(() => _decks = updated);
   }
 
-  /// Crea un mazo (deck == null) o renombra [deck].
-  Future<void> _showDeckDialog({Deck? deck}) async {
+  /// Edita nombre, rótulos, color y estilo de [deck] en su pantalla de ajustes.
+  Future<void> _editDeck(Deck deck) async {
+    await Navigator.push<void>(
+      context,
+      MaterialPageRoute(builder: (_) => DeckEditScreen(deck: deck)),
+    );
+    // La pantalla guarda sola: al volver se recarga la lista.
+    await _fetchDecks();
+  }
+
+  /// Crea un mazo nuevo (pide solo el nombre).
+  Future<void> _showDeckDialog() async {
     final title = await showDialog<String>(
       context: context,
-      builder: (_) => DeckNameDialog(initialTitle: deck?.title),
+      builder: (_) => const DeckNameDialog(),
     );
     if (title == null) return;
-
-    if (deck != null) {
-      await _apply(DeckController.editDeck(_decks, deck.id, title));
-      return;
-    }
 
     // Mazo nuevo: se entra directamente a él con el editor de tarjeta abierto.
     await _apply(DeckController.addDeck(_decks, title));
@@ -105,12 +110,9 @@ class _DecksScreenState extends State<DecksScreen> {
   Future<void> _deleteDeck(Deck deck) async {
     final confirmed = await confirmDelete(
       context,
-      title: 'KEY_DELETE_DECK_TITLE'.locOr('¿Eliminar mazo?', 'Delete deck?'),
+      title: 'KEY_DELETE_DECK_TITLE'.loc,
       message: 'KEY_DELETE_DECK_MSG'
-          .locOr(
-            'Se eliminará el mazo «{name}» y sus {count} tarjetas. Esta acción no se puede deshacer.',
-            'The deck "{name}" and its {count} cards will be deleted. This cannot be undone.',
-          )
+          .loc
           .fill({'name': deck.title, 'count': deck.cards.length}),
     );
     if (!confirmed || !mounted) return;
@@ -129,13 +131,10 @@ class _DecksScreenState extends State<DecksScreen> {
     final confirmed = await confirmDelete(
       context,
       title: 'KEY_DELETE_DECKS_TITLE'
-          .locOr('¿Eliminar {count} mazos?', 'Delete {count} decks?')
+          .loc
           .fill({'count': ids.length}),
       message: 'KEY_DELETE_DECKS_MSG'
-          .locOr(
-            'Se eliminarán {count} mazos con un total de {cards} tarjetas. Esta acción no se puede deshacer.',
-            '{count} decks with a total of {cards} cards will be deleted. This cannot be undone.',
-          )
+          .loc
           .fill({'count': ids.length, 'cards': cardCount}),
     );
     if (!confirmed || !mounted) return;
@@ -174,7 +173,11 @@ class _DecksScreenState extends State<DecksScreen> {
                 onToggleAll: _toggleAllVisible,
                 onDelete: _deleteSelected,
               )
-            : AppBar(title: Text('${'KEY_DECKS'.loc} (${_decks.length})')),
+            : AppBar(
+                title: Text('KEY_DECKS'.loc),
+                // El nº de mazos va en una pastilla a la derecha, no en el título.
+                actions: [_DeckCountPill(count: _decks.length)],
+              ),
         // DEV-ONLY: botón a la izquierda para crear el mazo "test". Borrar este
         // Stack (dejando solo _buildBody()) para eliminarlo; ver dev_test_deck.dart.
         body: Stack(
@@ -216,6 +219,7 @@ class _DecksScreenState extends State<DecksScreen> {
     return Column(
       children: [
         AppSearchBar(
+          hintText: 'KEY_SEARCH_DECKS'.loc,
           // Al buscar se limpia la selección: así nunca se borra algo oculto.
           onChanged: (value) => setState(() {
             _query = value;
@@ -240,13 +244,53 @@ class _DecksScreenState extends State<DecksScreen> {
                       onTap: () =>
                           _selecting ? _toggleSelected(deck) : _openDeck(deck),
                       onLongPress: () => _toggleSelected(deck),
-                      onEdit: () => _showDeckDialog(deck: deck),
+                      onEdit: () => _editDeck(deck),
                       onDelete: () => _deleteDeck(deck),
                     );
                   },
                 ),
         ),
       ],
+    );
+  }
+}
+
+/// Pastilla con el icono de mazo y cuántos hay.
+class _DeckCountPill extends StatelessWidget {
+  final int count;
+
+  const _DeckCountPill({required this.count});
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(end: 16),
+      child: Tooltip(
+        message: 'KEY_DECKS'.loc,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            color: scheme.primary.withValues(alpha: 0.12),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.style, size: 16, color: scheme.primary),
+              const SizedBox(width: 6),
+              Text(
+                '$count',
+                style: TextStyle(
+                  color: scheme.primary,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

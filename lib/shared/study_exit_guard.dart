@@ -11,21 +11,18 @@ Future<bool> confirmExitStudy(BuildContext context) async {
       return AlertDialog(
         icon: Icon(Icons.exit_to_app_rounded, size: 34, color: scheme.primary),
         title: Text(
-          'KEY_EXIT_STUDY_TITLE'.locOr('¿Salir del estudio?', 'Leave the study session?'),
+          'KEY_EXIT_STUDY_TITLE'.loc,
           textAlign: TextAlign.center,
         ),
         content: Text(
-          'KEY_EXIT_STUDY_MSG'.locOr(
-            'Las tarjetas que ya has respondido se guardan, pero esta sesión se cerrará.',
-            'The cards you have already answered are saved, but this session will close.',
-          ),
+          'KEY_EXIT_STUDY_MSG'.loc,
           textAlign: TextAlign.center,
         ),
         actionsAlignment: MainAxisAlignment.center,
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext, false),
-            child: Text('KEY_KEEP_STUDYING'.locOr('Seguir estudiando', 'Keep studying')),
+            child: Text('KEY_KEEP_STUDYING'.loc),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(dialogContext, true),
@@ -37,6 +34,11 @@ Future<bool> confirmExitStudy(BuildContext context) async {
   );
   return confirmed ?? false;
 }
+
+/// Sale del estudio y vuelve a la pestaña Memorizar (la pantalla de elegir modo),
+/// cerrando de golpe la selección de mazos y lo que haya en medio.
+void exitToMemorize(BuildContext context) =>
+    Navigator.of(context).popUntil((route) => route.isFirst);
 
 /// Envuelve una pantalla de estudio: mientras la sesión está en marcha, el
 /// botón "atrás" (flecha, gesto o botón del sistema) pregunta antes de salir.
@@ -64,7 +66,7 @@ class StudyExitGuard extends StatelessWidget {
     if (!context.mounted) return;
 
     if (exit) {
-      Navigator.pop(context);
+      exitToMemorize(context);
     } else {
       onStay?.call();
     }
@@ -73,9 +75,16 @@ class StudyExitGuard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: canExit,
+      // Siempre se intercepta el "atrás": con la sesión terminada sale directo
+      // a Memorizar y, si no, pregunta antes.
+      canPop: false,
       onPopInvokedWithResult: (didPop, _) {
-        if (!didPop) _handleBack(context);
+        if (didPop) return;
+        if (canExit) {
+          exitToMemorize(context);
+        } else {
+          _handleBack(context);
+        }
       },
       child: child,
     );

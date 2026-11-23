@@ -15,6 +15,10 @@ class StudyCardPlayer extends StatefulWidget {
   /// Rótulo del anverso (el del mazo de la tarjeta).
   final String frontLabel;
   final String backLabel;
+
+  /// Mazo de la tarjeta: la tarjeta se dibuja con SU estilo y color (si
+  /// estudias varios mazos a la vez, cada tarjeta sale con el suyo).
+  final Deck? deck;
   final Future<void> Function(bool isCorrect) onAnswer;
 
   /// Widget opcional sobre la tarjeta (p. ej. la prioridad en Memorio Learning).
@@ -25,6 +29,7 @@ class StudyCardPlayer extends StatefulWidget {
     required this.card,
     required this.frontLabel,
     this.backLabel = '',
+    this.deck,
     required this.onAnswer,
     this.header,
   });
@@ -156,14 +161,21 @@ class _StudyCardPlayerState extends State<StudyCardPlayer>
       },
       child: SizedBox(
         width: cardWidth,
-        child: StudyCardView(
-          card: widget.card,
-          frontLabel: widget.frontLabel,
-          backLabel: widget.backLabel,
-          controller: _flip,
+        child: _withDeckLook(
+          StudyCardView(
+            card: widget.card,
+            frontLabel: widget.frontLabel,
+            backLabel: widget.backLabel,
+            controller: _flip,
+          ),
         ),
       ),
     );
+  }
+
+  Widget _withDeckLook(Widget card) {
+    final deck = widget.deck;
+    return deck == null ? card : DeckLookScope.forDeck(deck, child: card);
   }
 
   Widget _buildActions() {

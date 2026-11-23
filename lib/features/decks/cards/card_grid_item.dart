@@ -32,6 +32,8 @@ class CardGridItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
 
+    final usable = card.isUsable;
+
     return AnimatedScale(
       scale: selected ? 0.94 : 1,
       duration: const Duration(milliseconds: 150),
@@ -40,6 +42,7 @@ class CardGridItem extends StatelessWidget {
         children: [
           CardSurface(
             compact: true,
+            invalid: !usable,
             child: Material(
               type: MaterialType.transparency,
               child: InkWell(
@@ -136,22 +139,36 @@ class _Content extends StatelessWidget {
         // deja el hueco para que la tarjeta no "salte".
         SizedBox(
           height: 30,
-          child: showActions
+          child: !card.isUsable
+              // Sin palabra o sin respuesta no hay estadísticas: se avisa.
               ? Center(
-            child: CardStatsButton(card: card, color: face.caption),
-          )
-              : null,
+                  child: Tooltip(
+                    message: 'KEY_INCOMPLETE_CARD'.loc,
+                    child: const Icon(
+                      Icons.warning_amber_rounded,
+                      color: const Color(0xFFE53935),
+                      size: 24,
+                    ),
+                  ),
+                )
+              : showActions
+                  ? Center(
+                      child: CardStatsButton(card: card, color: face.caption),
+                    )
+                  : null,
         ),
         Expanded(
           flex: 3,
           child: _Section(
             icon: Icons.flip_to_front_rounded,
-            semanticLabel: 'KEY_CARD_FRONT_LABEL'.locOr('Anverso', 'Front'),
-            child: _FitText(
-              card.front,
-              maxLinesCap: 4,
-              style: CardFonts.title(color: face.title, size: 20),
-            ),
+            semanticLabel: 'KEY_CARD_FRONT_LABEL'.loc,
+            child: card.front.trim().isEmpty
+                ? _MissingText('KEY_MISSING_WORD'.loc)
+                : _FitText(
+                    card.front,
+                    maxLinesCap: 4,
+                    style: CardFonts.title(color: face.title, size: 20),
+                  ),
           ),
         ),
         // Sin pista no se reserva hueco: el espacio pasa al anverso y al reverso.
@@ -181,17 +198,19 @@ class _Content extends StatelessWidget {
           flex: 3,
           child: _Section(
             icon: Icons.flip_to_back_rounded,
-            semanticLabel: 'KEY_CARD_BACK_LABEL'.locOr('Reverso', 'Back'),
-            child: _FitText(
-              card.back,
-              maxLinesCap: 5,
-              style: TextStyle(
-                color: face.title,
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
-                height: 1.25,
-              ),
-            ),
+            semanticLabel: 'KEY_CARD_BACK_LABEL'.loc,
+            child: card.back.trim().isEmpty
+                ? _MissingText('KEY_MISSING_ANSWER'.loc)
+                : _FitText(
+                    card.back,
+                    maxLinesCap: 5,
+                    style: TextStyle(
+                      color: face.title,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                      height: 1.25,
+                    ),
+                  ),
           ),
         ),
         _Footer(card: card, onDelete: onDelete, showActions: showActions),
@@ -350,6 +369,28 @@ class _Stat extends StatelessWidget {
         const SizedBox(width: 2),
         Text('$count', style: TextStyle(color: color, fontSize: 12)),
       ],
+    );
+  }
+}
+
+/// Texto rojo que ocupa el sitio de lo que falta en una tarjeta incompleta.
+class _MissingText extends StatelessWidget {
+  final String text;
+
+  const _MissingText(this.text);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
+      style: const TextStyle(
+        color: Colors.redAccent,
+        fontSize: 13,
+        fontStyle: FontStyle.italic,
+        fontWeight: FontWeight.w600,
+      ),
     );
   }
 }

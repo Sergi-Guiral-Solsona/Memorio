@@ -65,7 +65,7 @@ class _SinglePassStudyScreenState extends State<SinglePassStudyScreen> {
       correct: _session.correct,
       incorrect: _session.incorrect,
       onRepeat: widget.allowRepeat ? _restart : null,
-      onExit: () => Navigator.pop(context),
+      onExit: () => exitToMemorize(context),
     );
   }
 
@@ -85,6 +85,7 @@ class _SinglePassStudyScreenState extends State<SinglePassStudyScreen> {
             card: card,
             frontLabel: current.frontLabel,
             backLabel: current.backLabel,
+            deck: current.deck,
             header: widget.showPriority ? _PriorityChip(card: card) : null,
             onAnswer: _answer,
           ),

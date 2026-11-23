@@ -12,46 +12,43 @@ KEY_SAVE,Guardar,Save,Speichern,Enregistrer,Salva,Guardar,Сохранить,保
 KEY_CREATE_DECK,Crear mazo,Create deck,Stapel erstellen,Créer un paquet,Crea mazzo,Criar baralho,Создать колоду,创建卡组,デッキを作成,덱 만들기,إنشاء مجموعة,Deste oluştur,Stapel maken,Utwórz talię,डेक बनाएँ
 KEY_EDIT_DECK,Editar mazo,Edit deck,Stapel bearbeiten,Modifier le paquet,Modifica mazzo,Editar baralho,Изменить колоду,编辑卡组,デッキを編集,덱 편집,تعديل المجموعة,Desteyi düzenle,Stapel bewerken,Edytuj talię,डेक संपादित करें
 KEY_DECK_NAME,Nombre del mazo,Deck name,Name des Stapels,Nom du paquet,Nome del mazzo,Nome do baralho,Название колоды,卡组名称,デッキ名,덱 이름,اسم المجموعة,Deste adı,Naam van de stapel,Nazwa talii,डेक का नाम
-KEY_NO_DECKS,Aún no tienes mazos,You don't have any decks yet,Du hast noch keine Stapel,Vous n'avez pas encore de paquets,Non hai ancora nessun mazzo,Ainda não tem baralhos,У вас пока нет колод,你还没有卡组,まだデッキがありません,아직 덱이 없어요,ليس لديك أي مجموعات بعد,Henüz deste yok,Je hebt nog geen stapels,Nie masz jeszcze talii,आपके पास अभी कोई डेक नहीं है
+KEY_NO_DECKS,No hay mazos,No decks,Du hast noch keine Stapel,Vous n'avez pas encore de paquets,Non hai ancora nessun mazzo,Ainda não tem baralhos,У вас пока нет колод,你还没有卡组,まだデッキがありません,아직 덱이 없어요,ليس لديك أي مجموعات بعد,Henüz deste yok,Je hebt nog geen stapels,Nie masz jeszcze talii,आपके पास अभी कोई डेक नहीं है
 KEY_CREATE_FIRST_DECK,Crea tu primer mazo para empezar,Create your first deck to get started,"Erstelle deinen ersten Stapel, um zu beginnen",Créez votre premier paquet pour commencer,Crea il tuo primo mazzo per iniziare,Crie o seu primeiro baralho para começar,"Создайте первую колоду, чтобы начать",创建你的第一个卡组开始吧,最初のデッキを作成して始めましょう,첫 번째 덱을 만들어 시작하세요,أنشئ أول مجموعة لك للبدء,Başlamak için ilk desteni oluştur,Maak je eerste stapel om te beginnen,"Utwórz pierwszą talię, aby zacząć",शुरू करने के लिए अपना पहला डेक बनाएँ
-KEY_GO_TO_CREATE_DECK,Ir a crear un mazo,Go create a deck,Stapel erstellen,Créer un paquet,Vai a creare un mazzo,Ir criar um baralho,Создать колоду,去创建卡组,デッキを作成しに行く,덱 만들러 가기,اذهب لإنشاء مجموعة,Deste oluşturmaya git,Ga een stapel maken,Przejdź do tworzenia talii,डेक बनाने जाएँ
-KEY_NO_CARDS,Este mazo no tiene tarjetas,This deck has no cards,Dieser Stapel hat keine Karten,Ce paquet n'a pas de cartes,Questo mazzo non ha carte,Este baralho não tem cartões,В этой колоде нет карточек,这个卡组没有卡片,このデッキにはカードがありません,이 덱에는 카드가 없어요,لا توجد بطاقات في هذه المجموعة,Bu destede kart yok,Deze stapel heeft geen kaarten,Ta talia nie ma fiszek,इस डेक में कोई कार्ड नहीं है
+KEY_GO_TO_CREATE_DECK,Ir a crear mazo,Go to create deck,Stapel erstellen,Créer un paquet,Vai a creare un mazzo,Ir criar um baralho,Создать колоду,去创建卡组,デッキを作成しに行く,덱 만들러 가기,اذهب لإنشاء مجموعة,Deste oluşturmaya git,Ga een stapel maken,Przejdź do tworzenia talii,डेक बनाने जाएँ
+KEY_NO_CARDS,No hay tarjetas,No cards,Dieser Stapel hat keine Karten,Ce paquet n'a pas de cartes,Questo mazzo non ha carte,Este baralho não tem cartões,В этой колоде нет карточек,这个卡组没有卡片,このデッキにはカードがありません,이 덱에는 카드가 없어요,لا توجد بطاقات في هذه المجموعة,Bu destede kart yok,Deze stapel heeft geen kaarten,Ta talia nie ma fiszek,इस डेक में कोई कार्ड नहीं है
 KEY_CREATE_FIRST_CARD,Crea tu primera tarjeta,Create your first card,Erstelle deine erste Karte,Créez votre première carte,Crea la tua prima carta,Crie o seu primeiro cartão,Создайте первую карточку,创建你的第一张卡片,最初のカードを作成しましょう,첫 번째 카드를 만들어 보세요,أنشئ أول بطاقة لك,İlk kartını oluştur,Maak je eerste kaart,Utwórz pierwszą fiszkę,अपना पहला कार्ड बनाएँ
 KEY_CREATE_CARD,Crear tarjeta,Create card,Karte erstellen,Créer une carte,Crea carta,Criar cartão,Создать карточку,创建卡片,カードを作成,카드 만들기,إنشاء بطاقة,Kart oluştur,Kaart maken,Utwórz fiszkę,कार्ड बनाएँ
 KEY_EDIT_CARD,Editar tarjeta,Edit card,Karte bearbeiten,Modifier la carte,Modifica carta,Editar cartão,Изменить карточку,编辑卡片,カードを編集,카드 편집,تعديل البطاقة,Kartı düzenle,Kaart bewerken,Edytuj fiszkę,कार्ड संपादित करें
-KEY_WORD_OR_PHRASE,Palabra o frase,Word or phrase,Wort oder Satz,Mot ou phrase,Parola o frase,Palavra ou frase,Слово или фраза,单词或短语,単語またはフレーズ,단어 또는 문장,كلمة أو عبارة,Kelime veya cümle,Woord of zin,Słowo lub fraza,शब्द या वाक्यांश
 KEY_HINT,Pista,Hint,Hinweis,Indice,Suggerimento,Dica,Подсказка,提示,ヒント,힌트,تلميح,İpucu,Hint,Podpowiedź,संकेत
 KEY_ANSWER,Respuesta,Answer,Antwort,Réponse,Risposta,Resposta,Ответ,答案,答え,정답,الإجابة,Cevap,Antwoord,Odpowiedź,उत्तर
-KEY_FLIP,Dar la vuelta,Flip card,Karte umdrehen,Retourner la carte,Gira la carta,Virar cartão,Перевернуть,翻转卡片,カードをめくる,카드 뒤집기,اقلب البطاقة,Kartı çevir,Kaart omdraaien,Obróć fiszkę,कार्ड पलटें
-KEY_CARD_REQUIRED,Rellena la palabra y la respuesta,Fill in the word and the answer,Fülle Wort und Antwort aus,Remplissez le mot et la réponse,Compila la parola e la risposta,Preencha a palavra e a resposta,Заполните слово и ответ,请填写单词和答案,単語と答えを入力してください,단어와 정답을 입력하세요,املأ الكلمة والإجابة,Kelimeyi ve cevabı doldur,Vul het woord en het antwoord in,Uzupełnij słowo i odpowiedź,शब्द और उत्तर भरें
-KEY_MODE,Modo,Mode,Modus,Mode,Modalità,Modo,Режим,模式,モード,모드,الوضع,Mod,Modus,Tryb,मोड
+KEY_FLIP,Voltear,Flip,Karte umdrehen,Retourner la carte,Gira la carta,Virar cartão,Перевернуть,翻转卡片,カードをめくる,카드 뒤집기,اقلب البطاقة,Kartı çevir,Kaart omdraaien,Obróć fiszkę,कार्ड पलटें
 KEY_POMODORO,Pomodoro,Pomodoro,Pomodoro,Pomodoro,Pomodoro,Pomodoro,Pomodoro,Pomodoro,Pomodoro,Pomodoro,Pomodoro,Pomodoro,Pomodoro,Pomodoro,Pomodoro
-KEY_FOCUSED_STUDY,Estudio con tiempos de enfoque y descanso,Study in focus and break intervals,Lernen in Fokus- und Pausenphasen,Étude par périodes de concentration et de pause,Studio a intervalli di concentrazione e pausa,Estudo com períodos de foco e descanso,Учёба с периодами концентрации и отдыха,专注与休息交替的学习,集中と休憩を繰り返して学習,집중과 휴식을 반복하며 학습,دراسة بفترات تركيز واستراحة,Odak ve mola aralıklarıyla çalışma,Studeren met focus- en pauzeperiodes,Nauka w okresach skupienia i przerw,फ़ोकस और ब्रेक के अंतराल में पढ़ाई
+KEY_FOCUSED_STUDY,Estudio enfocado,Focused study,,,,,,,,,,,,,
 KEY_RANDOM,Aleatorio,Random,Zufall,Aléatoire,Casuale,Aleatório,Случайно,随机,ランダム,무작위,عشوائي,Rastgele,Willekeurig,Losowo,यादृच्छिक
-KEY_RANDOM_CARDS,Tarjetas en orden aleatorio,Cards in random order,Karten in zufälliger Reihenfolge,Cartes dans un ordre aléatoire,Carte in ordine casuale,Cartões em ordem aleatória,Карточки в случайном порядке,按随机顺序学习卡片,カードをランダムな順番で,카드를 무작위 순서로,بطاقات بترتيب عشوائي,Kartlar rastgele sırada,Kaarten in willekeurige volgorde,Fiszki w losowej kolejności,कार्ड यादृच्छिक क्रम में
+KEY_RANDOM_CARDS,Tarjetas aleatorias,Random cards,Karten in zufälliger Reihenfolge,Cartes dans un ordre aléatoire,Carte in ordine casuale,Cartões em ordem aleatória,Карточки в случайном порядке,按随机顺序学习卡片,カードをランダムな順番で,카드를 무작위 순서로,بطاقات بترتيب عشوائي,Kartlar rastgele sırada,Kaarten in willekeurige volgorde,Fiszki w losowej kolejności,कार्ड यादृच्छिक क्रम में
 KEY_COMING_SOON,Próximamente,Coming soon,Demnächst,Bientôt,Prossimamente,Em breve,Скоро,即将推出,近日公開,곧 출시,قريبًا,Çok yakında,Binnenkort,Wkrótce,जल्द आ रहा है
-KEY_SELECT_DECKS,Elige uno o varios mazos,Choose one or more decks,Wähle einen oder mehrere Stapel,Choisissez un ou plusieurs paquets,Scegli uno o più mazzi,Escolha um ou mais baralhos,Выберите одну или несколько колод,选择一个或多个卡组,デッキを1つ以上選んでください,덱을 하나 이상 선택하세요,اختر مجموعة أو أكثر,Bir veya daha fazla deste seç,Kies een of meer stapels,Wybierz jedną lub więcej talii,एक या अधिक डेक चुनें
-KEY_SELECT_ALL,Todos,Select all,Alle,Tout,Tutti,Todos,Все,全选,すべて,모두,الكل,Tümü,Alles,Wszystkie,सभी
-KEY_DESELECT_ALL,Ninguno,Deselect all,Keine,Aucun,Nessuno,Nenhum,Снять всё,全不选,選択解除,모두 해제,إلغاء الكل,Hiçbiri,Niets,Żadne,कोई नहीं
-KEY_START,Empezar,Start,Starten,Commencer,Inizia,Começar,Начать,开始,開始,시작,ابدأ,Başla,Starten,Rozpocznij,शुरू करें
-KEY_KNEW_IT,Lo sabía,I knew it,Gewusst,Je savais,Lo sapevo,Eu sabia,Помню,我记得,わかった,알고 있었어요,كنت أعرفها,Biliyordum,Wist ik,Znam to,मुझे पता था
-KEY_DIDNT_KNOW,No lo sabía,I didn't know it,Nicht gewusst,Je ne savais pas,Non lo sapevo,Eu não sabia,Не помню,我不记得,わからなかった,몰랐어요,لم أكن أعرفها,Bilmiyordum,Wist ik niet,Nie znam,मुझे नहीं पता था
+KEY_SELECT_DECKS,Selecciona mazos,Select decks,Wähle einen oder mehrere Stapel,Choisissez un ou plusieurs paquets,Scegli uno o più mazzi,Escolha um ou mais baralhos,Выберите одну или несколько колод,选择一个或多个卡组,デッキを1つ以上選んでください,덱을 하나 이상 선택하세요,اختر مجموعة أو أكثر,Bir veya daha fazla deste seç,Kies een of meer stapels,Wybierz jedną lub więcej talii,एक या अधिक डेक चुनें
+KEY_SELECT_ALL,Seleccionar todo,Select all,Alle,Tout,Tutti,Todos,Все,全选,すべて,모두,الكل,Tümü,Alles,Wszystkie,सभी
+KEY_DESELECT_ALL,Desmarcar todo,Deselect all,Keine,Aucun,Nessuno,Nenhum,Снять всё,全不选,選択解除,모두 해제,إلغاء الكل,Hiçbiri,Niets,Żadne,कोई नहीं
+KEY_START,Iniciar,Start,Starten,Commencer,Inizia,Começar,Начать,开始,開始,시작,ابدأ,Başla,Starten,Rozpocznij,शुरू करें
+KEY_KNEW_IT,Lo sabía,Knew it,Gewusst,Je savais,Lo sapevo,Eu sabia,Помню,我记得,わかった,알고 있었어요,كنت أعرفها,Biliyordum,Wist ik,Znam to,मुझे पता था
+KEY_DIDNT_KNOW,No lo sabía,Didn't know,Nicht gewusst,Je ne savais pas,Non lo sapevo,Eu não sabia,Не помню,我不记得,わからなかった,몰랐어요,لم أكن أعرفها,Bilmiyordum,Wist ik niet,Nie znam,मुझे नहीं पता था
 KEY_SESSION_COMPLETE,Sesión completada,Session complete,Sitzung abgeschlossen,Session terminée,Sessione completata,Sessão concluída,Сессия завершена,学习完成,セッション完了,세션 완료,اكتملت الجلسة,Oturum tamamlandı,Sessie voltooid,Sesja zakończona,सत्र पूरा हुआ
 KEY_CORRECT,Aciertos,Correct,Richtig,Correctes,Corrette,Certas,Верно,答对,正解,정답,صحيحة,Doğru,Goed,Poprawne,सही
 KEY_INCORRECT,Fallos,Incorrect,Falsch,Incorrectes,Sbagliate,Erradas,Неверно,答错,不正解,오답,خاطئة,Yanlış,Fout,Błędne,गलत
 KEY_REPEAT,Repetir,Repeat,Wiederholen,Recommencer,Ripeti,Repetir,Повторить,重复,もう一度,다시 하기,إعادة,Tekrarla,Herhalen,Powtórz,दोहराएँ
 KEY_EXIT,Salir,Exit,Beenden,Quitter,Esci,Sair,Выйти,退出,終了,나가기,خروج,Çık,Afsluiten,Wyjdź,बाहर निकलें
-KEY_FOCUS,Enfoque,Focus,Fokus,Concentration,Concentrazione,Foco,Концентрация,专注,集中,집중,تركيز,Odak,Focus,Skupienie,फ़ोकस
+KEY_FOCUS,Foco,Focus,Fokus,Concentration,Concentrazione,Foco,Концентрация,专注,集中,집중,تركيز,Odak,Focus,Skupienie,फ़ोकस
 KEY_BREAK,Descanso,Break,Pause,Pause,Pausa,Pausa,Перерыв,休息,休憩,휴식,استراحة,Mola,Pauze,Przerwa,ब्रेक
 KEY_LONG_BREAK,Descanso largo,Long break,Lange Pause,Longue pause,Pausa lunga,Pausa longa,Длинный перерыв,长休息,長い休憩,긴 휴식,استراحة طويلة,Uzun mola,Lange pauze,Długa przerwa,लंबा ब्रेक
-KEY_TAKE_A_BREAK,Toca descansar,Time for a break,Zeit für eine Pause,C'est l'heure de la pause,È ora di una pausa,Hora de uma pausa,Время отдохнуть,该休息一下了,休憩の時間です,쉬어갈 시간이에요,حان وقت الاستراحة,Mola zamanı,Tijd voor een pauze,Czas na przerwę,ब्रेक का समय
+KEY_TAKE_A_BREAK,Toma un descanso,Take a break,Zeit für eine Pause,C'est l'heure de la pause,È ora di una pausa,Hora de uma pausa,Время отдохнуть,该休息一下了,休憩の時間です,쉬어갈 시간이에요,حان وقت الاستراحة,Mola zamanı,Tijd voor een pauze,Czas na przerwę,ब्रेक का समय
 KEY_SKIP_BREAK,Saltar descanso,Skip break,Pause überspringen,Passer la pause,Salta la pausa,Saltar pausa,Пропустить перерыв,跳过休息,休憩をスキップ,휴식 건너뛰기,تخطي الاستراحة,Molayı atla,Pauze overslaan,Pomiń przerwę,ब्रेक छोड़ें
-KEY_PAUSED,En pausa,Paused,Pausiert,En pause,In pausa,Em pausa,Пауза,已暂停,一時停止中,일시정지됨,متوقف مؤقتًا,Duraklatıldı,Gepauzeerd,Wstrzymano,रुका हुआ
-KEY_RESUME,Continuar,Resume,Fortsetzen,Reprendre,Riprendi,Continuar,Продолжить,继续,再開,계속하기,متابعة,Devam et,Hervatten,Wznów,जारी रखें
-KEY_POMODOROS_DONE,Pomodoros completados,Pomodoros completed,Abgeschlossene Pomodoros,Pomodoros terminés,Pomodori completati,Pomodoros concluídos,Завершённые помодоро,已完成番茄钟,完了したポモドーロ,완료한 포모도로,البومودورو المكتملة,Tamamlanan pomodorolar,Voltooide pomodoro's,Ukończone pomodoro,पूरे हुए पोमोडोरो
-KEY_FINISH_SESSION,Terminar sesión,End session,Sitzung beenden,Terminer la session,Termina sessione,Terminar sessão,Завершить сессию,结束学习,セッションを終了,세션 종료,إنهاء الجلسة,Oturumu bitir,Sessie beëindigen,Zakończ sesję,सत्र समाप्त करें
+KEY_PAUSED,Pausado,Paused,Pausiert,En pause,In pausa,Em pausa,Пауза,已暂停,一時停止中,일시정지됨,متوقف مؤقتًا,Duraklatıldı,Gepauzeerd,Wstrzymano,रुका हुआ
+KEY_RESUME,Reanudar,Resume,Fortsetzen,Reprendre,Riprendi,Continuar,Продолжить,继续,再開,계속하기,متابعة,Devam et,Hervatten,Wznów,जारी रखें
+KEY_POMODOROS_DONE,Pomodoros hechos,Pomodoros done,Abgeschlossene Pomodoros,Pomodoros terminés,Pomodori completati,Pomodoros concluídos,Завершённые помодоро,已完成番茄钟,完了したポモドーロ,완료한 포모도로,البومودورو المكتملة,Tamamlanan pomodorolar,Voltooide pomodoro's,Ukończone pomodoro,पूरे हुए पोमोडोरो
+KEY_FINISH_SESSION,Finalizar sesión,Finish session,Sitzung beenden,Terminer la session,Termina sessione,Terminar sessão,Завершить сессию,结束学习,セッションを終了,세션 종료,إنهاء الجلسة,Oturumu bitir,Sessie beëindigen,Zakończ sesję,सत्र समाप्त करें
 KEY_MEMORIO_LEARNING,Memorio Learning,Memorio Learning,Memorio Learning,Memorio Learning,Memorio Learning,Memorio Learning,Memorio Learning,Memorio Learning,Memorio Learning,Memorio Learning,Memorio Learning,Memorio Learning,Memorio Learning,Memorio Learning,Memorio Learning
-KEY_MEMORIO_LEARNING_DESC,Las tarjetas que más fallas salen antes,Cards you miss most come up sooner,"Karten, die du oft verfehlst, kommen früher",Les cartes que vous ratez le plus reviennent plus tôt,Le carte che sbagli di più escono prima,Os cartões em que mais falha aparecem primeiro,"Карточки, в которых вы чаще ошибаетесь, выпадают раньше",你错得越多的卡片出现得越早,間違いの多いカードほど先に出てきます,많이 틀린 카드가 먼저 나옵니다,البطاقات التي تخطئ فيها أكثر تظهر أولًا,En çok yanlış yaptığın kartlar daha önce gelir,"Kaarten die je vaker fout hebt, komen eerder","Fiszki, w których częściej się mylisz, pojawiają się wcześniej",जिन कार्ड में आप ज़्यादा गलती करते हैं वे पहले आते हैं
+KEY_MEMORIO_LEARNING_DESC,Repetición espaciada inteligente,Smart spaced repetition,,,,,,,,,,,,,
 KEY_PRIORITY,Prioridad,Priority,Priorität,Priorité,Priorità,Prioridade,Приоритет,优先级,優先度,우선순위,الأولوية,Öncelik,Prioriteit,Priorytet,प्राथमिकता
 KEY_NEW_CARD,Tarjeta nueva,New card,Neue Karte,Nouvelle carte,Nuova carta,Novo cartão,Новая карточка,新卡片,新しいカード,새 카드,بطاقة جديدة,Yeni kart,Nieuwe kaart,Nowa fiszka,नया कार्ड
 KEY_ACCURACY,Precisión,Accuracy,Genauigkeit,Précision,Precisione,Precisão,Точность,正确率,正答率,정확도,الدقة,Doğruluk,Nauwkeurigheid,Dokładność,सटीकता
@@ -63,13 +60,13 @@ KEY_THEME_DARK,Oscuro,Dark,Dunkel,Sombre,Scuro,Escuro,Тёмная,深色,ダー
 KEY_ACCENT_COLOR,Color de acento,Accent color,Akzentfarbe,Couleur d'accent,Colore principale,Cor de destaque,Акцентный цвет,主题色,アクセントカラー,강조 색상,لون التمييز,Vurgu rengi,Accentkleur,Kolor akcentu,एक्सेंट रंग
 KEY_AMOLED,Negro puro (AMOLED),Pure black (AMOLED),Reines Schwarz (AMOLED),Noir pur (AMOLED),Nero puro (AMOLED),Preto puro (AMOLED),Чисто чёрный (AMOLED),纯黑（AMOLED）,ピュアブラック（AMOLED）,퓨어 블랙 (AMOLED),أسود نقي (AMOLED),Saf siyah (AMOLED),Puur zwart (AMOLED),Czerń absolutna (AMOLED),शुद्ध काला (AMOLED)
 KEY_AMOLED_DESC,Ahorra batería en pantallas OLED con el tema oscuro,Saves battery on OLED screens in the dark theme,Spart Akku auf OLED-Displays im dunklen Design,Économise la batterie sur les écrans OLED avec le thème sombre,Risparmia batteria sugli schermi OLED con il tema scuro,Poupa bateria em ecrãs OLED com o tema escuro,Экономит заряд на OLED-экранах в тёмной теме,深色主题下可为 OLED 屏幕省电,ダークテーマのOLED画面でバッテリーを節約します,다크 테마에서 OLED 화면의 배터리를 절약해요,يوفّر البطارية على شاشات OLED في السمة الداكنة,Koyu temada OLED ekranlarda pil tasarrufu sağlar,Bespaart batterij op OLED-schermen in het donkere thema,Oszczędza baterię na ekranach OLED w ciemnym motywie,डार्क थीम में OLED स्क्रीन पर बैटरी बचाता है
-KEY_FORGETTING_VALLEY,Valle del olvido,Forgetting Valley,Tal des Vergessens,Vallée de l'oubli,Valle dell'oblio,Vale do esquecimento,Долина забвения,遗忘之谷,忘却の谷,망각의 계곡,وادي النسيان,Unutma Vadisi,Vallei van het vergeten,Dolina zapomnienia,भूलने की घाटी
-KEY_FORGETTING_VALLEY_DESC,"Repasa lo que estás a punto de olvidar, mezclado con tarjetas nuevas","Review what you're about to forget, mixed with new cards","Wiederhole, was du gleich vergisst, gemischt mit neuen Karten","Révisez ce que vous allez oublier, mêlé à de nouvelles cartes","Ripassa ciò che stai per dimenticare, insieme a carte nuove","Reveja o que está prestes a esquecer, misturado com cartões novos","Повторяйте то, что скоро забудете, вперемешку с новыми карточками",复习你即将遗忘的内容，并穿插新卡片,忘れかけていることを、新しいカードと混ぜて復習,잊기 직전의 내용을 새 카드와 섞어 복습해요,راجع ما أوشكت على نسيانه مع بطاقات جديدة,Unutmak üzere olduklarını yeni kartlarla karışık tekrar et,"Herhaal wat je bijna vergeet, gemengd met nieuwe kaarten","Powtarzaj to, co zaraz zapomnisz, wymieszane z nowymi fiszkami",जो भूलने वाले हैं उसे नए कार्ड के साथ मिलाकर दोहराएँ
-KEY_FORGETTING_VALLEY_INFO,"Con el tiempo olvidamos. Aquí las tarjetas salen justo cuando tu memoria empieza a debilitarse, mezcladas con unas pocas nuevas.","We forget over time. Here cards come up just as your memory starts to fade, mixed with a few new ones.","Mit der Zeit vergessen wir. Hier erscheinen Karten genau dann, wenn dein Gedächtnis nachlässt, gemischt mit ein paar neuen.","Avec le temps, nous oublions. Ici, les cartes reviennent juste quand votre mémoire faiblit, mêlées à quelques nouvelles.","Con il tempo dimentichiamo. Qui le carte escono proprio quando la memoria inizia a indebolirsi, insieme a poche nuove.","Com o tempo, esquecemos. Aqui os cartões surgem quando a sua memória começa a enfraquecer, misturados com alguns novos.","Со временем мы забываем. Здесь карточки появляются, когда память начинает слабеть, вперемешку с несколькими новыми.",随着时间推移我们会遗忘。卡片会在你的记忆开始减弱时出现，并穿插少量新卡片。,人は時間とともに忘れます。記憶が薄れ始めたタイミングで、少数の新しいカードと混ぜて出題します。,"시간이 지나면 잊게 돼요. 기억이 흐려질 즈음에 카드가 나오고, 새 카드가 조금 섞여요.",ننسى مع مرور الوقت. هنا تظهر البطاقات حين تبدأ ذاكرتك بالضعف، مع بضع بطاقات جديدة.,"Zamanla unuturuz. Kartlar, hafızan zayıflamaya başladığı anda birkaç yeni kartla karışık gelir.","Na verloop van tijd vergeten we. Hier komen kaarten precies op het moment dat je geheugen begint te vervagen, gemengd met een paar nieuwe.","Z czasem zapominamy. Tu fiszki wracają dokładnie wtedy, gdy pamięć zaczyna słabnąć, wymieszane z kilkoma nowymi.","समय के साथ हम भूल जाते हैं। यहाँ कार्ड तब आते हैं जब आपकी याददाश्त कमज़ोर पड़ने लगती है, कुछ नए कार्ड के साथ।"
-KEY_DUE_CARDS,Por repasar,To review,Zu wiederholen,À réviser,Da ripassare,Para rever,К повторению,待复习,復習する,복습할 카드,للمراجعة,Tekrar edilecek,Te herhalen,Do powtórki,दोहराने के लिए
-KEY_NEW_CARDS,Nuevas,New,Neu,Nouvelles,Nuove,Novos,Новые,新卡片,新規,새 카드,جديدة,Yeni,Nieuw,Nowe,नए
+KEY_FORGETTING_VALLEY,Valle del olvido,Forgetting valley,Tal des Vergessens,Vallée de l'oubli,Valle dell'oblio,Vale do esquecimento,Долина забвения,遗忘之谷,忘却の谷,망각의 계곡,وادي النسيان,Unutma Vadisi,Vallei van het vergeten,Dolina zapomnienia,भूलने की घाटी
+KEY_FORGETTING_VALLEY_DESC,Repasa justo cuando empiezas a olvidar,Review just as you start forgetting,,,,,,,,,,,,,
+KEY_FORGETTING_VALLEY_INFO,"El Valle del olvido programa los repasos justo cuando la memoria empieza a decaer. Las tarjetas ""en el valle"" son las que toca repasar hoy; las ""nuevas"" se intercalan para que no se acumulen.","The Forgetting Valley schedules reviews right when memory starts to decay. Cards ""in the valley"" are due today; ""new"" ones are interleaved so they don't pile up.",,,,,,,,,,,,,
+KEY_DUE_CARDS,Por repasar,Due cards,Zu wiederholen,À réviser,Da ripassare,Para rever,К повторению,待复习,復習する,복습할 카드,للمراجعة,Tekrar edilecek,Te herhalen,Do powtórki,दोहराने के लिए
+KEY_NEW_CARDS,Nuevas,New cards,Neu,Nouvelles,Nuove,Novos,Новые,新卡片,新規,새 카드,جديدة,Yeni,Nieuw,Nowe,नए
 KEY_UP_TO_DATE,Al día,Up to date,Aktuell,À jour,In regola,Em dia,Свежие,无需复习,復習不要,복습 불필요,لا تحتاج مراجعة,Güncel,Bij,Aktualne,ताज़ा
-KEY_NOTHING_TO_REVIEW,Nada que repasar ahora,Nothing to review right now,Gerade nichts zu wiederholen,Rien à réviser pour l'instant,Niente da ripassare ora,Nada para rever agora,Сейчас нечего повторять,现在没有需要复习的内容,今は復習するものがありません,지금은 복습할 카드가 없어요,لا شيء للمراجعة الآن,Şu an tekrar edilecek bir şey yok,Nu niets te herhalen,Na razie nic do powtórki,अभी दोहराने के लिए कुछ नहीं है
+KEY_NOTHING_TO_REVIEW,Nada que repasar,Nothing to review,Gerade nichts zu wiederholen,Rien à réviser pour l'instant,Niente da ripassare ora,Nada para rever agora,Сейчас нечего повторять,现在没有需要复习的内容,今は復習するものがありません,지금은 복습할 카드가 없어요,لا شيء للمراجعة الآن,Şu an tekrar edilecek bir şey yok,Nu niets te herhalen,Na razie nic do powtórki,अभी दोहराने के लिए कुछ नहीं है
 KEY_NEXT_REVIEW,Próximo repaso,Next review,Nächste Wiederholung,Prochaine révision,Prossimo ripasso,Próxima revisão,Следующее повторение,下次复习,次の復習,다음 복습,المراجعة التالية,Sonraki tekrar,Volgende herhaling,Następna powtórka,अगला दोहराव
 KEY_STUDY_ANYWAY,Estudiar de todos modos,Study anyway,Trotzdem lernen,Étudier quand même,Studia comunque,Estudar mesmo assim,Всё равно заниматься,仍然学习,それでも学習する,그래도 학습하기,ادرس على أي حال,Yine de çalış,Toch studeren,Ucz się mimo to,फिर भी पढ़ें
 KEY_UNIT_MIN,min,min,Min.,min,min,min,мин,分钟,分,분,دقيقة,dk,min,min,मिनट
@@ -82,139 +79,104 @@ KEY_CARD_STYLE_INK,Tinta,Ink,Tinte,Encre,Inchiostro,Tinta,Чернила,墨色,
 KEY_CARD_STYLE_INK_DESC,Reverso relleno de color,Back filled with color,Rückseite in Farbe gefüllt,Verso rempli de couleur,Retro riempito di colore,Verso preenchido de cor,Оборот залит цветом,背面填充颜色,裏面を色で塗りつぶし,뒷면을 색으로 채움,الوجه الخلفي ممتلئ باللون,Arka yüz renkle dolu,Achterkant gevuld met kleur,Rewers wypełniony kolorem,पीछे का हिस्सा रंग से भरा
 KEY_CARD_STYLE_SOFT,Suave,Soft,Sanft,Doux,Morbida,Suave,Мягкая,柔和,ソフト,소프트,ناعم,Yumuşak,Zacht,Delikatna,कोमल
 KEY_CARD_STYLE_SOFT_DESC,"Fondo tintado, sin sombra","Tinted background, no shadow","Getönter Hintergrund, kein Schatten","Fond teinté, sans ombre","Sfondo tinto, senza ombra","Fundo tingido, sem sombra","Тонированный фон, без тени",淡彩背景，无阴影,淡い色の背景、影なし,"은은한 배경, 그림자 없음",خلفية ملوّنة بلا ظل,"Renkli zemin, gölge yok","Getinte achtergrond, geen schaduw","Zabarwione tło, bez cienia","रंगीन पृष्ठभूमि, बिना छाया"
-KEY_CARD_STYLE_CLASSIC,Clásica,Classic,Klassisch,Classique,Classica,Clássica,Классика,经典,クラシック,클래식,كلاسيكي,Klasik,Klassiek,Klasyczna,क्लासिक
-KEY_CARD_STYLE_CLASSIC_DESC,Papel con marco y adornos,Paper with frame and ornaments,Papier mit Rahmen und Verzierungen,Papier avec cadre et ornements,Carta con cornice e ornamenti,Papel com moldura e adornos,Бумага с рамкой и узорами,带边框和装饰的纸张,枠と飾りのある紙,테두리와 장식이 있는 종이,ورق بإطار وزخارف,Çerçeveli ve süslemeli kâğıt,Papier met kader en versiering,Papier z ramką i ozdobami,फ्रेम और सजावट वाला कागज़
 KEY_DELETE,Eliminar,Delete,,,,,,,,,,,,,
-KEY_DELETE_CONFIRM_TITLE,Confirmar eliminación,Confirm deletion,,,,,,,,,,,,,
 KEY_DELETE_DECK_MSG,Se eliminará el mazo «{name}» con sus {count} tarjetas y todas sus estadísticas. Esta acción no se puede deshacer.,"The deck ""{name}"" will be deleted with its {count} cards and all their statistics. This cannot be undone.",,,,,,,,,,,,,
 KEY_DELETE_DECKS_MSG,Se eliminarán {count} mazos con {cards} tarjetas en total y todas sus estadísticas. Esta acción no se puede deshacer.,{count} decks with {cards} cards in total and all their statistics will be deleted. This cannot be undone.,,,,,,,,,,,,,
 KEY_DELETE_CARD_MSG,Se eliminará la tarjeta «{name}» y sus estadísticas. Esta acción no se puede deshacer.,"The card ""{name}"" and its statistics will be deleted. This cannot be undone.",,,,,,,,,,,,,
 KEY_DELETE_CARDS_MSG,Se eliminarán {count} tarjetas y sus estadísticas. Esta acción no se puede deshacer.,{count} cards and their statistics will be deleted. This cannot be undone.,,,,,,,,,,,,,
-KEY_AND_MORE,y {count} más,and {count} more,,,,,,,,,,,,,
-KEY_SELECTED,seleccionados,selected,,,,,,,,,,,,,
-KEY_FRONT,Anverso,Front,,,,,,,,,,,,,
-KEY_BACK,Reverso,Back,,,,,,,,,,,,,
-KEY_CARD_FACES_HELP,Estos textos se aplican a todas las tarjetas del mazo. Si dejas el anverso vacío se usa el nombre del mazo.,"These texts apply to every card in the deck. If the front is empty, the deck name is used.",,,,,,,,,,,,,
 KEY_CARD_STATS,Estadísticas de la tarjeta,Card statistics,,,,,,,,,,,,,
-KEY_NO_STATS_YET,Esta tarjeta aún no se ha estudiado.,This card has not been studied yet.,,,,,,,,,,,,,
 KEY_TOTAL,Total,Total,,,,,,,,,,,,,
 KEY_HOW_IT_WORKS,Cómo funciona,How it works,,,,,,,,,,,,,
-KEY_STATS_PER_METHOD_NOTE,Los aciertos y fallos de este método se guardan aparte de los de los demás métodos.,Correct and incorrect answers in this method are stored separately from every other method.,,,,,,,,,,,,,
-KEY_MEMORIO_LEARNING_INFO,"Recorres todas las tarjetas una vez. Las que más has fallado en este método tienden a salir antes; las nuevas salen pronto y las que dominas, al final. Es un sorteo ponderado: no hay orden fijo, pero ninguna se queda fuera.","You go through every card once. The ones you have missed most in this method tend to come up sooner; new cards come early and mastered ones last. It is a weighted draw: no fixed order, but no card is left out.",,,,,,,,,,,,,
-KEY_POMODORO_INFO,"Estudias en bloques de tiempo con descansos entre ellos. Tú eliges la duración del estudio, del descanso corto y del descanso largo (que llega cada 4 bloques). Las tarjetas se repiten en bucle mientras dura la sesión.","You study in timed blocks with breaks in between. You choose the length of study, short break and long break (which comes every 4 blocks). Cards loop for as long as the session lasts.",,,,,,,,,,,,,
-KEY_RANDOM_INFO,"Todas las tarjetas de los mazos elegidos, una vez cada una y en orden totalmente aleatorio. Sin prioridades: ideal para un repaso general.","Every card from the chosen decks, once each, in completely random order. No priorities: ideal for a general review.",,,,,,,,,,,,,
-KEY_POMODORO_SETUP_INTRO,Ajusta los tiempos de tu sesión. Se recordarán la próxima vez.,Set the times for your session. They will be remembered next time.,,,,,,,,,,,,,
-KEY_STUDY_TIME,Tiempo de estudio,Study time,,,,,,,,,,,,,
-KEY_SHORT_BREAK_TIME,Descanso corto,Short break,,,,,,,,,,,,,
-KEY_LONG_BREAK_TIME,Descanso largo,Long break,,,,,,,,,,,,,
-KEY_RESET_DEFAULTS,Valores por defecto,Reset to defaults,,,,,,,,,,,,,
-KEY_YOUR_SESSION,Tu sesión,Your session,,,,,,,,,,,,,
-KEY_UNSUPPORTED_CARD,Esta tarjeta usa un formato que esta versión de la app no reconoce.,This card uses a format this version of the app does not recognise.,,,,,,,,,,,,,
-KEY_MEMORIZE,Memorizar,Memorize
-KEY_DECKS,Mazos,Decks
-KEY_SETTINGS,Ajustes,Settings
-KEY_STATISTICS,Estadísticas,Statistics
-KEY_MODE,Modo,Mode
-KEY_MEMORIO_LEARNING,Memorio Learning,Memorio Learning
-KEY_MEMORIO_LEARNING_DESC,Repetición espaciada inteligente,Smart spaced repetition
-KEY_POMODORO,Pomodoro,Pomodoro
-KEY_FOCUSED_STUDY,Estudio enfocado,Focused study
-KEY_RANDOM,Aleatorio,Random
-KEY_RANDOM_CARDS,Tarjetas aleatorias,Random cards
-KEY_FORGETTING_VALLEY,Valle del olvido,Forgetting valley
-KEY_FORGETTING_VALLEY_DESC,Repasa justo cuando empiezas a olvidar,Review just as you start forgetting
-KEY_SELECT_DECKS,Selecciona mazos,Select decks
-KEY_DECKS_COLON,Mazos:,Decks:
-KEY_CARDS,Tarjetas,Cards
-KEY_START,Iniciar,Start
-KEY_SELECT_ALL,Seleccionar todo,Select all
-KEY_DESELECT_ALL,Desmarcar todo,Deselect all
-KEY_NO_DECKS,No hay mazos,No decks
-KEY_NO_CARDS,No hay tarjetas,No cards
-KEY_CREATE_FIRST_CARD,Crea tu primera tarjeta,Create your first card
-KEY_CREATE_CARD,Crear tarjeta,Create card
-KEY_GO_TO_CREATE_DECK,Ir a crear mazo,Go to create deck
-KEY_NO_RESULTS,Sin resultados,No results
-KEY_FINISH_SESSION,Finalizar sesión,Finish session
-KEY_POMODOROS_DONE,Pomodoros hechos,Pomodoros done
-KEY_TAKE_A_BREAK,Toma un descanso,Take a break
-KEY_SKIP_BREAK,Saltar descanso,Skip break
-KEY_PAUSED,Pausado,Paused
-KEY_RESUME,Reanudar,Resume
-KEY_FOCUS,Foco,Focus
-KEY_BREAK,Descanso,Break
-KEY_LONG_BREAK,Descanso largo,Long break
-KEY_SESSION_COMPLETE,Sesión completada,Session complete
-KEY_CORRECT,Aciertos,Correct
-KEY_INCORRECT,Fallos,Incorrect
-KEY_ACCURACY,Precisión,Accuracy
-KEY_REPEAT,Repetir,Repeat
-KEY_EXIT,Salir,Exit
-KEY_FORGETTING_VALLEY_INFO,El Valle del olvido programa los repasos justo cuando la memoria empieza a decaer. Las tarjetas "en el valle" son las que toca repasar hoy; las "nuevas" se intercalan para que no se acumulen.,The Forgetting Valley schedules reviews right when memory starts to decay. Cards "in the valley" are due today; "new" ones are interleaved so they don't pile up.
-KEY_DUE_CARDS,Por repasar,Due cards
-KEY_NEW_CARDS,Nuevas,New cards
-KEY_UP_TO_DATE,Al día,Up to date
-KEY_START,Iniciar,Start
-KEY_STUDY_ANYWAY,Estudiar de todos modos,Study anyway
-KEY_NOTHING_TO_REVIEW,Nada que repasar,Nothing to review
-KEY_NEXT_REVIEW,Próximo repaso,Next review
-KEY_UNIT_MIN,min,min
-KEY_UNIT_HOUR,h,h
-KEY_UNIT_DAY,d,d
-KEY_PRIORITY,Prioridad,Priority
-KEY_NEW_CARD,Tarjeta nueva,New card
-KEY_FLIP,Voltear,Flip
-KEY_KNEW_IT,Lo sabía,Knew it
-KEY_DIDNT_KNOW,No lo sabía,Didn't know
-KEY_REFRESH,Actualizar,Refresh
-KEY_NO_STATS_YET,Aún no hay estadísticas,No stats yet
-KEY_START_STUDYING,¡Empieza a estudiar!,Start studying
-KEY_GLOBAL_STATS,Estadísticas globales,Global stats
-KEY_TOTAL_CARDS_STUDIED,Tarjetas estudiadas: {0},Total cards studied: {0}
-KEY_BY_METHOD,Por método,By method
-KEY_CARDS_STUDIED,Tarjetas estudiadas: {0},Cards studied: {0}
-KEY_MAX_STREAK,Racha máxima,Max streak
-KEY_RECENT_SESSIONS,Sesiones recientes,Recent sessions
-KEY_MOST_DIFFICULT_CARDS,Tarjetas más difíciles,Most difficult cards
-KEY_NO_DATA_YET,Aún no hay datos,No data yet
-KEY_NO_DIFFICULT_CARDS,¡Ninguna tarjeta difícil!,No difficult cards
-KEY_VIEW_DETAILED_STATS,Ver estadísticas detalladas,View detailed stats
-KEY_JUST_NOW,Ahora mismo,Just now
-KEY_MIN_AGO,hace {0} min,{0} min ago
-KEY_HOURS_AGO,hace {0} h,{0} h ago
-KEY_CARD_STATS,Estadísticas,Statistics
-KEY_DELETE,Eliminar,Delete
-KEY_DELETE_CARDS_MSG,Se eliminarán {count} tarjetas. Esta acción no se puede deshacer.,{count} cards will be deleted. This cannot be undone.
-KEY_DELETE_CARDS_TITLE,¿Eliminar {count} tarjetas?,Delete {count} cards?
-KEY_DELETE_CARD_MSG,Se eliminará la tarjeta «{name}». Esta acción no se puede deshacer.,"The card ""{name}"" will be deleted. This cannot be undone."
-KEY_DELETE_CARD_TITLE,¿Eliminar tarjeta?,Delete card?
-KEY_DELETE_DECKS_MSG,Se eliminarán {count} mazos con un total de {cards} tarjetas. Esta acción no se puede deshacer.,{count} decks with a total of {cards} cards will be deleted. This cannot be undone.
-KEY_DELETE_DECKS_TITLE,¿Eliminar {count} mazos?,Delete {count} decks?
-KEY_DELETE_DECK_MSG,Se eliminará el mazo «{name}» y sus {count} tarjetas. Esta acción no se puede deshacer.,"The deck ""{name}"" and its {count} cards will be deleted. This cannot be undone."
-KEY_DELETE_DECK_TITLE,¿Eliminar mazo?,Delete deck?
-KEY_HOW_IT_WORKS,Cómo funciona,How it works
-KEY_LEGACY_STATS,Anteriores,Previous
-KEY_MEMORIO_INFO_BEST_FOR,Ideal para estudiar un mazo entero centrándote en lo que se te resiste.,Great for studying a whole deck while focusing on what you find hard.
-KEY_MEMORIO_INFO_STEP_1,Gira la tarjeta y marca si la sabías o no.,Flip the card and mark whether you knew it.
-KEY_MEMORIO_INFO_STEP_2,Cada fallo sube la prioridad de la tarjeta y cada acierto la baja. Las nuevas empiezan con prioridad máxima.,Each miss raises the priority of a card and each hit lowers it. New cards start at maximum priority.
-KEY_MEMORIO_INFO_STEP_3,"Cada tarjeta sale una vez por ronda. El orden tiene algo de azar: las difíciles suelen salir antes, pero no siempre las primeras.","Each card shows up once per round. The order has some randomness: hard cards usually come earlier, but not always first."
-KEY_MEMORIO_INFO_SUMMARY,Repasa todas tus tarjetas una vez; las que más fallas tienden a salir primero.,Review all your cards once; the ones you miss most tend to come first.
-KEY_NOT_STUDIED_YET,Sin estudiar,Not studied yet
-KEY_POMODORO_INFO_BEST_FOR,Ideal para sesiones largas en las que necesitas mantener la concentración.,Great for long sessions where you need to stay focused.
-KEY_POMODORO_INFO_STEP_1,Estudias {focus} minutos seguidos con las tarjetas de tus mazos.,You study {focus} minutes in a row with the cards from your decks.
-KEY_POMODORO_INFO_STEP_2,Después descansas {short} minutos. Cada {sessions} bloques el descanso es largo ({long} minutos).,Then you rest for {short} minutes. Every {sessions} blocks the break is longer ({long} minutes).
-KEY_POMODORO_INFO_STEP_3,"Las tarjetas se repiten en rondas, con las que más fallas primero, hasta que termines la sesión.","Cards repeat in rounds, with the ones you miss most first, until you end the session."
-KEY_POMODORO_INFO_SUMMARY,"Estudia por bloques de concentración con descansos, para mantener la atención sin agotarte.","Study in focused blocks with breaks, to keep your attention without burning out."
-KEY_RANDOM_INFO_BEST_FOR,"Ideal para un repaso rápido, sin preparación.",Great for a quick review with no setup.
-KEY_RANDOM_INFO_STEP_1,Se mezclan las tarjetas de los mazos que elijas.,The cards from the decks you choose are shuffled.
-KEY_RANDOM_INFO_STEP_2,Todas tienen la misma probabilidad: no importa cuánto las hayas fallado.,Every card has the same chance: it does not matter how often you missed it.
-KEY_RANDOM_INFO_STEP_3,Al terminar ves tu resultado y puedes repetir con un orden nuevo.,When you finish you see your result and can repeat in a new order.
-KEY_RANDOM_INFO_SUMMARY,"Todas las tarjetas, una vez cada una, en orden aleatorio.","All cards, once each, in random order."
-KEY_SELECTED_COUNT,{count} seleccionados,{count} selected
-KEY_SHARED_FRONT_LABEL,El rótulo del anverso es común a todo el mazo,The front label is shared by the whole deck
-KEY_STUDY_STATS_NOTE,Cada método guarda sus propios aciertos y fallos.,Each method keeps its own hits and misses.
-KEY_TOTAL,Total,Total
-KEY_VALLEY_INFO_BEST_FOR,"Ideal para recordar a largo plazo con pocos repasos, de forma constante.","Great for long-term memory with few reviews, done consistently."
-KEY_VALLEY_INFO_STEP_1,"Cada tarjeta se va olvidando con el tiempo. Cuantos más aciertos seguidos, más tarda: 1, 2, 4, 8... días.","Every card fades from memory over time. The more hits in a row, the longer it lasts: 1, 2, 4, 8... days."
-KEY_VALLEY_INFO_STEP_2,"Solo repasas lo que empieza a olvidarse, justo a tiempo, más unas pocas tarjetas nuevas (hasta {new} por sesión).","You only review what is starting to fade, just in time, plus a few new cards (up to {new} per session)."
-KEY_VALLEY_INFO_STEP_3,"Si fallas una tarjeta, vuelve a empezar desde 1 día. Si hoy no toca nada, te dice cuándo volver.","If you miss a card it starts again from 1 day. If nothing is due today, it tells you when to come back."
+KEY_POMODORO_SETUP_INTRO,"Elige cuánto dura cada bloque; se recordará la próxima vez. Con tarjetas, los bloques cortos suelen funcionar mejor.","Choose how long each block lasts; it will be remembered next time. With flashcards, shorter blocks often work better.",,,,,,,,,,,,,
+KEY_DELETE_CARDS_TITLE,¿Eliminar {count} tarjetas?,Delete {count} cards?,,,,,,,,,,,,,
+KEY_DELETE_CARD_TITLE,¿Eliminar tarjeta?,Delete card?,,,,,,,,,,,,,
+KEY_DELETE_DECKS_TITLE,¿Eliminar {count} mazos?,Delete {count} decks?,,,,,,,,,,,,,
+KEY_DELETE_DECK_TITLE,¿Eliminar mazo?,Delete deck?,,,,,,,,,,,,,
+KEY_LEGACY_STATS,Anteriores,Previous,,,,,,,,,,,,,
+KEY_MEMORIO_INFO_BEST_FOR,Ideal para estudiar un mazo entero centrándote en lo que se te resiste.,Great for studying a whole deck while focusing on what you find hard.,,,,,,,,,,,,,
+KEY_MEMORIO_INFO_STEP_1,Gira la tarjeta y marca si la sabías o no.,Flip the card and mark whether you knew it.,,,,,,,,,,,,,
+KEY_MEMORIO_INFO_STEP_2,Cada fallo sube la prioridad de la tarjeta y cada acierto la baja. Las nuevas empiezan con prioridad máxima.,Each miss raises the priority of a card and each hit lowers it. New cards start at maximum priority.,,,,,,,,,,,,,
+KEY_MEMORIO_INFO_STEP_3,"Cada tarjeta sale una vez por ronda. El orden tiene algo de azar: las difíciles suelen salir antes, pero no siempre las primeras.","Each card shows up once per round. The order has some randomness: hard cards usually come earlier, but not always first.",,,,,,,,,,,,,
+KEY_MEMORIO_INFO_SUMMARY,Repasa todas tus tarjetas una vez; las que más fallas tienden a salir primero.,Review all your cards once; the ones you miss most tend to come first.,,,,,,,,,,,,,
+KEY_NOT_STUDIED_YET,Sin estudiar,Not studied yet,,,,,,,,,,,,,
+KEY_POMODORO_INFO_BEST_FOR,Ideal para sesiones largas en las que necesitas mantener la concentración.,Great for long sessions where you need to stay focused.,,,,,,,,,,,,,
+KEY_POMODORO_INFO_STEP_1,Estudias {focus} minutos seguidos con las tarjetas de tus mazos.,You study {focus} minutes in a row with the cards from your decks.,,,,,,,,,,,,,
+KEY_POMODORO_INFO_STEP_2,Después descansas {short} minutos. Cada {sessions} bloques el descanso es largo ({long} minutos).,Then you rest for {short} minutes. Every {sessions} blocks the break is longer ({long} minutes).,,,,,,,,,,,,,
+KEY_POMODORO_INFO_STEP_3,"Las tarjetas se repiten en rondas, con las que más fallas primero. La sesión termina sola al acabar el descanso largo.","Cards repeat in rounds, with the ones you miss most first. The session ends on its own when the long break is over.",,,,,,,,,,,,,
+KEY_POMODORO_INFO_SUMMARY,"Estudia por bloques de concentración con descansos, para mantener la atención sin agotarte.","Study in focused blocks with breaks, to keep your attention without burning out.",,,,,,,,,,,,,
+KEY_RANDOM_INFO_BEST_FOR,"Ideal para un repaso rápido, sin preparación.",Great for a quick review with no setup.,,,,,,,,,,,,,
+KEY_RANDOM_INFO_STEP_1,Se mezclan las tarjetas de los mazos que elijas.,The cards from the decks you choose are shuffled.,,,,,,,,,,,,,
+KEY_RANDOM_INFO_STEP_2,Todas tienen la misma probabilidad: no importa cuánto las hayas fallado.,Every card has the same chance: it does not matter how often you missed it.,,,,,,,,,,,,,
+KEY_RANDOM_INFO_STEP_3,Al terminar ves tu resultado y puedes repetir con un orden nuevo.,When you finish you see your result and can repeat in a new order.,,,,,,,,,,,,,
+KEY_RANDOM_INFO_SUMMARY,"Todas las tarjetas, una vez cada una, en orden aleatorio.","All cards, once each, in random order.",,,,,,,,,,,,,
+KEY_SELECTED_COUNT,{count} seleccionados,{count} selected,,,,,,,,,,,,,
+KEY_STUDY_STATS_NOTE,Cada método guarda sus propios aciertos y fallos.,Each method keeps its own hits and misses.,,,,,,,,,,,,,
+KEY_VALLEY_INFO_BEST_FOR,"Ideal para recordar a largo plazo con pocos repasos, de forma constante.","Great for long-term memory with few reviews, done consistently.",,,,,,,,,,,,,
+KEY_VALLEY_INFO_STEP_1,"Cada tarjeta se va olvidando con el tiempo. Cuantos más aciertos seguidos, más tarda: 1, 2, 4, 8... días.","Every card fades from memory over time. The more hits in a row, the longer it lasts: 1, 2, 4, 8... days.",,,,,,,,,,,,,
+KEY_VALLEY_INFO_STEP_3,"Si fallas una tarjeta, vuelve a empezar desde 1 día. Si hoy no toca nada, te dice cuándo volver.","If you miss a card it starts again from 1 day. If nothing is due today, it tells you when to come back.",,,,,,,,,,,,,
+KEY_ADD_ANSWER_MSG,"Escribe la respuesta; sin ella, esta tarjeta no se podrá estudiar","Write the answer, or this card can't be studied",,,,,,,,,,,,,
+KEY_ADD_BOTH_MSG,"Escribe el concepto y la respuesta; sin ellos, esta tarjeta no se podrá estudiar","Write the concept and the answer, or this card can't be studied",,,,,,,,,,,,,
+KEY_ADD_WORD_MSG,"Escribe el concepto; sin él, esta tarjeta no se podrá estudiar","Write the concept, or this card can't be studied",,,,,,,,,,,,,
+KEY_BACK_LABEL,Reverso,Back,,,,,,,,,,,,,
+KEY_BORDER_COLOR,Color del borde,Border color,,,,,,,,,,,,,
+KEY_BORDER_COLOR_BLACK,Negro,Black,,,,,,,,,,,,,
+KEY_BORDER_COLOR_CHARCOAL,Grafito,Charcoal,,,,,,,,,,,,,
+KEY_BORDER_COLOR_GRAY,Gris,Gray,,,,,,,,,,,,,
+KEY_BORDER_COLOR_SILVER,Plata,Silver,,,,,,,,,,,,,
+KEY_BORDER_COLOR_WHITE,Blanco,White,,,,,,,,,,,,,
+KEY_BORDER_MATCH,Usar el color del estilo,Use the style color,,,,,,,,,,,,,
+KEY_CARD_BACK_LABEL,Reverso,Back,,,,,,,,,,,,,
+KEY_CARD_BORDER,Borde,Border,,,,,,,,,,,,,
+KEY_CARD_BORDER_DEFAULT,Del estilo,Style default,,,,,,,,,,,,,
+KEY_CARD_BORDER_DESC,"Si no eliges color, el borde usa el color del estilo.","If you don’t pick a color, the border uses the style color.",,,,,,,,,,,,,
+KEY_CARD_BORDER_GLOBAL_DESC,Se aplica a los mazos que no tengan un borde propio.,Applies to decks that don’t have their own border.,,,,,,,,,,,,,
+KEY_CARD_BORDER_MEDIUM,Medio,Medium,,,,,,,,,,,,,
+KEY_CARD_BORDER_NONE,Sin borde,None,,,,,,,,,,,,,
+KEY_CARD_BORDER_THICK,Grueso,Thick,,,,,,,,,,,,,
+KEY_CARD_BORDER_THIN,Fino,Thin,,,,,,,,,,,,,
+KEY_CARD_EMPTY,Escribe al menos el concepto o la respuesta,Write at least the concept or the answer,,,,,,,,,,,,,
+KEY_CARD_FRONT_LABEL,Anverso,Front,,,,,,,,,,,,,
+KEY_CARD_LABELS,Rótulos de la tarjeta,Card labels,,,,,,,,,,,,,
+KEY_CONCEPT,Concepto,Concept,,,,,,,,,,,,,
+KEY_DECK_DEFAULT,Como en Ajustes,Same as Settings,,,,,,,,,,,,,
+KEY_DECK_STYLE_DEFAULT_DESC,Usa el estilo elegido en Ajustes > Apariencia,Uses the style chosen in Settings > Appearance,,,,,,,,,,,,,
+KEY_EDIT_DECK_STYLE,Editar estilo de mazo,Edit deck style,,,,,,,,,,,,,
+KEY_EXIT_STUDY_MSG,"Las tarjetas que ya has respondido se guardan, pero la sesión se cerrará.","The cards you’ve already answered are saved, but the session will close.",,,,,,,,,,,,,
+KEY_EXIT_STUDY_TITLE,¿Salir del estudio?,Leave the study session?,,,,,,,,,,,,,
+KEY_EXPORT_BUTTON,Exportar,Export,,,,,,,,,,,,,
+KEY_EXPORT_DECKS,Exportar mazos,Export decks,,,,,,,,,,,,,
+KEY_EXPORT_DONE,Mazos exportados: {count},Decks exported: {count},,,,,,,,,,,,,
+KEY_EXPORT_ERROR,No se pudo exportar,Could not export,,,,,,,,,,,,,
+KEY_EXPORT_INCLUDE_PROGRESS,Incluir progreso de estudio,Include study progress,,,,,,,,,,,,,
+KEY_EXPORT_INCLUDE_PROGRESS_SUB,"Aciertos, fallos y rachas de cada tarjeta","Hits, misses and streaks for each card",,,,,,,,,,,,,
+KEY_FILTER_ALL,Todas,All,,,,,,,,,,,,,
+KEY_FILTER_COMPLETE,Completas,Complete,,,,,,,,,,,,,
+KEY_FILTER_INCOMPLETE,Incompletas,Incomplete,,,,,,,,,,,,,
+KEY_FRONT_LABEL,Anverso,Front,,,,,,,,,,,,,
+KEY_IMPORTED_DECK,Mazo importado,Imported deck,,,,,,,,,,,,,
+KEY_IMPORT_ADD,Añadir,Add,,,,,,,,,,,,,
+KEY_IMPORT_CONFIRM_MSG,Se añadirán {count} mazos con {cards} tarjetas. Tus mazos actuales no se modificarán.,{count} decks with {cards} cards will be added. Your current decks won’t be changed.,,,,,,,,,,,,,
+KEY_IMPORT_DECKS,Importar mazos,Import decks,,,,,,,,,,,,,
+KEY_IMPORT_DONE,Mazos importados: {count} ({cards} tarjetas),Decks imported: {count} ({cards} cards),,,,,,,,,,,,,
+KEY_IMPORT_ERROR,No se pudo importar el archivo,The file could not be imported,,,,,,,,,,,,,
+KEY_IMPORT_INVALID,El archivo no contiene mazos válidos,The file doesn’t contain any valid decks,,,,,,,,,,,,,
+KEY_INCOMPLETE_CARD,Tarjeta incompleta: no se estudiará,Incomplete card: it won’t be studied,,,,,,,,,,,,,
+KEY_KEEP_STUDYING,Seguir estudiando,Keep studying,,,,,,,,,,,,,
+KEY_MISSING_ANSWER,Falta la respuesta,Missing answer,,,,,,,,,,,,,
+KEY_MISSING_WORD,Falta el concepto,Missing concept,,,,,,,,,,,,,
+KEY_POMODORO_BLOCKS_BEFORE_LONG,Bloques hasta el descanso largo,Blocks before long break,,,,,,,,,,,,,
+KEY_POMODORO_FULL_CYCLE,Ciclo completo,Full cycle,,,,,,,,,,,,,
+KEY_POMODORO_LAST_BREAK,Último descanso: la sesión termina al acabar.,Last break: the session ends when it’s over.,,,,,,,,,,,,,
+KEY_POMODORO_PRESETS,Preajustes,Presets,,,,,,,,,,,,,
+KEY_POMODORO_PRESET_CLASSIC,Clásico,Classic,,,,,,,,,,,,,
+KEY_POMODORO_PRESET_MEDIUM,Medio,Medium,,,,,,,,,,,,,
+KEY_POMODORO_PRESET_MINI,Mini,Mini,,,,,,,,,,,,,
+KEY_POMODORO_PRESET_SHORT,Corto,Short,,,,,,,,,,,,,
+KEY_POMODORO_YOUR_TIMES,Tus tiempos,Your times,,,,,,,,,,,,,
+KEY_SEARCH_CARDS,Buscar tarjetas,Search cards,,,,,,,,,,,,,
+KEY_SEARCH_DECKS,Buscar mazos,Search decks,,,,,,,,,,,,,
+KEY_SEARCH_LANGUAGE,Buscar idioma,Search language,,,,,,,,,,,,,
+KEY_SHARED_LABELS,Los rótulos del anverso y del reverso son los mismos en todo el mazo,The front and back labels are the same for the whole deck,,,,,,,,,,,,,
+KEY_STYLE,Estilo,Style,,,,,,,,,,,,,
+KEY_UNIT_SEC,s,s,,,,,,,,,,,,,
+KEY_VALLEY_INFO_STEP_2_NO_LIMIT,"Solo repasas lo que empieza a olvidarse, justo a tiempo, más todas las tarjetas nuevas: sin límite por sesión.","You only review what is starting to fade, just in time, plus all new cards: no per-session limit.",,,,,,,,,,,,,

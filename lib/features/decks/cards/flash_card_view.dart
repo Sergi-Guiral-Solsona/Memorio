@@ -313,8 +313,7 @@ class _FrontContent extends StatelessWidget {
                 child: _CaptionField(
                   controller: labelController,
                   editable: editable,
-                  //aqui
-                  fallback: 'Test',
+                  fallback: 'KEY_CONCEPT'.loc,
                 ),
               ),
             ],
@@ -323,26 +322,27 @@ class _FrontContent extends StatelessWidget {
         // La palabra ocupa la zona principal y va centrada en ella; pista y
         // ojo quedan justo debajo, de modo que todo el conjunto se ve centrado
         // en la tarjeta y no "salta" al mostrar u ocultar la pista.
+        // El concepto ocupa ~65 % de la tarjeta (la pista, el resto). Va centrado
+        // en vertical y en horizontal, crece al escribir y, si no cabe, se
+        // desliza con una barra lateral visible.
         Expanded(
-          flex: 5,
-          child: Align(
-            alignment: Alignment.center,
-            // Toda la caja de la palabra enfoca el campo, no solo la línea de texto.
-            child: _TapToFocus(
+          flex: hasHint ? 13 : 1,
+          // Toda la caja del concepto enfoca el campo, no solo la línea de texto.
+          child: _TapToFocus(
+            enabled: editable,
+            controller: frontController,
+            focusNode: frontFocus,
+            child: _InsetBox(
               enabled: editable,
-              controller: frontController,
-              focusNode: frontFocus,
-              child: _InsetBox(
-                enabled: editable,
-                height: 150,
+              expand: true,
+              child: _ScrollCenter(
                 child: _TitleText(
                   controller: frontController,
                   focusNode: frontFocus,
                   editable: editable,
-                  hintText: 'KEY_WORD_OR_PHRASE'.loc,
+                  hintText: 'KEY_CONCEPT'.loc,
                   baseSize: 54,
                   bold: true,
-                  maxLines: 4,
                 ),
               ),
             ),
@@ -351,23 +351,23 @@ class _FrontContent extends StatelessWidget {
         const SizedBox(height: 8),
         const Center(child: CardAccentLine()),
         if (hasHint) _HintToggle(visible: hintVisible, onTap: onToggleHint),
-        Expanded(
-          flex: 4,
-          child: hasHint
-              ? AnimatedSwitcher(
-            duration: const Duration(milliseconds: 260),
-            switchInCurve: Curves.easeOut,
-            child: hintVisible
-                ? _HintArea(
-              key: const ValueKey('hint'),
-              controller: hintController,
-              focusNode: hintFocus,
-              editable: editable,
-            )
-                : const SizedBox.expand(key: ValueKey('no-hint')),
-          )
-              : const SizedBox.shrink(),
-        ),
+        // Sin pista no se reserva hueco: todo el espacio pasa al concepto.
+        if (hasHint)
+          Expanded(
+            flex: 7,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 260),
+              switchInCurve: Curves.easeOut,
+              child: hintVisible
+                  ? _HintArea(
+                      key: const ValueKey('hint'),
+                      controller: hintController,
+                      focusNode: hintFocus,
+                      editable: editable,
+                    )
+                  : const SizedBox.expand(key: ValueKey('no-hint')),
+            ),
+          ),
       ],
     );
   }
@@ -439,15 +439,13 @@ class _BackContent extends StatelessWidget {
             enabled: editable,
             controller: controller,
             focusNode: focusNode,
-            child: Center(
-              child: SingleChildScrollView(
-                child: _TitleText(
-                  controller: controller,
-                  focusNode: focusNode,
-                  editable: editable,
-                  hintText: 'KEY_ANSWER'.loc,
-                  baseSize: 48,
-                ),
+            child: _ScrollCenter(
+              child: _TitleText(
+                controller: controller,
+                focusNode: focusNode,
+                editable: editable,
+                hintText: 'KEY_ANSWER'.loc,
+                baseSize: 48,
               ),
             ),
           ),
@@ -608,21 +606,18 @@ class _HintArea extends StatelessWidget {
       enabled: editable,
       controller: controller,
       focusNode: focusNode,
-      child: Align(
-        alignment: Alignment.topCenter,
-        child: SingleChildScrollView(
-          child: _FaceText(
-            controller: controller,
-            focusNode: focusNode,
-            editable: editable,
-            hintText: 'KEY_HINT'.loc,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontStyle: FontStyle.italic,
-              fontSize: 21,
-              height: 1.35,
-              color: face.hint,
-            ),
+      child: _ScrollCenter(
+        child: _FaceText(
+          controller: controller,
+          focusNode: focusNode,
+          editable: editable,
+          hintText: 'KEY_HINT'.loc,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontStyle: FontStyle.italic,
+            fontSize: 21,
+            height: 1.35,
+            color: face.hint,
           ),
         ),
       ),
@@ -657,7 +652,8 @@ class _InsetBox extends StatelessWidget {
       width: double.infinity,
       height: expand ? double.infinity : height,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      alignment: Alignment.center,
+      // Con [expand] el hijo ocupa toda la caja (se centra él mismo).
+      alignment: expand ? null : Alignment.center,
       decoration: BoxDecoration(
         color: face.fieldFill,
         borderRadius: BorderRadius.circular(14),
@@ -756,6 +752,58 @@ class _FaceText extends StatelessWidget {
       decoration: InputDecoration.collapsed(
         hintText: hintText,
         hintStyle: style.copyWith(color: style.color?.withValues(alpha: 0.35)),
+      ),
+    );
+  }
+}
+
+
+/// Contenido centrado (vertical y horizontal) que crece al escribir. Si no cabe
+/// en el alto disponible se desliza y muestra una barra lateral, para que se
+/// vea que hay más texto.
+class _ScrollCenter extends StatefulWidget {
+  final Widget child;
+
+  const _ScrollCenter({required this.child});
+
+  @override
+  State<_ScrollCenter> createState() => _ScrollCenterState();
+}
+
+class _ScrollCenterState extends State<_ScrollCenter> {
+  final ScrollController _scroll = ScrollController();
+
+  @override
+  void dispose() {
+    _scroll.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final face = CardFaceScope.of(context);
+
+    return LayoutBuilder(
+      builder: (context, box) => RawScrollbar(
+        controller: _scroll,
+        // Siempre visible mientras haya algo que deslizar (si cabe, no sale).
+        thumbVisibility: true,
+        thickness: 4,
+        radius: const Radius.circular(2),
+        thumbColor: face.caption.withValues(alpha: 0.6),
+        child: SingleChildScrollView(
+          controller: _scroll,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: box.maxHeight),
+            child: Center(
+              // Espacio a los lados para que la barra no tape el texto.
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: widget.child,
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

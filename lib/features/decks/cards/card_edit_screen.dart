@@ -71,9 +71,13 @@ class _CardEditScreenState extends State<CardEditScreen> {
     final front = _front.text.trim();
     final back = _back.text.trim();
 
-    if (front.isEmpty || back.isEmpty) {
+    // Se puede guardar sin palabra o sin respuesta (queda como incompleta y no
+    // se estudia), pero no vacía del todo.
+    if (front.isEmpty && back.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('KEY_CARD_REQUIRED'.loc)),
+        SnackBar(
+          content: Text('KEY_CARD_EMPTY'.loc),
+        ),
       );
       return;
     }
@@ -121,8 +125,15 @@ class _CardEditScreenState extends State<CardEditScreen> {
                     frontLabelController: _frontLabel,
                     backLabelController: _backLabel,
                   ),
-                  const SizedBox(height: 10),
-                  const _SharedLabelNote(),
+                  const SizedBox(height: 14),
+                  // Aviso rojo mientras falte el concepto o la respuesta.
+                  ListenableBuilder(
+                    listenable: Listenable.merge([_front, _back]),
+                    builder: (context, _) => _IncompleteBanner(
+                      missingFront: _front.text.trim().isEmpty,
+                      missingBack: _back.text.trim().isEmpty,
+                    ),
+                  ),
                   const SizedBox(height: 18),
                   OutlinedButton.icon(
                     onPressed: _flip.flip,
@@ -147,30 +158,54 @@ class _CardEditScreenState extends State<CardEditScreen> {
   }
 }
 
-/// Aviso bajo la tarjeta: los rótulos de anverso y reverso son de todo el mazo.
-class _SharedLabelNote extends StatelessWidget {
-  const _SharedLabelNote();
+/// Aviso discreto: solo se ve mientras falte el concepto o la respuesta.
+class _IncompleteBanner extends StatelessWidget {
+  final bool missingFront;
+  final bool missingBack;
+
+  const _IncompleteBanner({required this.missingFront, required this.missingBack});
 
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context).colorScheme.onSurfaceVariant;
+    const red = Color(0xFFE53935);
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    final text = dark ? const Color(0xFFFFB4AB) : const Color(0xFF8C1D18);
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(Icons.link_rounded, size: 14, color: color),
-        const SizedBox(width: 6),
-        Flexible(
-          child: Text(
-            'KEY_SHARED_LABELS'.locOr(
-              'Los rótulos del anverso y del reverso son comunes a todo el mazo',
-              'The front and back labels are shared by the whole deck',
+    final String message;
+    if (missingFront && missingBack) {
+      message = 'KEY_ADD_BOTH_MSG'.loc;
+    } else if (missingFront) {
+      message = 'KEY_ADD_WORD_MSG'.loc;
+    } else {
+      message = 'KEY_ADD_ANSWER_MSG'.loc;
+    }
+
+    return AnimatedSize(
+      duration: const Duration(milliseconds: 200),
+      alignment: Alignment.topCenter,
+      child: (!missingFront && !missingBack)
+          ? const SizedBox(width: double.infinity)
+          : Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              decoration: BoxDecoration(
+                color: red.withValues(alpha: dark ? 0.12 : 0.06),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: red.withValues(alpha: 0.35)),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.warning_amber_rounded, color: red, size: 20),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      message,
+                      style: TextStyle(color: text, fontSize: 13),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            textAlign: TextAlign.center,
-            style: TextStyle(color: color, fontSize: 12),
-          ),
-        ),
-      ],
     );
   }
 }

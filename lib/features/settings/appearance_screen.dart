@@ -76,7 +76,39 @@ class AppearanceScreen extends StatelessWidget {
                   onTap: () => theme.setCardStyle(style),
                 ),
               const SizedBox(height: 12),
-
+              _SectionLabel('KEY_CARD_BORDER'.loc),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  ChoiceChip(
+                    label: Text('KEY_CARD_BORDER_DEFAULT'
+                        .loc),
+                    selected: theme.cardBorder == null,
+                    onSelected: (_) => theme.setCardBorder(null),
+                  ),
+                  for (final b in CardBorder.values)
+                    ChoiceChip(
+                      label: Text(b.titleKey.loc),
+                      selected: theme.cardBorder == b,
+                      onSelected: (_) => theme.setCardBorder(b),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 14),
+              BorderColorPicker(
+                selected: theme.cardBorderColor,
+                onChanged: theme.setCardBorderColor,
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'KEY_CARD_BORDER_GLOBAL_DESC'.loc,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontSize: 12,
+                ),
+              ),
+              const SizedBox(height: 24),
             ],
           ),
         );

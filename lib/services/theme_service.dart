@@ -11,6 +11,8 @@ class ThemeService extends ChangeNotifier {
   ThemeMode _mode = ThemeMode.system;
   AppAccent _accent = AppAccent.ink;
   CardStyle _cardStyle = CardStyle.minimal;
+  CardBorder? _cardBorder;
+  CardBorderColor? _cardBorderColor;
   bool _amoled = false;
 
   late ThemeData _lightTheme;
@@ -19,6 +21,8 @@ class ThemeService extends ChangeNotifier {
   ThemeMode get mode => _mode;
   AppAccent get accent => _accent;
   CardStyle get cardStyle => _cardStyle;
+  CardBorder? get cardBorder => _cardBorder;
+  CardBorderColor? get cardBorderColor => _cardBorderColor;
   bool get amoled => _amoled;
   ThemeData get lightTheme => _lightTheme;
   ThemeData get darkTheme => _darkTheme;
@@ -29,6 +33,8 @@ class ThemeService extends ChangeNotifier {
     _mode = settings.themeMode;
     _accent = settings.accent;
     _cardStyle = settings.cardStyle;
+    _cardBorder = settings.cardBorder;
+    _cardBorderColor = settings.cardBorderColor;
     _amoled = settings.amoled;
     _rebuildThemes();
   }
@@ -56,6 +62,22 @@ class ThemeService extends ChangeNotifier {
     await SettingsService.instance.setCardStyle(style);
   }
 
+  Future<void> setCardBorder(CardBorder? border) async {
+    if (_cardBorder == border) return;
+    _cardBorder = border;
+    _rebuildThemes();
+    notifyListeners();
+    await SettingsService.instance.setCardBorder(border);
+  }
+
+  Future<void> setCardBorderColor(CardBorderColor? color) async {
+    if (_cardBorderColor == color) return;
+    _cardBorderColor = color;
+    _rebuildThemes();
+    notifyListeners();
+    await SettingsService.instance.setCardBorderColor(color);
+  }
+
   Future<void> setAmoled(bool value) async {
     if (_amoled == value) return;
     _amoled = value;
@@ -65,7 +87,10 @@ class ThemeService extends ChangeNotifier {
   }
 
   void _rebuildThemes() {
-    _lightTheme = AppTheme.light(_accent.color, cardStyle: _cardStyle);
-    _darkTheme = AppTheme.dark(_accent.color, amoled: _amoled, cardStyle: _cardStyle);
+    _lightTheme = AppTheme.light(_accent.color, cardStyle: _cardStyle,
+        cardBorder: _cardBorder, cardBorderColor: _cardBorderColor);
+    _darkTheme = AppTheme.dark(_accent.color,
+        amoled: _amoled,
+        cardStyle: _cardStyle, cardBorder: _cardBorder, cardBorderColor: _cardBorderColor);
   }
 }

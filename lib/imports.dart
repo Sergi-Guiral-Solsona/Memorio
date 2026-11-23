@@ -9,6 +9,7 @@ export './features/decks/cards/card_surface.dart';
 export './features/decks/cards/flash_card_view.dart'; 
 export './features/decks/deck_controller.dart'; 
 export './features/decks/deck_detail_screen.dart'; 
+export './features/decks/deck_edit_screen.dart'; 
 export './features/decks/deck_list_item.dart'; 
 export './features/decks/deck_name_dialog.dart'; 
 export './features/decks/decks_screen.dart'; 

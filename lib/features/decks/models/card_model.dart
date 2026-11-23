@@ -37,6 +37,11 @@ class CardModel {
 
   bool get isDraft => id.isEmpty;
 
+  /// Una tarjeta se puede estudiar solo si tiene palabra Y respuesta. Sin una
+  /// de las dos se guarda igualmente (para completarla luego), pero no entra en
+  /// ningún estudio.
+  bool get isUsable => front.trim().isNotEmpty && back.trim().isNotEmpty;
+
   // ------------------------ Estadísticas por método ------------------------
 
   /// Estadísticas de este método (vacías si aún no ha visto la tarjeta).

@@ -67,7 +67,7 @@ class DeckTransferService {
     // file_picker 12+: `bytes` es obligatorio y el propio plugin escribe el
     // archivo en todas las plataformas. Devuelve null si se cancela.
     final saved = await FilePicker.saveFile(
-      dialogTitle: 'KEY_EXPORT_DECKS'.locOr('Exportar mazos', 'Export decks'),
+      dialogTitle: 'KEY_EXPORT_DECKS'.loc,
       fileName: fileName ?? suggestedFileName(),
       type: FileType.custom,
       allowedExtensions: const ['json'],
@@ -146,7 +146,7 @@ class DeckTransferService {
     var seed = DateTime.now().microsecondsSinceEpoch;
     String nextId() => (seed++).toString();
 
-    final fallbackTitle = 'KEY_IMPORTED_DECK'.locOr('Mazo importado', 'Imported deck');
+    final fallbackTitle = 'KEY_IMPORTED_DECK'.loc;
 
     final added = <Deck>[];
     var cardCount = 0;
@@ -172,6 +172,10 @@ class DeckTransferService {
         title: title,
         frontLabel: deck.frontLabel,
         backLabel: deck.backLabel,
+        cardStyle: deck.cardStyle,
+        accent: deck.accent,
+        border: deck.border,
+        borderColor: deck.borderColor,
         cards: cards,
       ));
     }

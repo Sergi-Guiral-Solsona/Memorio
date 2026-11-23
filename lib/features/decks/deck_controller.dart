@@ -53,6 +53,39 @@ class DeckController {
     await _persistDeck(deck);
   }
 
+  /// Guarda de una vez los ajustes de un mazo: nombre, rótulos y aspecto.
+  /// [cardStyle] / [accent] null = seguir lo elegido en Ajustes.
+  /// Un rótulo de anverso vacío (o igual al nombre) sigue al nombre del mazo.
+  static Future<void> updateDeckSettings(
+    Deck deck, {
+    required String title,
+    required String frontLabel,
+    required String backLabel,
+    required CardStyle? cardStyle,
+    required AppAccent? accent,
+    CardBorder? border,
+    CardBorderColor? borderColor,
+  }) async {
+    final oldFront = deck.effectiveFrontLabel;
+    final wasDefaultFront = deck.frontLabel.isEmpty;
+    final newTitle = title.trim().isEmpty ? deck.title : title.trim();
+    final cleanFront = frontLabel.trim();
+
+    deck.title = newTitle;
+    // Si el rótulo seguía al nombre y no se ha tocado, sigue haciéndolo.
+    deck.frontLabel = (cleanFront.isEmpty ||
+            cleanFront == newTitle ||
+            (wasDefaultFront && cleanFront == oldFront))
+        ? ''
+        : cleanFront;
+    deck.backLabel = backLabel.trim();
+    deck.cardStyle = cardStyle;
+    deck.accent = accent;
+    deck.border = border;
+    deck.borderColor = borderColor;
+    await _persistDeck(deck);
+  }
+
   /// Elimina varios mazos de una vez (una sola escritura).
   static Future<List<Deck>> deleteDecks(
     List<Deck> decks,

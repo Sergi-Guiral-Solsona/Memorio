@@ -1,6 +1,9 @@
 import 'dart:math' as math;
 import 'package:memorio/barrel_file.dart';
 
+/// Qué tarjetas se ven en el mazo.
+enum _CardFilter { all, complete, incomplete }
+
 class DeckDetailScreen extends StatefulWidget {
   final Deck deck;
   final VoidCallback onDeckUpdated;
@@ -24,6 +27,7 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
   static const double _targetCardWidth = 190;
 
   String _query = '';
+  _CardFilter _filter = _CardFilter.all;
 
   /// Tarjetas marcadas en el modo selección (vacío = modo selección apagado).
   final Set<String> _selectedIds = {};
@@ -48,9 +52,14 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
     return visible.isNotEmpty && visible.every((c) => _selectedIds.contains(c.id));
   }
 
-  /// Busca en el nombre (front) y en la respuesta (back).
+  /// Busca en el nombre (front) y en la respuesta (back), y aplica el filtro.
   List<CardModel> get _visibleCards => _deck.cards
       .where((c) => matchesSearch(_query, [c.front, c.back]))
+      .where((c) => switch (_filter) {
+            _CardFilter.all => true,
+            _CardFilter.complete => c.isUsable,
+            _CardFilter.incomplete => !c.isUsable,
+          })
       .toList();
 
   /// Abre el editor de tarjeta: crea si [card] es null, edita si no.
@@ -58,10 +67,14 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
     final result = await Navigator.push<CardEditResult>(
       context,
       MaterialPageRoute(
-        builder: (_) => CardEditScreen(
-          card: card,
-          frontLabel: _deck.effectiveFrontLabel,
-          backLabel: _deck.backLabel,
+        // La ruta nueva no hereda el estilo del mazo: se vuelve a aplicar.
+        builder: (_) => DeckLookScope.forDeck(
+          _deck,
+          child: CardEditScreen(
+            card: card,
+            frontLabel: _deck.effectiveFrontLabel,
+            backLabel: _deck.backLabel,
+          ),
         ),
       ),
     );
@@ -82,6 +95,15 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
     } else {
       await DeckController.updateCardInDeck(_deck, result.card);
     }
+    _refresh();
+  }
+
+  /// Abre los ajustes del mazo (nombre, rótulos, color y estilo).
+  Future<void> _openDeckSettings() async {
+    await Navigator.push<void>(
+      context,
+      MaterialPageRoute(builder: (_) => DeckEditScreen(deck: _deck)),
+    );
     _refresh();
   }
 
@@ -109,12 +131,9 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
   Future<void> _deleteCard(CardModel card) async {
     final confirmed = await confirmDelete(
       context,
-      title: 'KEY_DELETE_CARD_TITLE'.locOr('¿Eliminar tarjeta?', 'Delete card?'),
+      title: 'KEY_DELETE_CARD_TITLE'.loc,
       message: 'KEY_DELETE_CARD_MSG'
-          .locOr(
-            'Se eliminará la tarjeta «{name}». Esta acción no se puede deshacer.',
-            'The card "{name}" will be deleted. This cannot be undone.',
-          )
+          .loc
           .fill({'name': card.front}),
     );
     if (!confirmed || !mounted) return;
@@ -131,13 +150,10 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
     final confirmed = await confirmDelete(
       context,
       title: 'KEY_DELETE_CARDS_TITLE'
-          .locOr('¿Eliminar {count} tarjetas?', 'Delete {count} cards?')
+          .loc
           .fill({'count': ids.length}),
       message: 'KEY_DELETE_CARDS_MSG'
-          .locOr(
-            'Se eliminarán {count} tarjetas. Esta acción no se puede deshacer.',
-            '{count} cards will be deleted. This cannot be undone.',
-          )
+          .loc
           .fill({'count': ids.length}),
     );
     if (!confirmed || !mounted) return;
@@ -169,8 +185,22 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
                 onToggleAll: _toggleAllVisible,
                 onDelete: _deleteSelected,
               )
-            : AppBar(title: Text('${_deck.title} (${_deck.cards.length})')),
-        body: _buildBody(),
+            : AppBar(
+                title: Text(_deck.title),
+                actions: [
+                  // Botón con texto: lápiz + "Estilo".
+                  Padding(
+                    padding: const EdgeInsetsDirectional.only(end: 8),
+                    child: TextButton.icon(
+                      icon: const Icon(Icons.edit_outlined, size: 20),
+                      label: Text('KEY_STYLE'.loc),
+                      onPressed: _openDeckSettings,
+                    ),
+                  ),
+                ],
+              ),
+        // Miniaturas del mazo con SU estilo y color.
+        body: DeckLookScope.forDeck(_deck, child: _buildBody()),
         floatingActionButton: _selecting
             ? null
             : FloatingActionButton(
@@ -196,12 +226,14 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
     return Column(
       children: [
         AppSearchBar(
+          hintText: 'KEY_SEARCH_CARDS'.loc,
           // Al buscar se limpia la selección: así nunca se borra algo oculto.
           onChanged: (value) => setState(() {
             _query = value;
             _selectedIds.clear();
           }),
         ),
+        _buildFilter(),
         Expanded(
           child: visible.isEmpty
               ? EmptyStateView(
@@ -211,6 +243,52 @@ class _DeckDetailScreenState extends State<DeckDetailScreen> {
               : _buildGrid(visible),
         ),
       ],
+    );
+  }
+
+  /// Filtro bajo el buscador: todas, solo las completas (las que se estudian) o
+  /// solo las incompletas (sin palabra o sin respuesta).
+  Widget _buildFilter() {
+    final incomplete = _deck.incompleteCount;
+    final complete = _deck.cards.length - incomplete;
+
+    Widget chip(_CardFilter value, String label, {IconData? icon, Color? color}) {
+      return ChoiceChip(
+        avatar: icon == null ? null : Icon(icon, size: 18, color: color),
+        label: Text(label),
+        selected: _filter == value,
+        showCheckmark: false,
+        onSelected: (_) => setState(() {
+          _filter = value;
+          _selectedIds.clear();
+        }),
+      );
+    }
+
+    return SizedBox(
+      height: 44,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 4),
+        children: [
+          chip(_CardFilter.all,
+              '${'KEY_FILTER_ALL'.loc} (${_deck.cards.length})'),
+          const SizedBox(width: 8),
+          chip(
+            _CardFilter.complete,
+            '${'KEY_FILTER_COMPLETE'.loc} ($complete)',
+            icon: Icons.check_circle_outline,
+            color: Colors.green,
+          ),
+          const SizedBox(width: 8),
+          chip(
+            _CardFilter.incomplete,
+            '${'KEY_FILTER_INCOMPLETE'.loc} ($incomplete)',
+            icon: Icons.warning_amber_rounded,
+            color: Colors.redAccent,
+          ),
+        ],
+      ),
     );
   }
 

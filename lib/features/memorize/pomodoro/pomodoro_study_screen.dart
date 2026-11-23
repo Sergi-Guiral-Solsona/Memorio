@@ -143,7 +143,7 @@ class _PomodoroStudyScreenState extends State<PomodoroStudyScreen>
         '${'KEY_POMODOROS_DONE'.loc}: ${_timer.completedFocusSessions}',
         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
       ),
-      onExit: () => Navigator.pop(context),
+      onExit: () => exitToMemorize(context),
     );
   }
 
@@ -177,10 +177,7 @@ class _PomodoroStudyScreenState extends State<PomodoroStudyScreen>
         subtitle: !_timer.isRunning
             ? 'KEY_PAUSED'.loc
             : isLong
-                ? 'KEY_POMODORO_LAST_BREAK'.locOr(
-                    'Último descanso: al terminar acaba la sesión.',
-                    'Last break: the session ends when it finishes.',
-                  )
+                ? 'KEY_POMODORO_LAST_BREAK'.loc
                 : null,
         // Saltar el descanso largo = terminar la sesión.
         actionLabel:
@@ -211,6 +208,7 @@ class _PomodoroStudyScreenState extends State<PomodoroStudyScreen>
         card: card,
         frontLabel: current.frontLabel,
         backLabel: current.backLabel,
+        deck: current.deck,
         onAnswer: _answer,
       ),
     );

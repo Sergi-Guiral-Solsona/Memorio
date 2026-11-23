@@ -28,6 +28,8 @@ class DeckListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    // Cada mazo se tiñe con su color (si no tiene, el de Ajustes).
+    final deckColor = deck.accent?.color ?? scheme.primary;
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 180),
@@ -69,12 +71,12 @@ class DeckListItem extends StatelessWidget {
             decoration: BoxDecoration(
               color: selected
                   ? scheme.primary
-                  : scheme.primary.withValues(alpha: 0.12),
+                  : deckColor.withValues(alpha: 0.14),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
               selected ? Icons.check_rounded : Icons.style,
-              color: selected ? scheme.onPrimary : scheme.primary,
+              color: selected ? scheme.onPrimary : deckColor,
             ),
           ),
         ),
@@ -84,8 +86,9 @@ class DeckListItem extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
+        // Solo se cuentan las tarjetas completas (las incompletas se ven al entrar).
         subtitle: Text(
-          '${'KEY_CARDS'.loc}: ${deck.cards.length}',
+          '${'KEY_CARDS'.loc}: ${deck.usableCards.length}',
           style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 13),
         ),
         trailing: selectionMode

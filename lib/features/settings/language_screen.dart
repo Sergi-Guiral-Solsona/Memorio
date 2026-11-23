@@ -26,7 +26,10 @@ class _LanguageScreenState extends State<LanguageScreen> {
       appBar: AppBar(title: Text('KEY_LANGUAGE'.loc)),
       body: Column(
         children: [
-          AppSearchBar(onChanged: (value) => setState(() => _query = value)),
+          AppSearchBar(
+            hintText: 'KEY_SEARCH_LANGUAGE'.loc,
+            onChanged: (value) => setState(() => _query = value),
+          ),
           Expanded(
             child: languages.isEmpty
                 ? EmptyStateView(icon: Icons.search_off, title: 'KEY_NO_RESULTS'.loc)

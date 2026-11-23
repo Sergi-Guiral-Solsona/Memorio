@@ -30,9 +30,9 @@ class _SelectDecksForStudyScreenState extends State<SelectDecksForStudyScreen> {
       widget.decks.where((d) => _selectedIds.contains(d.id)).toList();
 
   int get _selectedCardCount =>
-      _selectedDecks.fold(0, (sum, deck) => sum + deck.cards.length);
+      _selectedDecks.fold(0, (sum, deck) => sum + deck.usableCards.length);
 
-  bool _isSelectable(Deck deck) => deck.cards.isNotEmpty;
+  bool _isSelectable(Deck deck) => deck.usableCards.isNotEmpty;
 
   bool get _allVisibleSelected {
     final selectable = _visibleDecks.where(_isSelectable);
@@ -90,33 +90,39 @@ class _SelectDecksForStudyScreenState extends State<SelectDecksForStudyScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${'KEY_MODE'.loc} : ${widget.mode.title}'),
-        actions: [
-          StudyModeInfoButton(mode: widget.mode),
-          TextButton(
-            onPressed: _toggleAllVisible,
-            child: Text(
-              _allVisibleSelected ? 'KEY_DESELECT_ALL'.loc : 'KEY_SELECT_ALL'.loc,
-            ),
-          ),
-        ],
+        title: Text(widget.mode.title),
+        actions: [StudyModeInfoButton(mode: widget.mode)],
       ),
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'KEY_SELECT_DECKS'.loc,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontSize: 13,
+            padding: const EdgeInsets.fromLTRB(16, 4, 8, 0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'KEY_SELECT_DECKS'.loc,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      fontSize: 13,
+                    ),
+                  ),
                 ),
-              ),
+                TextButton(
+                  onPressed: _toggleAllVisible,
+                  child: Text(
+                    _allVisibleSelected
+                        ? 'KEY_DESELECT_ALL'.loc
+                        : 'KEY_SELECT_ALL'.loc,
+                  ),
+                ),
+              ],
             ),
           ),
-          AppSearchBar(onChanged: (value) => setState(() => _query = value)),
+          AppSearchBar(
+            hintText: 'KEY_SEARCH_DECKS'.loc,
+            onChanged: (value) => setState(() => _query = value),
+          ),
           Expanded(child: _buildList()),
         ],
       ),
@@ -190,6 +196,8 @@ class _DeckCheckTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final enabled = onChanged != null;
     final scheme = Theme.of(context).colorScheme;
+    // Cada mazo con su color (si no tiene, el de Ajustes).
+    final deckColor = deck.accent?.color ?? scheme.primary;
 
     return Card(
       elevation: 0,
@@ -197,7 +205,7 @@ class _DeckCheckTile extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
         side: BorderSide(
-          color: selected ? scheme.primary : scheme.outlineVariant,
+          color: selected ? deckColor : scheme.outlineVariant,
           width: selected ? 2 : 1,
         ),
       ),
@@ -207,12 +215,13 @@ class _DeckCheckTile extends StatelessWidget {
         controlAffinity: ListTileControlAffinity.trailing,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-        secondary: Icon(Icons.style, color: enabled ? scheme.primary : scheme.outline),
+        secondary: Icon(Icons.style, color: enabled ? deckColor : scheme.outline),
+        activeColor: deckColor,
         title: Text(
           deck.title,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        subtitle: Text('${'KEY_CARDS'.loc}: ${deck.cards.length}'),
+        subtitle: Text('${'KEY_CARDS'.loc}: ${deck.usableCards.length}'),
       ),
     );
   }

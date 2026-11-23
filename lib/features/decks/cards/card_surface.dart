@@ -30,6 +30,10 @@ class CardSurface extends StatelessWidget {
   /// Fuerza un estilo concreto en vez del elegido (vistas previas).
   final CardStyle? style;
 
+  /// Tarjeta incompleta: se dibuja con el tema rojo, ignorando el estilo, el
+  /// color y el borde del mazo.
+  final bool invalid;
+
   /// Versión pequeña (sombra corta, radio menor) para miniaturas.
   final bool compact;
   final double? radius;
@@ -40,13 +44,17 @@ class CardSurface extends StatelessWidget {
     this.padding = EdgeInsets.zero,
     this.isBack = false,
     this.style,
+    this.invalid = false,
     this.compact = false,
     this.radius,
   });
 
   @override
   Widget build(BuildContext context) {
-    final face = context.cardLook.face(isBack: isBack, styleOverride: style);
+    final look = context.cardLook;
+    final face = invalid
+        ? look.invalidFace()
+        : look.face(isBack: isBack, styleOverride: style);
     final outerRadius = radius ?? (compact ? 18.0 : face.radius);
     final borderWidth = compact ? face.borderWidth * 0.8 : face.borderWidth;
     final innerRadius = math.max(0.0, outerRadius - borderWidth);

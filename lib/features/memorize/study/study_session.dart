@@ -24,7 +24,8 @@ class StudyCard {
   /// Todas las tarjetas de los mazos dados.
   static List<StudyCard> fromDecks(Iterable<Deck> decks) => [
         for (final deck in decks)
-          for (final card in deck.cards) StudyCard(deck: deck, card: card),
+          // Las tarjetas incompletas (sin palabra o sin respuesta) no se estudian.
+          for (final card in deck.usableCards) StudyCard(deck: deck, card: card),
       ];
 }
 

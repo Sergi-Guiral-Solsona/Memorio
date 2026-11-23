@@ -17,6 +17,35 @@ enum CardStyle {
   String get descriptionKey => '${titleKey}_DESC';
 }
 
+/// Grosor del borde de las tarjetas de un mazo (se pinta con el color del
+/// mazo). Un mazo sin borde elegido usa el que trae su estilo.
+enum CardBorder {
+  none(0),
+  thin(1.5),
+  medium(3),
+  thick(5);
+
+  final double width;
+  const CardBorder(this.width);
+
+  String get titleKey => 'KEY_CARD_BORDER_${name.toUpperCase()}';
+}
+
+/// Colores neutros para el borde (negros, grises, blanco). Para un borde de
+/// color se usa el del mazo: ver [CardLook.borderColor] null.
+enum CardBorderColor {
+  black(Color(0xFF111111)),
+  charcoal(Color(0xFF424242)),
+  gray(Color(0xFF9E9E9E)),
+  silver(Color(0xFFD6D6D6)),
+  white(Color(0xFFFFFFFF));
+
+  final Color color;
+  const CardBorderColor(this.color);
+
+  String get titleKey => 'KEY_BORDER_COLOR_${name.toUpperCase()}';
+}
+
 /// Tipografía de las tarjetas. Serif condensada para el título.
 /// Para el aspecto exacto de las capturas: añade la fuente "Instrument Serif"
 /// (licencia OFL) al pubspec con la familia `InstrumentSerif`. Sin ella se usa
@@ -74,6 +103,28 @@ class CardFaceStyle {
   final Color badge;
   final Color hintAccent;
 
+  /// Copia con otro borde (null / 0 = sin borde).
+  CardFaceStyle withBorder(Color? color, double width) => CardFaceStyle(
+        color: this.color,
+        gradient: gradient,
+        borderColor: width <= 0 ? null : color,
+        borderWidth: width <= 0 ? 0 : width,
+        shadows: shadows,
+        compactShadows: compactShadows,
+        radius: radius,
+        title: title,
+        caption: caption,
+        hint: hint,
+        line: line,
+        control: control,
+        fieldFill: fieldFill,
+        fieldBorder: fieldBorder,
+        ornamentInk: ornamentInk,
+        glossAlpha: glossAlpha,
+        badge: badge,
+        hintAccent: hintAccent,
+      );
+
   const CardFaceStyle({
     this.color,
     this.gradient,
@@ -104,10 +155,18 @@ class CardLook extends ThemeExtension<CardLook> {
   final Brightness brightness;
   final Color accent;
 
+  /// Borde elegido para el mazo (null = el del estilo).
+  final CardBorder? border;
+
+  /// Color neutro del borde (null = el color del estilo / del mazo).
+  final CardBorderColor? borderColor;
+
   const CardLook({
     required this.style,
     required this.brightness,
     required this.accent,
+    this.border,
+    this.borderColor,
   });
 
   bool get _dark => brightness == Brightness.dark;
@@ -118,6 +177,17 @@ class CardLook extends ThemeExtension<CardLook> {
 
   /// Cara de la tarjeta. [styleOverride] sirve para previsualizar otro estilo.
   CardFaceStyle face({required bool isBack, CardStyle? styleOverride}) {
+    final base = _baseFace(isBack: isBack, styleOverride: styleOverride);
+    final b = border;
+    final c = borderColor;
+    if (b == null && c == null) return base;
+
+    // Solo color: se conserva el grosor del estilo (o uno fino si no tenía).
+    final width = b?.width ?? (base.borderWidth > 0 ? base.borderWidth : 1.5);
+    return base.withBorder(c?.color ?? base.line, width);
+  }
+
+  CardFaceStyle _baseFace({required bool isBack, CardStyle? styleOverride}) {
     switch (styleOverride ?? style) {
       case CardStyle.minimal:
         return _minimal();
@@ -126,6 +196,29 @@ class CardLook extends ThemeExtension<CardLook> {
       case CardStyle.soft:
         return _soft();
     }
+  }
+
+  /// Tema propio de las tarjetas incompletas: fondo y borde rojos. Sustituye al
+  /// estilo, el color y el borde del mazo (no se mezclan con ellos).
+  CardFaceStyle invalidFace() {
+    const red = Color(0xFFE53935);
+    final text = _dark ? const Color(0xFFFFB4AB) : const Color(0xFF8C1D18);
+
+    return CardFaceStyle(
+      color: Color.alphaBlend(
+        red.withValues(alpha: _dark ? 0.22 : 0.12),
+        _dark ? const Color(0xFF2A2B31) : const Color(0xFFFFFDFA),
+      ),
+      borderColor: red,
+      borderWidth: 2,
+      shadows: const [],
+      compactShadows: const [],
+      title: text,
+      caption: text.withValues(alpha: 0.75),
+      hint: text.withValues(alpha: 0.8),
+      line: red,
+      control: text.withValues(alpha: 0.8),
+    );
   }
 
   List<BoxShadow> _paperShadows({required bool compact}) => [
@@ -206,11 +299,19 @@ class CardLook extends ThemeExtension<CardLook> {
 
 
   @override
-  CardLook copyWith({CardStyle? style, Brightness? brightness, Color? accent}) {
+  CardLook copyWith({
+    CardStyle? style,
+    Brightness? brightness,
+    Color? accent,
+    CardBorder? border,
+    CardBorderColor? borderColor,
+  }) {
     return CardLook(
       style: style ?? this.style,
       brightness: brightness ?? this.brightness,
       accent: accent ?? this.accent,
+      border: border ?? this.border,
+      borderColor: borderColor ?? this.borderColor,
     );
   }
 
@@ -221,6 +322,8 @@ class CardLook extends ThemeExtension<CardLook> {
       style: t < 0.5 ? style : other.style,
       brightness: t < 0.5 ? brightness : other.brightness,
       accent: Color.lerp(accent, other.accent, t)!,
+      border: t < 0.5 ? border : other.border,
+      borderColor: t < 0.5 ? borderColor : other.borderColor,
     );
   }
 }
@@ -234,5 +337,62 @@ extension CardLookContext on BuildContext {
           brightness: theme.brightness,
           accent: theme.colorScheme.primary,
         );
+  }
+}
+
+
+/// Aplica a lo que haya debajo el aspecto de tarjeta de UN mazo: su estilo y su
+/// color. Lo que sea null se queda como esté en Ajustes. Así las tarjetas, las
+/// miniaturas y el editor de un mazo se dibujan con el estilo del mazo.
+class DeckLookScope extends StatelessWidget {
+  final CardStyle? style;
+  final AppAccent? accent;
+  final CardBorder? border;
+  final CardBorderColor? borderColor;
+  final Widget child;
+
+  const DeckLookScope({
+    super.key,
+    this.style,
+    this.accent,
+    this.border,
+    this.borderColor,
+    required this.child,
+  });
+
+  DeckLookScope.forDeck(Deck deck, {Key? key, required Widget child})
+      : this(
+          key: key,
+          style: deck.cardStyle,
+          accent: deck.accent,
+          border: deck.border,
+          borderColor: deck.borderColor,
+          child: child,
+        );
+
+  @override
+  Widget build(BuildContext context) {
+    if (style == null &&
+        accent == null &&
+        border == null &&
+        borderColor == null) {
+      return child;
+    }
+
+    final theme = Theme.of(context);
+    final look = context.cardLook.copyWith(
+          style: style,
+          accent: accent?.color,
+          border: border,
+          borderColor: borderColor,
+        );
+
+    return Theme(
+      data: theme.copyWith(extensions: [
+        ...theme.extensions.values.where((e) => e is! CardLook),
+        look,
+      ]),
+      child: child,
+    );
   }
 }

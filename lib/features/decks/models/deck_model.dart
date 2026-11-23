@@ -1,12 +1,28 @@
 import 'dart:convert';
 import 'package:memorio/barrel_file.dart';
 
-/// Mazo de tarjetas. `title` y `id` son inmutables; la lista [cards] y el
-/// rótulos [frontLabel] y [backLabel] los gestiona [DeckController].
+/// Mazo de tarjetas. La lista [cards], el nombre, los rótulos ([frontLabel],
+/// [backLabel]) y el aspecto ([cardStyle], [accent]) los gestiona
+/// [DeckController].
 class Deck {
   final String id;
-  final String title;
+
+  /// Nombre del mazo. Cámbialo con [DeckController.updateDeckSettings] para
+  /// que se guarde.
+  String title;
   final List<CardModel> cards;
+
+  /// Modelo de tarjeta de ESTE mazo. null = el elegido en Ajustes > Apariencia.
+  CardStyle? cardStyle;
+
+  /// Color de ESTE mazo (tarjetas y lista). null = el acento de Ajustes.
+  AppAccent? accent;
+
+  /// Borde de las tarjetas de ESTE mazo. null = el propio del estilo.
+  CardBorder? border;
+
+  /// Color neutro del borde de ESTE mazo. null = el color del estilo.
+  CardBorderColor? borderColor;
 
   /// Rótulo del anverso, común a TODAS las tarjetas del mazo (p. ej. "English").
   /// Vacío = usar el nombre del mazo. Cámbialo con
@@ -23,8 +39,18 @@ class Deck {
     required this.title,
     this.frontLabel = '',
     this.backLabel = '',
+    this.cardStyle,
+    this.accent,
+    this.border,
+    this.borderColor,
     List<CardModel>? cards,
   }) : cards = cards ?? [];
+
+  /// Tarjetas completas (con palabra y respuesta): las únicas que se estudian.
+  List<CardModel> get usableCards => cards.where((c) => c.isUsable).toList();
+
+  /// Tarjetas a las que les falta el concepto o la respuesta.
+  int get incompleteCount => cards.where((c) => !c.isUsable).length;
 
   /// Rótulo que se muestra: el elegido o, si no hay, el nombre del mazo.
   String get effectiveFrontLabel =>
@@ -34,6 +60,10 @@ class Deck {
     String? title,
     String? frontLabel,
     String? backLabel,
+    CardStyle? cardStyle,
+    AppAccent? accent,
+    CardBorder? border,
+    CardBorderColor? borderColor,
     List<CardModel>? cards,
   }) {
     return Deck(
@@ -41,6 +71,10 @@ class Deck {
       title: title ?? this.title,
       frontLabel: frontLabel ?? this.frontLabel,
       backLabel: backLabel ?? this.backLabel,
+      cardStyle: cardStyle ?? this.cardStyle,
+      accent: accent ?? this.accent,
+      border: border ?? this.border,
+      borderColor: borderColor ?? this.borderColor,
       cards: cards ?? this.cards,
     );
   }
@@ -50,6 +84,10 @@ class Deck {
         'title': title,
         'frontLabel': frontLabel,
         'backLabel': backLabel,
+        'cardStyle': cardStyle?.name,
+        'accent': accent?.name,
+        'border': border?.name,
+        'borderColor': borderColor?.name,
         'cards': cards.map((c) => c.toMap()).toList(),
       };
 
@@ -90,6 +128,10 @@ class Deck {
       title: map['title'] ?? '',
       frontLabel: frontLabel,
       backLabel: backLabel,
+      cardStyle: CardStyle.values.asNameMap()[map['cardStyle']],
+      accent: AppAccent.values.asNameMap()[map['accent']],
+      border: CardBorder.values.asNameMap()[map['border']],
+      borderColor: CardBorderColor.values.asNameMap()[map['borderColor']],
       cards: rawCards
           .map((c) => CardModel.fromMap(c as Map<String, dynamic>))
           .toList(),

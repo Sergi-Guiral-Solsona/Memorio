@@ -12,6 +12,8 @@ class SettingsService {
   static const String _kAccent = 'settings_accent';
   static const String _kAmoled = 'settings_amoled';
   static const String _kCardStyle = 'settings_card_style';
+  static const String _kCardBorder = 'settings_card_border';
+  static const String _kCardBorderColor = 'settings_card_border_color';
   static const String _kPomodoroFocus = 'settings_pomodoro_focus_min';
   static const String _kPomodoroShort = 'settings_pomodoro_short_min';
   static const String _kPomodoroLong = 'settings_pomodoro_long_min';
@@ -53,6 +55,30 @@ class SettingsService {
 
   Future<void> setCardStyle(CardStyle style) async {
     await _prefs?.setString(_kCardStyle, style.name);
+  }
+
+  /// Borde global de las tarjetas (null = el propio de cada estilo).
+  CardBorder? get cardBorder =>
+      CardBorder.values.asNameMap()[_prefs?.getString(_kCardBorder)];
+
+  Future<void> setCardBorder(CardBorder? border) async {
+    if (border == null) {
+      await _prefs?.remove(_kCardBorder);
+    } else {
+      await _prefs?.setString(_kCardBorder, border.name);
+    }
+  }
+
+  /// Color neutro global del borde (null = el color del estilo).
+  CardBorderColor? get cardBorderColor =>
+      CardBorderColor.values.asNameMap()[_prefs?.getString(_kCardBorderColor)];
+
+  Future<void> setCardBorderColor(CardBorderColor? color) async {
+    if (color == null) {
+      await _prefs?.remove(_kCardBorderColor);
+    } else {
+      await _prefs?.setString(_kCardBorderColor, color.name);
+    }
   }
 
   // ---- Pomodoro (tiempos elegidos por el usuario) ----

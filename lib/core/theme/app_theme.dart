@@ -21,21 +21,34 @@ enum AppAccent {
 class AppTheme {
   AppTheme._();
 
-  static ThemeData light(Color seed, {CardStyle cardStyle = CardStyle.minimal}) =>
-      _build(Brightness.light, seed, amoled: false, cardStyle: cardStyle);
+  static ThemeData light(
+    Color seed, {
+    CardStyle cardStyle = CardStyle.minimal,
+    CardBorder? cardBorder,
+    CardBorderColor? cardBorderColor,
+  }) =>
+      _build(Brightness.light, seed,
+          amoled: false,
+          cardStyle: cardStyle, cardBorder: cardBorder, cardBorderColor: cardBorderColor);
 
   static ThemeData dark(
     Color seed, {
     bool amoled = false,
     CardStyle cardStyle = CardStyle.minimal,
+    CardBorder? cardBorder,
+    CardBorderColor? cardBorderColor,
   }) =>
-      _build(Brightness.dark, seed, amoled: amoled, cardStyle: cardStyle);
+      _build(Brightness.dark, seed,
+          amoled: amoled,
+          cardStyle: cardStyle, cardBorder: cardBorder, cardBorderColor: cardBorderColor);
 
   static ThemeData _build(
     Brightness brightness,
     Color seed, {
     required bool amoled,
     required CardStyle cardStyle,
+    CardBorder? cardBorder,
+    CardBorderColor? cardBorderColor,
   }) {
     var scheme = ColorScheme.fromSeed(seedColor: seed, brightness: brightness);
 
@@ -61,7 +74,13 @@ class AppTheme {
       ),
       snackBarTheme: const SnackBarThemeData(behavior: SnackBarBehavior.floating),
       extensions: [
-        CardLook(style: cardStyle, brightness: brightness, accent: seed),
+        CardLook(
+          style: cardStyle,
+          brightness: brightness,
+          accent: seed,
+          border: cardBorder,
+          borderColor: cardBorderColor,
+        ),
       ],
     );
   }
