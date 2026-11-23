@@ -18,7 +18,7 @@ class CardStatsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      tooltip: 'KEY_CARD_STATS'.loc,
+      tooltip: 'KEY_CARD_STATS'.locOr('Estadísticas', 'Statistics'),
       padding: compact ? EdgeInsets.zero : null,
       constraints:
           compact ? const BoxConstraints.tightFor(width: 30, height: 30) : null,
@@ -83,7 +83,7 @@ List<_MethodEntry> _entriesFor(CardModel card) {
     final isLegacy = entry.key == CardModel.legacyMethodId;
     entries.add(_MethodEntry(
       label: isLegacy
-          ? 'KEY_LEGACY_STATS'.loc
+          ? 'KEY_LEGACY_STATS'.locOr('Anteriores', 'Previous')
           : entry.key,
       icon: isLegacy ? Icons.history_rounded : Icons.extension_outlined,
       color: Colors.blueGrey,
@@ -157,7 +157,7 @@ class _Header extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'KEY_CARD_STATS'.loc,
+                'KEY_CARD_STATS'.locOr('Estadísticas', 'Statistics'),
                 style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 2),
@@ -233,7 +233,7 @@ class _MethodRow extends StatelessWidget {
                     )
                   else
                     Text(
-                      'KEY_NOT_STUDIED_YET'.loc,
+                      'KEY_NOT_STUDIED_YET'.locOr('Sin estudiar', 'Not studied yet'),
                       style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 12),
                     ),
                 ],
@@ -308,7 +308,7 @@ class _TotalPanel extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'KEY_TOTAL'.loc,
+                  'KEY_TOTAL'.locOr('Total', 'Total'),
                   style: TextStyle(
                     fontSize: 12,
                     letterSpacing: 1.2,

@@ -110,9 +110,12 @@ class _DecksScreenState extends State<DecksScreen> {
   Future<void> _deleteDeck(Deck deck) async {
     final confirmed = await confirmDelete(
       context,
-      title: 'KEY_DELETE_DECK_TITLE'.loc,
+      title: 'KEY_DELETE_DECK_TITLE'.locOr('¿Eliminar mazo?', 'Delete deck?'),
       message: 'KEY_DELETE_DECK_MSG'
-          .loc
+          .locOr(
+            'Se eliminará el mazo «{name}» y sus {count} tarjetas. Esta acción no se puede deshacer.',
+            'The deck "{name}" and its {count} cards will be deleted. This cannot be undone.',
+          )
           .fill({'name': deck.title, 'count': deck.cards.length}),
     );
     if (!confirmed || !mounted) return;
@@ -131,10 +134,13 @@ class _DecksScreenState extends State<DecksScreen> {
     final confirmed = await confirmDelete(
       context,
       title: 'KEY_DELETE_DECKS_TITLE'
-          .loc
+          .locOr('¿Eliminar {count} mazos?', 'Delete {count} decks?')
           .fill({'count': ids.length}),
       message: 'KEY_DELETE_DECKS_MSG'
-          .loc
+          .locOr(
+            'Se eliminarán {count} mazos con un total de {cards} tarjetas. Esta acción no se puede deshacer.',
+            '{count} decks with a total of {cards} cards will be deleted. This cannot be undone.',
+          )
           .fill({'count': ids.length, 'cards': cardCount}),
     );
     if (!confirmed || !mounted) return;
@@ -219,7 +225,7 @@ class _DecksScreenState extends State<DecksScreen> {
     return Column(
       children: [
         AppSearchBar(
-          hintText: 'KEY_SEARCH_DECKS'.loc,
+          hintText: 'KEY_SEARCH_DECKS'.locOr('Buscar mazos', 'Search decks'),
           // Al buscar se limpia la selección: así nunca se borra algo oculto.
           onChanged: (value) => setState(() {
             _query = value;

@@ -177,7 +177,10 @@ class _PomodoroStudyScreenState extends State<PomodoroStudyScreen>
         subtitle: !_timer.isRunning
             ? 'KEY_PAUSED'.loc
             : isLong
-                ? 'KEY_POMODORO_LAST_BREAK'.loc
+                ? 'KEY_POMODORO_LAST_BREAK'.locOr(
+                    'Último descanso: al terminar acaba la sesión.',
+                    'Last break: the session ends when it finishes.',
+                  )
                 : null,
         // Saltar el descanso largo = terminar la sesión.
         actionLabel:

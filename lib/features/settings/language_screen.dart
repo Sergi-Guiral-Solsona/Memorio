@@ -27,7 +27,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
       body: Column(
         children: [
           AppSearchBar(
-            hintText: 'KEY_SEARCH_LANGUAGE'.loc,
+            hintText: 'KEY_SEARCH_LANGUAGE'.locOr('Buscar idioma', 'Search language'),
             onChanged: (value) => setState(() => _query = value),
           ),
           Expanded(

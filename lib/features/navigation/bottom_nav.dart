@@ -25,6 +25,14 @@ class BottomNavScreenState extends State<BottomNavScreen> {
     });
   }
 
+  void openMemorize() {
+    setState(() => _currentIndex = 1);
+  }
+
+  void openSettings() {
+    setState(() => _currentIndex = 2);
+  }
+
   Widget _screenAt(int index) {
     switch (index) {
       case 0:

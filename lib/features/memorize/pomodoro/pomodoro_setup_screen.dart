@@ -27,9 +27,11 @@ class _PomodoroSetupScreenState extends State<PomodoroSetupScreen> {
   PomodoroConfig get _effectiveConfig => _testMode ? _config.asTest() : _config;
 
   /// Combinaciones habituales, de la clásica a las más cortas.
-  static const List<(String, PomodoroConfig)> _presets = [
+  static const List<(String, String, String, PomodoroConfig)> _presets = [
     (
       'KEY_POMODORO_PRESET_CLASSIC',
+      'Clásico',
+      'Classic',
       PomodoroConfig(
         focus: Duration(minutes: 25),
         shortBreak: Duration(minutes: 5),
@@ -39,6 +41,8 @@ class _PomodoroSetupScreenState extends State<PomodoroSetupScreen> {
     ),
     (
       'KEY_POMODORO_PRESET_MEDIUM',
+      'Medio',
+      'Medium',
       PomodoroConfig(
         focus: Duration(minutes: 15),
         shortBreak: Duration(minutes: 3),
@@ -48,6 +52,8 @@ class _PomodoroSetupScreenState extends State<PomodoroSetupScreen> {
     ),
     (
       'KEY_POMODORO_PRESET_SHORT',
+      'Corto',
+      'Short',
       PomodoroConfig(
         focus: Duration(minutes: 10),
         shortBreak: Duration(minutes: 2),
@@ -57,6 +63,8 @@ class _PomodoroSetupScreenState extends State<PomodoroSetupScreen> {
     ),
     (
       'KEY_POMODORO_PRESET_MINI',
+      'Mini',
+      'Mini',
       PomodoroConfig(
         focus: Duration(minutes: 5),
         shortBreak: Duration(minutes: 1),
@@ -93,7 +101,7 @@ class _PomodoroSetupScreenState extends State<PomodoroSetupScreen> {
 
   /// Duración del ciclo: en segundos si no llega al minuto (modo test).
   String _formatCycle(Duration d) => d.inSeconds < 60
-      ? '${d.inSeconds} ${'KEY_UNIT_SEC'.loc}'
+      ? '${d.inSeconds} ${'KEY_UNIT_SEC'.locOr('s', 's')}'
       : _formatMinutes(d.inMinutes);
 
   String _formatMinutes(int minutes) {
@@ -119,7 +127,10 @@ class _PomodoroSetupScreenState extends State<PomodoroSetupScreen> {
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
         children: [
           Text(
-            'KEY_POMODORO_SETUP_INTRO'.loc,
+            'KEY_POMODORO_SETUP_INTRO'.locOr(
+              'Elige tú cuánto dura cada bloque. Con tarjetas, bloques más cortos suelen funcionar mejor.',
+              'Choose how long each block lasts. With flashcards, shorter blocks often work better.',
+            ),
             style: TextStyle(color: scheme.onSurfaceVariant, height: 1.4),
           ),
           const SizedBox(height: 16),
@@ -139,15 +150,15 @@ class _PomodoroSetupScreenState extends State<PomodoroSetupScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _SectionTitle('KEY_POMODORO_PRESETS'.loc),
+                  _SectionTitle('KEY_POMODORO_PRESETS'.locOr('Preajustes', 'Presets')),
                   Wrap(
                     spacing: 8,
                     runSpacing: 4,
                     children: [
-                      for (final (key, preset) in _presets)
+                      for (final (key, es, en, preset) in _presets)
                         ChoiceChip(
                           label: Text(
-                            '${key.loc} '
+                            '${key.locOr(es, en)} '
                             '${preset.focus.inMinutes}/${preset.shortBreak.inMinutes}/${preset.longBreak.inMinutes}',
                           ),
                           selected: config == preset,
@@ -156,7 +167,7 @@ class _PomodoroSetupScreenState extends State<PomodoroSetupScreen> {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  _SectionTitle('KEY_POMODORO_YOUR_TIMES'.loc),
+                  _SectionTitle('KEY_POMODORO_YOUR_TIMES'.locOr('Tus tiempos', 'Your times')),
                   _TimeSetting(
                     icon: Icons.timer_outlined,
                     color: Colors.orange,
@@ -206,7 +217,7 @@ class _PomodoroSetupScreenState extends State<PomodoroSetupScreen> {
                     icon: Icons.repeat,
                     color: scheme.primary,
                     label: 'KEY_POMODORO_BLOCKS_BEFORE_LONG'
-                        .loc,
+                        .locOr('Bloques hasta el descanso largo', 'Blocks before long break'),
                     valueText: '${config.focusSessionsBeforeLongBreak}',
                     value: config.focusSessionsBeforeLongBreak,
                     min: PomodoroConfig.minSessionsBeforeLongBreak,
@@ -435,7 +446,7 @@ class _CycleSummary extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          '${'KEY_POMODORO_FULL_CYCLE'.loc}: $totalText',
+          '${'KEY_POMODORO_FULL_CYCLE'.locOr('Ciclo completo', 'Full cycle')}: $totalText',
           style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 13),
         ),
       ],

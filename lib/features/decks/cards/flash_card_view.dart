@@ -313,7 +313,7 @@ class _FrontContent extends StatelessWidget {
                 child: _CaptionField(
                   controller: labelController,
                   editable: editable,
-                  fallback: 'KEY_CONCEPT'.loc,
+                  fallback: 'KEY_CONCEPT'.locOr('Concepto', 'Concept'),
                 ),
               ),
             ],
@@ -340,7 +340,7 @@ class _FrontContent extends StatelessWidget {
                   controller: frontController,
                   focusNode: frontFocus,
                   editable: editable,
-                  hintText: 'KEY_CONCEPT'.loc,
+                  hintText: 'KEY_CONCEPT'.locOr('Concepto', 'Concept'),
                   baseSize: 54,
                   bold: true,
                 ),

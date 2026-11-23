@@ -143,7 +143,10 @@ class _Content extends StatelessWidget {
               // Sin palabra o sin respuesta no hay estadísticas: se avisa.
               ? Center(
                   child: Tooltip(
-                    message: 'KEY_INCOMPLETE_CARD'.loc,
+                    message: 'KEY_INCOMPLETE_CARD'.locOr(
+                      'Tarjeta incompleta: no se estudiará',
+                      'Incomplete card: it won\'t be studied',
+                    ),
                     child: const Icon(
                       Icons.warning_amber_rounded,
                       color: const Color(0xFFE53935),
@@ -161,9 +164,9 @@ class _Content extends StatelessWidget {
           flex: 3,
           child: _Section(
             icon: Icons.flip_to_front_rounded,
-            semanticLabel: 'KEY_CARD_FRONT_LABEL'.loc,
+            semanticLabel: 'KEY_CARD_FRONT_LABEL'.locOr('Anverso', 'Front'),
             child: card.front.trim().isEmpty
-                ? _MissingText('KEY_MISSING_WORD'.loc)
+                ? _MissingText('KEY_MISSING_WORD'.locOr('Falta el concepto', 'Missing concept'))
                 : _FitText(
                     card.front,
                     maxLinesCap: 4,
@@ -198,9 +201,9 @@ class _Content extends StatelessWidget {
           flex: 3,
           child: _Section(
             icon: Icons.flip_to_back_rounded,
-            semanticLabel: 'KEY_CARD_BACK_LABEL'.loc,
+            semanticLabel: 'KEY_CARD_BACK_LABEL'.locOr('Reverso', 'Back'),
             child: card.back.trim().isEmpty
-                ? _MissingText('KEY_MISSING_ANSWER'.loc)
+                ? _MissingText('KEY_MISSING_ANSWER'.locOr('Falta la respuesta', 'Missing answer'))
                 : _FitText(
                     card.back,
                     maxLinesCap: 5,

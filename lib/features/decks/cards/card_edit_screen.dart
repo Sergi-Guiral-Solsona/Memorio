@@ -76,7 +76,10 @@ class _CardEditScreenState extends State<CardEditScreen> {
     if (front.isEmpty && back.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('KEY_CARD_EMPTY'.loc),
+          content: Text('KEY_CARD_EMPTY'.locOr(
+            'Escribe al menos el concepto o la respuesta',
+            'Write at least the concept or the answer',
+          )),
         ),
       );
       return;
@@ -173,11 +176,20 @@ class _IncompleteBanner extends StatelessWidget {
 
     final String message;
     if (missingFront && missingBack) {
-      message = 'KEY_ADD_BOTH_MSG'.loc;
+      message = 'KEY_ADD_BOTH_MSG'.locOr(
+        'Escribe el concepto y la respuesta; si no, esta tarjeta no se podrá usar para estudiar',
+        'Write the concept and the answer, or this card can\'t be used to study',
+      );
     } else if (missingFront) {
-      message = 'KEY_ADD_WORD_MSG'.loc;
+      message = 'KEY_ADD_WORD_MSG'.locOr(
+        'Escribe el concepto; si no, esta tarjeta no se podrá usar para estudiar',
+        'Write the concept, or this card can\'t be used to study',
+      );
     } else {
-      message = 'KEY_ADD_ANSWER_MSG'.loc;
+      message = 'KEY_ADD_ANSWER_MSG'.locOr(
+        'Escribe la respuesta; si no, esta tarjeta no se podrá usar para estudiar',
+        'Write the answer, or this card can\'t be used to study',
+      );
     }
 
     return AnimatedSize(

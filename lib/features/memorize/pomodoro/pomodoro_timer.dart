@@ -50,6 +50,8 @@ class PomodoroConfig {
       shortBreak * (focusSessionsBeforeLongBreak - 1) +
       longBreak;
 
+  int get cycleMinutes => cycleDuration.inMinutes;
+
   /// Duración de cada fase en el modo TEST (solo para probar la app).
   static const Duration testPhaseDuration = Duration(seconds: 3);
 
@@ -117,7 +119,11 @@ class PomodoroTimer extends ChangeNotifier {
   });
 
   PomodoroPhase get phase => _phase;
+  Duration get remaining => _remaining;
   bool get isRunning => _isRunning;
+
+  /// true cuando ya se hizo el ciclo entero (no se puede volver a arrancar).
+  bool get isCompleted => _isCompleted;
   int get completedFocusSessions => _completedFocusSessions;
 
   /// Fracción ya transcurrida de la fase actual (0..1).

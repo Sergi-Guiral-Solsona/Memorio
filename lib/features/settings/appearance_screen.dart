@@ -76,20 +76,20 @@ class AppearanceScreen extends StatelessWidget {
                   onTap: () => theme.setCardStyle(style),
                 ),
               const SizedBox(height: 12),
-              _SectionLabel('KEY_CARD_BORDER'.loc),
+              _SectionLabel('KEY_CARD_BORDER'.locOr('Borde', 'Border')),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
                 children: [
                   ChoiceChip(
                     label: Text('KEY_CARD_BORDER_DEFAULT'
-                        .loc),
+                        .locOr('Del estilo', 'Style default')),
                     selected: theme.cardBorder == null,
                     onSelected: (_) => theme.setCardBorder(null),
                   ),
                   for (final b in CardBorder.values)
                     ChoiceChip(
-                      label: Text(b.titleKey.loc),
+                      label: Text(b.titleKey.locOr(b.fallbackEs, b.fallbackEn)),
                       selected: theme.cardBorder == b,
                       onSelected: (_) => theme.setCardBorder(b),
                     ),
@@ -102,7 +102,10 @@ class AppearanceScreen extends StatelessWidget {
               ),
               const SizedBox(height: 6),
               Text(
-                'KEY_CARD_BORDER_GLOBAL_DESC'.loc,
+                'KEY_CARD_BORDER_GLOBAL_DESC'.locOr(
+                  'Se aplica a los mazos que no tengan su propio borde.',
+                  'Applies to decks without their own border.',
+                ),
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                   fontSize: 12,

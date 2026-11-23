@@ -24,7 +24,10 @@ Future<void> importDecksFlow(BuildContext context) async {
     }
 
     if (incoming.isEmpty) {
-      say('KEY_IMPORT_INVALID'.loc);
+      say('KEY_IMPORT_INVALID'.locOr(
+        'El archivo no contiene mazos válidos.',
+        'The file does not contain valid decks.',
+      ));
       return;
     }
 
@@ -35,11 +38,17 @@ Future<void> importDecksFlow(BuildContext context) async {
 
     final summary = await DeckTransferService.addDecks(incoming);
     say('KEY_IMPORT_DONE'
-        .loc
+        .locOr(
+          'Importados {count} mazos ({cards} tarjetas).',
+          'Imported {count} decks ({cards} cards).',
+        )
         .fill({'count': summary.decks, 'cards': summary.cards}));
   } catch (e, stack) {
     AppLogger.error('Error al importar mazos', error: e, stackTrace: stack);
-    say('KEY_IMPORT_ERROR'.loc);
+    say('KEY_IMPORT_ERROR'.locOr(
+      'No se pudo importar el archivo.',
+      'The file could not be imported.',
+    ));
   }
 }
 
@@ -51,12 +60,15 @@ Future<bool> _confirmImport(BuildContext context, int decks, int cards) async {
       return AlertDialog(
         icon: Icon(Icons.file_download_outlined, size: 34, color: scheme.primary),
         title: Text(
-          'KEY_IMPORT_DECKS'.loc,
+          'KEY_IMPORT_DECKS'.locOr('Importar mazos', 'Import decks'),
           textAlign: TextAlign.center,
         ),
         content: Text(
           'KEY_IMPORT_CONFIRM_MSG'
-              .loc
+              .locOr(
+                'Se añadirán {count} mazos con {cards} tarjetas. Tus mazos actuales no se modificarán.',
+                '{count} decks with {cards} cards will be added. Your current decks will not be changed.',
+              )
               .fill({'count': decks, 'cards': cards}),
           textAlign: TextAlign.center,
         ),
@@ -68,7 +80,7 @@ Future<bool> _confirmImport(BuildContext context, int decks, int cards) async {
           ),
           FilledButton(
             onPressed: () => Navigator.pop(dialogContext, true),
-            child: Text('KEY_IMPORT_ADD'.loc),
+            child: Text('KEY_IMPORT_ADD'.locOr('Añadir', 'Add')),
           ),
         ],
       );

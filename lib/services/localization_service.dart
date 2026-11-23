@@ -56,9 +56,12 @@ class LocalizationService extends ChangeNotifier {
         orElse: () => _languages.first,
       );
 
+  Locale get currentLocale => currentLanguageInfo.locale;
+
   /// Dirección del texto del idioma actual (árabe = derecha a izquierda).
   TextDirection get textDirection =>
       currentLanguageInfo.isRtl ? TextDirection.rtl : TextDirection.ltr;
+  List<Locale> get supportedLocales => _languages.map((l) => l.locale).toList();
 
   Future<void> load() async {
     try {
@@ -155,4 +158,13 @@ class LocalizationService extends ChangeNotifier {
 
 extension LocalizationExtension on String {
   String get loc => LocalizationService.instance.translate(this);
+
+  /// Como [loc], pero si la clave aún no está en el CSV devuelve [es] (o [en]
+  /// cuando el idioma actual no es el español) en vez de la clave en crudo.
+  String locOr(String es, [String? en]) {
+    final text = LocalizationService.instance.translate(this);
+    if (text != this) return text;
+    final isSpanish = LocalizationService.instance.currentLanguage == 'es';
+    return isSpanish ? es : (en ?? es);
+  }
 }

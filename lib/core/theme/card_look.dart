@@ -29,6 +29,18 @@ enum CardBorder {
   const CardBorder(this.width);
 
   String get titleKey => 'KEY_CARD_BORDER_${name.toUpperCase()}';
+  String get fallbackEs => switch (this) {
+        none => 'Sin borde',
+        thin => 'Fino',
+        medium => 'Medio',
+        thick => 'Grueso',
+      };
+  String get fallbackEn => switch (this) {
+        none => 'None',
+        thin => 'Thin',
+        medium => 'Medium',
+        thick => 'Thick',
+      };
 }
 
 /// Colores neutros para el borde (negros, grises, blanco). Para un borde de
@@ -44,6 +56,20 @@ enum CardBorderColor {
   const CardBorderColor(this.color);
 
   String get titleKey => 'KEY_BORDER_COLOR_${name.toUpperCase()}';
+  String get fallbackEs => switch (this) {
+        black => 'Negro',
+        charcoal => 'Grafito',
+        gray => 'Gris',
+        silver => 'Plata',
+        white => 'Blanco',
+      };
+  String get fallbackEn => switch (this) {
+        black => 'Black',
+        charcoal => 'Charcoal',
+        gray => 'Gray',
+        silver => 'Silver',
+        white => 'White',
+      };
 }
 
 /// Tipografía de las tarjetas. Serif condensada para el título.

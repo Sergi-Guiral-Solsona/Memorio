@@ -11,18 +11,21 @@ Future<bool> confirmExitStudy(BuildContext context) async {
       return AlertDialog(
         icon: Icon(Icons.exit_to_app_rounded, size: 34, color: scheme.primary),
         title: Text(
-          'KEY_EXIT_STUDY_TITLE'.loc,
+          'KEY_EXIT_STUDY_TITLE'.locOr('¿Salir del estudio?', 'Leave the study session?'),
           textAlign: TextAlign.center,
         ),
         content: Text(
-          'KEY_EXIT_STUDY_MSG'.loc,
+          'KEY_EXIT_STUDY_MSG'.locOr(
+            'Las tarjetas que ya has respondido se guardan, pero esta sesión se cerrará.',
+            'The cards you have already answered are saved, but this session will close.',
+          ),
           textAlign: TextAlign.center,
         ),
         actionsAlignment: MainAxisAlignment.center,
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext, false),
-            child: Text('KEY_KEEP_STUDYING'.loc),
+            child: Text('KEY_KEEP_STUDYING'.locOr('Seguir estudiando', 'Keep studying')),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(dialogContext, true),
